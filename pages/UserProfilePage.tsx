@@ -1,0 +1,273 @@
+
+import React, { useState, useEffect } from 'react';
+import { User, Podcast, Video, Post } from '../types';
+import { toPersianDigits } from '../utils/helpers';
+import { getPosts, updateProfile } from '../services/api';
+
+interface UserProfilePageProps {
+  onClose: () => void;
+  onLogout: () => void;
+  user: User;
+  allPodcasts: Podcast[];
+  allVideos: Video[];
+  onPlayPodcast: (podcast: Podcast, episodeIndex: number) => void;
+  onPlayVideo: (video: Video) => void;
+  onEditPost?: (post: Post) => void;
+  onDeletePost?: (postId: number) => void;
+  onUpdateUser?: (user: User) => void;
+}
+
+const UserProfilePage: React.FC<UserProfilePageProps> = ({ onClose, onLogout, user, allPodcasts, allVideos, onPlayPodcast, onPlayVideo, onEditPost, onDeletePost, onUpdateUser }) => {
+    const [view, setView] = useState<'main' | 'library' | 'myPosts' | 'editProfile'>('main');
+    const [myPosts, setMyPosts] = useState<Post[]>([]);
+    const [editName, setEditName] = useState(user.name);
+    const [editPhone, setEditPhone] = useState(user.phoneNumber);
+    const [editAvatar, setEditAvatar] = useState(user.avatar || '');
+    const [isSaving, setIsSaving] = useState(false);
+    
+    const maskedPhoneNumber = user.phoneNumber 
+      ? `${user.phoneNumber.substring(0, 4)}****${user.phoneNumber.substring(8)}`
+      : 'شماره ثبت نشده';
+
+    const libraryPodcasts = allPodcasts.filter(p => user.library?.podcasts?.includes(p.id));
+    const libraryVideos = allVideos.filter(v => user.library?.videos?.includes(v.id));
+    const libraryNotesCount = user.library?.notes?.length || 0;
+    const totalLibraryItems = libraryPodcasts.length + libraryVideos.length + libraryNotesCount;
+
+    const isAuthor = user.role === 'author' || user.role === 'admin';
+
+    useEffect(() => {
+        if (isAuthor && view === 'myPosts') {
+            getPosts().then(allPosts => {
+                setMyPosts(allPosts.filter((p: Post) => p.author === user.name));
+            });
+        }
+    }, [isAuthor, view, user.name]);
+
+    return (
+        <div className="fixed inset-0 bg-black/60 z-[1000] flex items-end sm:items-center sm:justify-center p-0 sm:p-4 backdrop-blur-md animate-fadeIn" onClick={onClose}>
+            <div 
+              className="bg-white rounded-t-[2.5rem] sm:rounded-[2rem] shadow-2xl w-full max-w-md flex flex-col animate-slideInUp h-[85vh] overflow-hidden"
+              onClick={e => e.stopPropagation()}
+            >
+                <header className="flex justify-between items-center p-6 border-b border-gray-100 flex-shrink-0 bg-white">
+                    <div className="flex items-center gap-2">
+                        {view !== 'main' && (
+                            <button onClick={() => setView('main')} className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center text-gray-500 ml-2">
+                                <i className="fas fa-arrow-right"></i>
+                            </button>
+                        )}
+                        <h2 className="font-black text-gray-800">{view === 'main' ? 'پروفایل من' : view === 'library' ? 'کتابخانه من' : view === 'editProfile' ? 'ویرایش پروفایل' : 'یادداشت‌های من'}</h2>
+                    </div>
+                    <button onClick={onClose} className="text-gray-300 text-2xl w-8 h-8 rounded-full hover:bg-gray-100">&times;</button>
+                </header>
+                
+                <main className="flex-grow overflow-y-auto no-scrollbar pb-10">
+                    {view === 'main' ? (
+                        <>
+                            <div className="flex flex-col items-center py-8 bg-white border-b border-gray-50 mb-6">
+                                <div className="w-24 h-24 rounded-[2rem] bg-primary flex items-center justify-center text-white text-5xl font-bold mb-4 overflow-hidden border-4 border-white shadow-xl rotate-3">
+                                    {user.avatar ? <img src={user.avatar} className="w-full h-full object-cover" /> : <i className="fas fa-user"></i>}
+                                </div>
+                                <p className="text-lg font-black text-gray-800">{user.name}</p>
+                                <p className="text-xs font-bold text-gray-400 mt-1" dir="ltr">{maskedPhoneNumber}</p>
+                                <div className="mt-4 bg-primary/10 text-primary px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-primary/20">
+                                    {user.role === 'admin' ? 'مدیر سیستم' : user.role === 'author' ? 'نویسنده سرای هنر و اندیشه' : 'مخاطب همراه'}
+                                </div>
+                            </div>
+
+                            <div className="px-6 space-y-3">
+                                
+                                <button onClick={() => setView('library')} className="w-full text-right p-4 rounded-3xl hover:bg-gray-50 transition-colors flex items-center gap-4 bg-white border border-gray-100 shadow-sm group">
+                                    <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                        <i className="fas fa-bookmark text-sm"></i>
+                                    </div>
+                                    <div className="flex-1">
+                                        <span className="font-black text-gray-700 text-sm">کتابخانه من</span>
+                                        <p className="text-[10px] text-gray-400 font-bold mt-0.5">{toPersianDigits(totalLibraryItems)} مورد ذخیره شده</p>
+                                    </div>
+                                    <i className="fas fa-chevron-left text-gray-200"></i>
+                                </button>
+
+                                {isAuthor && (
+                                    <button onClick={() => setView('myPosts')} className="w-full text-right p-4 rounded-3xl hover:bg-gray-50 transition-colors flex items-center gap-4 bg-white border border-gray-100 shadow-sm group">
+                                        <div className="w-10 h-10 rounded-2xl bg-secondary/10 text-secondary flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                            <i className="fas fa-pen-fancy text-sm"></i>
+                                        </div>
+                                        <div className="flex-1">
+                                            <span className="font-black text-gray-700 text-sm">یادداشت‌های من</span>
+                                            <p className="text-[10px] text-gray-400 font-bold mt-0.5">مدیریت پست‌ها و یادداشت‌ها</p>
+                                        </div>
+                                        <i className="fas fa-chevron-left text-gray-200"></i>
+                                    </button>
+                                )}
+
+                                <button onClick={() => setView('editProfile')} className="w-full text-right p-4 rounded-3xl hover:bg-gray-50 transition-colors flex items-center gap-4 bg-white border border-gray-100 shadow-sm group">
+                                    <div className="w-10 h-10 rounded-2xl bg-primary/10 text-primary flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                                        <i className="fas fa-cog text-sm"></i>
+                                    </div>
+                                    <div className="flex-1">
+                                        <span className="font-black text-gray-700 text-sm">تنظیمات حساب</span>
+                                        <p className="text-[10px] text-gray-400 font-bold mt-0.5">ویرایش پروفایل</p>
+                                    </div>
+                                    <i className="fas fa-chevron-left text-gray-200"></i>
+                                </button>
+                            </div>
+                        </>
+                    ) : view === 'myPosts' ? (
+                        <div className="p-6 space-y-4 animate-fadeIn">
+                            <div className="flex items-center justify-between mb-2">
+                                <h4 className="font-black text-secondary text-[10px] uppercase tracking-widest border-r-4 border-secondary pr-3">یادداشت‌های من ({toPersianDigits(myPosts.length)})</h4>
+                            </div>
+                            {myPosts.length === 0 ? (
+                                <div className="text-center py-12 text-gray-300">
+                                    <i className="fas fa-pen-fancy text-4xl mb-3" />
+                                    <p className="text-[10px] font-bold">هنوز یادداشتی ننوشته‌اید</p>
+                                </div>
+                            ) : myPosts.map(post => (
+                                <div key={post.id} className="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <span className="text-[9px] text-gray-400 font-bold">{post.date}</span>
+                                        {post.isEdited && <span className="text-[8px] text-gray-300 font-bold">ویرایش شده</span>}
+                                    </div>
+                                    <p className="text-xs text-gray-700 leading-relaxed whitespace-pre-wrap mb-3">{post.text}</p>
+                                    <div className="flex items-center gap-3 text-[10px] text-gray-400">
+                                        <span><i className="fas fa-heart text-red-300 ml-1" />{toPersianDigits(post.likes)}</span>
+                                        <span><i className="fas fa-comment text-gray-300 ml-1" />{toPersianDigits(post.comments.length)}</span>
+                                    </div>
+                                    {(onEditPost || onDeletePost) && (
+                                        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-gray-50">
+                                            {onEditPost && (
+                                                <button onClick={() => onEditPost(post)} className="flex items-center gap-1 text-[10px] font-bold text-primary hover:text-primary-dark transition-colors px-2 py-1 rounded-lg hover:bg-primary/5">
+                                                    <i className="fas fa-edit" /> ویرایش
+                                                </button>
+                                            )}
+                                            {onDeletePost && (
+                                                <button onClick={() => { if (confirm('آیا از حذف این پست مطمئن هستید؟')) onDeletePost(post.id); }} className="flex items-center gap-1 text-[10px] font-bold text-red-400 hover:text-red-600 transition-colors px-2 py-1 rounded-lg hover:bg-red-50">
+                                                    <i className="fas fa-trash" /> حذف
+                                                </button>
+                                            )}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    ) : view === 'editProfile' ? (
+                        <div className="p-6 space-y-6 animate-fadeIn">
+                            <div className="flex flex-col items-center py-4">
+                                <label className="relative w-24 h-24 rounded-[2rem] cursor-pointer group overflow-hidden border-4 border-white shadow-xl rotate-3">
+                                    {editAvatar ? (
+                                        <img src={editAvatar} className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full bg-primary flex items-center justify-center text-white text-4xl font-bold">
+                                            <i className="fas fa-user"></i>
+                                        </div>
+                                    )}
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-[2rem]">
+                                        <i className="fas fa-camera text-white text-lg"></i>
+                                    </div>
+                                    <input type="file" accept="image/*" className="hidden" onChange={e => {
+                                        const file = e.target.files?.[0];
+                                        if (!file) return;
+                                        const reader = new FileReader();
+                                        reader.onload = (ev) => {
+                                            const img = new Image();
+                                            img.onload = () => {
+                                                const canvas = document.createElement('canvas');
+                                                canvas.width = 256; canvas.height = 256;
+                                                const ctx = canvas.getContext('2d')!;
+                                                const m = Math.min(img.width, img.height);
+                                                ctx.drawImage(img, (img.width - m) / 2, (img.height - m) / 2, m, m, 0, 0, 256, 256);
+                                                setEditAvatar(canvas.toDataURL('image/jpeg', 0.8));
+                                            };
+                                            img.src = ev.target?.result as string;
+                                        };
+                                        reader.readAsDataURL(file);
+                                    }} />
+                                </label>
+                                <p className="text-[10px] text-gray-400 mt-3 font-bold">برای تغییر آواتار کلیک کنید</p>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div>
+                                    <label className="block text-[11px] font-black text-gray-500 mb-2">نام و نام خانوادگی</label>
+                                    <input type="text" value={editName} onChange={e => setEditName(e.target.value)}
+                                        className="w-full px-4 py-3 rounded-2xl text-sm font-bold bg-gray-50 border-2 border-gray-100 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+                                        placeholder="نام خود را وارد کنید" dir="rtl" />
+                                </div>
+                                <div>
+                                    <label className="block text-[11px] font-black text-gray-500 mb-2">شماره تماس</label>
+                                    <input type="text" value={editPhone} readOnly
+                                        className="w-full px-4 py-3 rounded-2xl text-sm font-bold font-mono bg-gray-100 border-2 border-gray-100 text-gray-400 cursor-not-allowed"
+                                        dir="ltr" />
+                                    <p className="text-[9px] text-gray-300 mt-1 font-bold">شماره تماس قابل تغییر نیست</p>
+                                </div>
+                            </div>
+
+                            <button onClick={async () => {
+                                if (!editName.trim() || !onUpdateUser) return;
+                                setIsSaving(true);
+                                try {
+                                    await updateProfile({ name: editName.trim(), avatar: editAvatar });
+                                } catch {}
+                                onUpdateUser({ ...user, name: editName.trim(), avatar: editAvatar });
+                                setIsSaving(false);
+                                setView('main');
+                            }} disabled={!editName.trim() || isSaving}
+                                className="w-full py-4 rounded-3xl text-white text-sm font-black transition-all active:scale-95 disabled:opacity-50"
+                                style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
+                                {isSaving ? <i className="fas fa-spinner fa-spin" /> : <><i className="fas fa-check ml-2" /> ذخیره تغییرات</>}
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="p-6 space-y-6 animate-fadeIn">
+                             <section>
+                                <h4 className="font-black text-primary text-[10px] uppercase tracking-widest mb-4 border-r-4 border-primary pr-3">صوت‌های ذخیره شده ({toPersianDigits(libraryPodcasts.length)})</h4>
+                                <div className="space-y-3">
+                                    {libraryPodcasts.length > 0 ? libraryPodcasts.map(pod => (
+                                        <div key={pod.id} onClick={() => onPlayPodcast(pod, 0)} className="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 active:scale-95 transition-all">
+                                            <img src={pod.cover} className="w-12 h-12 rounded-xl object-cover shadow-sm" />
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-[11px] font-black text-gray-800 truncate">{pod.title}</p>
+                                                <p className="text-[9px] text-gray-400 font-bold mt-1">سال {toPersianDigits(pod.year)} • {toPersianDigits(pod.episodes.length)} جلسه</p>
+                                            </div>
+                                            <i className="fas fa-play text-primary text-xs ml-2"></i>
+                                        </div>
+                                    )) : <p className="text-center py-6 text-gray-300 text-[10px] font-black italic">موردی در کتابخانه نیست</p>}
+                                </div>
+                             </section>
+
+                             <section>
+                                <h4 className="font-black text-secondary text-[10px] uppercase tracking-widest mb-4 border-r-4 border-secondary pr-3">ویدیوهای ذخیره شده ({toPersianDigits(libraryVideos.length)})</h4>
+                                <div className="space-y-3">
+                                    {libraryVideos.length > 0 ? libraryVideos.map(vid => (
+                                        <div key={vid.id} onClick={() => onPlayVideo(vid)} className="bg-white p-3 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4 active:scale-95 transition-all">
+                                            <img src={vid.thumbnailUrl} className="w-20 aspect-video rounded-xl object-cover shadow-sm" />
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-[11px] font-black text-gray-800 truncate">{vid.title}</p>
+                                                <p className="text-[9px] text-gray-400 font-bold mt-1">{vid.uploadDate}</p>
+                                            </div>
+                                            <i className="fas fa-play text-secondary text-xs ml-2"></i>
+                                        </div>
+                                    )) : <p className="text-center py-6 text-gray-300 text-[10px] font-black italic">موردی در کتابخانه نیست</p>}
+                                </div>
+                             </section>
+                        </div>
+                    )}
+                </main>
+
+                <footer className="flex-shrink-0 p-6 border-t border-gray-100 bg-white">
+                    <button 
+                        onClick={onLogout}
+                        className="w-full bg-red-500/10 text-red-600 font-black py-4 px-5 rounded-3xl hover:bg-red-500/20 transition-all active:scale-95 text-xs flex items-center justify-center gap-2"
+                    >
+                        <i className="fas fa-sign-out-alt"></i>
+                        خروج از حساب کاربری
+                    </button>
+                </footer>
+            </div>
+        </div>
+    );
+};
+
+export default UserProfilePage;

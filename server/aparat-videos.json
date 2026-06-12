@@ -1,0 +1,3116 @@
+[
+  {
+    "video": {
+      "id": "56123259",
+      "title": "بزم عاشقانه",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 293,
+      "uid": "i467c84",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/56123259-9592-l__3352.jpg?width=900&quality=90&secret=C6vBybb5LTAAMFQlcvmHqA",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/56123259-9592-l__3352.jpg?width=300&quality=90&secret=Ho5b2AN8kYI85m6g2bkTVA",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 691,
+      "sdate": "17 آذر 1402 15:40",
+      "create_date": "2023-12-08 15:40:26",
+      "sdate_timediff": 78619733,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/i467c84/vt/frame",
+      "official": "no",
+      "tags": [
+        {
+          "name": "وائل دحدوح",
+          "video_cnt": "1"
+        }
+      ],
+      "tag_str": "غزه,شعر مقاومت,مهدی باکری,احمد کاظمی,وائل دحدوح",
+      "description": "",
+      "cat_id": 6,
+      "cat_name": "مذهبی",
+      "cat_name_en": "religious",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "10855833",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 15,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=i467c84",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian7.cdn.asset.aparat.com/aparat-video/05ed60a0daabb9ffceda0e7e9fa8810156123259-480p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjA2NmE4YzhkMmY3OTIxNWQ0NjI1NzFiMjM2MTQ3NTQyIiwiZXhwIjoxNzgwNjc1MTU5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.HB4sUcN6E4HnfOXfAEQ8vX8phMJW93QjX8RcLtEfL9M",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "10.35 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian7.cdn.asset.aparat.com/aparat-video/05ed60a0daabb9ffceda0e7e9fa8810156123259-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFkMjM0M2E4N2U3MmQzYjMwZTA2ZGZlZDdhYThhMjNiIiwiZXhwIjoxNzgwNjc1MTU5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.dtzjq7snC0VkFuG7MHR1hcFaA29gDqXfHyU3BoKY9JI"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "21.32 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/05ed60a0daabb9ffceda0e7e9fa8810156123259-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFkMjM0M2E4N2U3MmQzYjMwZTA2ZGZlZDdhYThhMjNiIiwiZXhwIjoxNzgwNjc1MTU5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.dtzjq7snC0VkFuG7MHR1hcFaA29gDqXfHyU3BoKY9JI"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "45.19 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/05ed60a0daabb9ffceda0e7e9fa8810156123259-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFkMjM0M2E4N2U3MmQzYjMwZTA2ZGZlZDdhYThhMjNiIiwiZXhwIjoxNzgwNjc1MTU5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.dtzjq7snC0VkFuG7MHR1hcFaA29gDqXfHyU3BoKY9JI"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "72.46 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian7.cdn.asset.aparat.com/aparat-video/05ed60a0daabb9ffceda0e7e9fa8810156123259-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFkMjM0M2E4N2U3MmQzYjMwZTA2ZGZlZDdhYThhMjNiIiwiZXhwIjoxNzgwNjc1MTU5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.dtzjq7snC0VkFuG7MHR1hcFaA29gDqXfHyU3BoKY9JI"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "56114073",
+      "title": "خبرنگار",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 149,
+      "uid": "OUMf9",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/56114073-2437-l__6567.jpg?width=900&quality=90&secret=rqOcMnffIFjV6FozIzIgnA",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/56114073-2437-l__6567.jpg?width=300&quality=90&secret=3KAlulZsgD6ga0JM9hh76w",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 539,
+      "sdate": "17 آذر 1402 00:09",
+      "create_date": "2023-12-08 00:09:43",
+      "sdate_timediff": 78675577,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/OUMf9/vt/frame",
+      "official": "no",
+      "tags": [
+        {
+          "name": "غزه",
+          "video_cnt": "5000"
+        },
+        {
+          "name": "خبرنگار",
+          "video_cnt": "2067"
+        },
+        {
+          "name": "سیدمرتضی آوینی",
+          "video_cnt": "12"
+        },
+        {
+          "name": "حاج احمد کاظمی",
+          "video_cnt": "56"
+        },
+        {
+          "name": "حاج قاسم",
+          "video_cnt": "4618"
+        },
+        {
+          "name": "خبرنگار",
+          "video_cnt": "1512"
+        },
+        {
+          "name": "خبرنگار",
+          "video_cnt": "1512"
+        },
+        {
+          "name": "خبرنگار",
+          "video_cnt": "1512"
+        },
+        {
+          "name": "خبرنگار",
+          "video_cnt": "1512"
+        },
+        {
+          "name": "خبرنگار",
+          "video_cnt": "1512"
+        },
+        {
+          "name": "خبرنگار",
+          "video_cnt": "1512"
+        },
+        {
+          "name": "حاج قاسم",
+          "video_cnt": "4466"
+        },
+        {
+          "name": "حاج قاسم",
+          "video_cnt": "3163"
+        },
+        {
+          "name": "حاج قاسم",
+          "video_cnt": "2372"
+        },
+        {
+          "name": "حاج قاسم ",
+          "video_cnt": "1811"
+        }
+      ],
+      "tag_str": "خبرنگار,غزه,سیدمرتضی آوینی,حاج احمد کاظمی,حاج قاسم",
+      "description": "روایتی از شهادت محمدابوحطب خبرنگاری اهل غزه، که توسط اشغالگران به شهادت رسید\n\nای وطن !\nچرا ؟ چقدر  فاصله است بین ما؟\nچرا مرا نمی&zwnj;برند مثل تو بروی دست&zwnj;ها؟\nتن تو زخمی و هنوز سالمم\nوطن اگر که می&zwnj;روی ...\nدرنگ کرد \nو باز گریه کرد\nگلوله می&zwnj;خوری و من ...\nلباس از تنش برون فکند و زد کلاه بر زمین و رفت و آخرش ...",
+      "cat_id": 6,
+      "cat_name": "مذهبی",
+      "cat_name_en": "religious",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "9109186",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 8,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=OUMf9",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian10.cdn.asset.aparat.com/aparat-video/9eec84f4ff1d9cf0070211419b1c14a556114073-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjNmZmIwMjUyMmVjZGFlNGE3YWM3YmYzZWZjYTU1NGQ5IiwiZXhwIjoxNzgwNjc1MTU5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.8468l-Dqe2Z2Q4id0k1q66rTQ7nf5qWsTRQGxNrTtP4",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "8.69 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/9eec84f4ff1d9cf0070211419b1c14a556114073-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImZlMWE0OTRhOTc1MTRlNGZlNzhiZTExNGZjMDNmZjUzIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.GmRk9Qy1aX4xuX605vvXWQGVIjkiOhbbJWktun7H1BE"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "15.35 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/9eec84f4ff1d9cf0070211419b1c14a556114073-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImZlMWE0OTRhOTc1MTRlNGZlNzhiZTExNGZjMDNmZjUzIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.GmRk9Qy1aX4xuX605vvXWQGVIjkiOhbbJWktun7H1BE"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "30.05 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/9eec84f4ff1d9cf0070211419b1c14a556114073-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImZlMWE0OTRhOTc1MTRlNGZlNzhiZTExNGZjMDNmZjUzIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.GmRk9Qy1aX4xuX605vvXWQGVIjkiOhbbJWktun7H1BE"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "45.59 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/9eec84f4ff1d9cf0070211419b1c14a556114073-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImZlMWE0OTRhOTc1MTRlNGZlNzhiZTExNGZjMDNmZjUzIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.GmRk9Qy1aX4xuX605vvXWQGVIjkiOhbbJWktun7H1BE"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "86.57 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian9.cdn.asset.aparat.com/aparat-video/9eec84f4ff1d9cf0070211419b1c14a556114073-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImZlMWE0OTRhOTc1MTRlNGZlNzhiZTExNGZjMDNmZjUzIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.GmRk9Qy1aX4xuX605vvXWQGVIjkiOhbbJWktun7H1BE"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "158.65 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/9eec84f4ff1d9cf0070211419b1c14a556114073-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImZlMWE0OTRhOTc1MTRlNGZlNzhiZTExNGZjMDNmZjUzIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.GmRk9Qy1aX4xuX605vvXWQGVIjkiOhbbJWktun7H1BE"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "56110097",
+      "title": "وعده صادق",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 396,
+      "uid": "r413om5",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/56110097-3445-l__6036.jpg?width=900&quality=90&secret=CmfDqsmJ18y1lA6gRKY4pg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/56110097-3445-l__6036.jpg?width=300&quality=90&secret=qPS9Yl5Nngcx8GQGeNY2TQ",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 584,
+      "sdate": "16 آذر 1402 19:44",
+      "create_date": "2023-12-07 19:44:44",
+      "sdate_timediff": 78691476,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/r413om5/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "غزه,طوفان الاقصی,فیلم چ,محاصره,پاوه",
+      "description": "مقایسه ی محاصره باریکه غزه توسط صهیونیست ها پس از عملیات طوفان الاقصی با محاصره شهر پاوه",
+      "cat_id": 17,
+      "cat_name": "فرهنگ و هنر",
+      "cat_name_en": "art",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "7842220",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 10,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=r413om5",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian8.cdn.asset.aparat.com/aparat-video/0c98746d0722dba902daa14180fe94f956110097-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjBkMjkyZmI1ZDM0NTMxNzgyN2YwMmVhZWJlMzdiNTNhIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.PT8EZbT6xJm8mq2QBXazYsXMTJadvto5sqfXCtwnGmM",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "7.48 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian9.cdn.asset.aparat.com/aparat-video/0c98746d0722dba902daa14180fe94f956110097-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUzMjUxNDNhOTFiYzMwNWJkMTEyNDdhNDFlMGRmY2NlIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.aKH1hite4lh4_HSvoWD1EU1gz3R9Ol7V2DSZFHfiGjs"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "12.87 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/0c98746d0722dba902daa14180fe94f956110097-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUzMjUxNDNhOTFiYzMwNWJkMTEyNDdhNDFlMGRmY2NlIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.aKH1hite4lh4_HSvoWD1EU1gz3R9Ol7V2DSZFHfiGjs"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "26.92 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian9.cdn.asset.aparat.com/aparat-video/0c98746d0722dba902daa14180fe94f956110097-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUzMjUxNDNhOTFiYzMwNWJkMTEyNDdhNDFlMGRmY2NlIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.aKH1hite4lh4_HSvoWD1EU1gz3R9Ol7V2DSZFHfiGjs"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "42.92 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/0c98746d0722dba902daa14180fe94f956110097-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUzMjUxNDNhOTFiYzMwNWJkMTEyNDdhNDFlMGRmY2NlIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.aKH1hite4lh4_HSvoWD1EU1gz3R9Ol7V2DSZFHfiGjs"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "87.27 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian9.cdn.asset.aparat.com/aparat-video/0c98746d0722dba902daa14180fe94f956110097-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUzMjUxNDNhOTFiYzMwNWJkMTEyNDdhNDFlMGRmY2NlIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.aKH1hite4lh4_HSvoWD1EU1gz3R9Ol7V2DSZFHfiGjs"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "168.4 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/0c98746d0722dba902daa14180fe94f956110097-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUzMjUxNDNhOTFiYzMwNWJkMTEyNDdhNDFlMGRmY2NlIiwiZXhwIjoxNzgwNjc1MTYwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.aKH1hite4lh4_HSvoWD1EU1gz3R9Ol7V2DSZFHfiGjs"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "56036592",
+      "title": "هیهات",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 151,
+      "uid": "lFjKT",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/56036592-4651-l__4349.jpg?width=900&quality=90&secret=LQRyEpf_j4vw0fp7XaKXXQ",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/56036592-4651-l__4349.jpg?width=300&quality=90&secret=6O3rC50b19QgxblN-SA_og",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 543,
+      "sdate": "13 آذر 1402 07:05",
+      "create_date": "2023-12-04 07:05:24",
+      "sdate_timediff": 78996237,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/lFjKT/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "غزه,فلسطین,طوفان الاقصی,جنگ,نماهنگ",
+      "description": "نماهنگ هیهات(هرگز)\nبرشی کوتاه از علل شرعی و عقلی شروع عملیات طوفان الاقضی",
+      "cat_id": 17,
+      "cat_name": "فرهنگ و هنر",
+      "cat_name_en": "art",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "8130144",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 2,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=lFjKT",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian6.cdn.asset.aparat.com/aparat-video/594dcbb8064d9a8bdb2ed8bf82a2402c56036592-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImE2NThjNDkyZTM1YTIxNTdlNjNhNDY4ZGNkYjQ5Y2RiIiwiZXhwIjoxNzgwNjc1MTYxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.GKgvsukpzHOKqpdl0f2doiIBEJmcZwYGRa5nTLN2nnM",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "7.75 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian9.cdn.asset.aparat.com/aparat-video/594dcbb8064d9a8bdb2ed8bf82a2402c56036592-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1YjNjYzc0NzIyZTNjZjgyNzFhZjkxMjNmNTlhODYwIiwiZXhwIjoxNzgwNjc1MTYxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VEzAwl-ETs4W_z8ySGiePDdglhj4qZoBsZZsRuC9TeE"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "14.02 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian6.cdn.asset.aparat.com/aparat-video/594dcbb8064d9a8bdb2ed8bf82a2402c56036592-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1YjNjYzc0NzIyZTNjZjgyNzFhZjkxMjNmNTlhODYwIiwiZXhwIjoxNzgwNjc1MTYxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VEzAwl-ETs4W_z8ySGiePDdglhj4qZoBsZZsRuC9TeE"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "27.3 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian9.cdn.asset.aparat.com/aparat-video/594dcbb8064d9a8bdb2ed8bf82a2402c56036592-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1YjNjYzc0NzIyZTNjZjgyNzFhZjkxMjNmNTlhODYwIiwiZXhwIjoxNzgwNjc1MTYxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VEzAwl-ETs4W_z8ySGiePDdglhj4qZoBsZZsRuC9TeE"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "42.94 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian9.cdn.asset.aparat.com/aparat-video/594dcbb8064d9a8bdb2ed8bf82a2402c56036592-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1YjNjYzc0NzIyZTNjZjgyNzFhZjkxMjNmNTlhODYwIiwiZXhwIjoxNzgwNjc1MTYxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VEzAwl-ETs4W_z8ySGiePDdglhj4qZoBsZZsRuC9TeE"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "85.08 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian7.cdn.asset.aparat.com/aparat-video/594dcbb8064d9a8bdb2ed8bf82a2402c56036592-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1YjNjYzc0NzIyZTNjZjgyNzFhZjkxMjNmNTlhODYwIiwiZXhwIjoxNzgwNjc1MTYxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VEzAwl-ETs4W_z8ySGiePDdglhj4qZoBsZZsRuC9TeE"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "148.56 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian6.cdn.asset.aparat.com/aparat-video/594dcbb8064d9a8bdb2ed8bf82a2402c56036592-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1YjNjYzc0NzIyZTNjZjgyNzFhZjkxMjNmNTlhODYwIiwiZXhwIjoxNzgwNjc1MTYxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VEzAwl-ETs4W_z8ySGiePDdglhj4qZoBsZZsRuC9TeE"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "56009028",
+      "title": "راهی که از سر گرفتیم",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 141,
+      "uid": "g95507e",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/56009028-1124-l__1488.jpg?width=900&quality=90&secret=I08ktwI3KR-PV4h--ANPDg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/56009028-1124-l__1488.jpg?width=300&quality=90&secret=V7AgY9LpPz2ijUsmGN0WDg",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 939,
+      "sdate": "11 آذر 1402 16:29",
+      "create_date": "2023-12-02 16:29:29",
+      "sdate_timediff": 79135193,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/g95507e/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "فلسطین,غزه,نماهنگ,لبنان,سید حسن نصر الله",
+      "description": "",
+      "cat_id": 17,
+      "cat_name": "فرهنگ و هنر",
+      "cat_name_en": "art",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "16864629",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 4,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=g95507e",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian8.cdn.asset.aparat.com/aparat-video/c65aab245a9db402f79dae95c47b3ad356009028-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjgzNjU0YzNkMzg2MjAzZmYzMTY5YzVkMmRmYmNhYmFiIiwiZXhwIjoxNzgwNjc1MTYyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.MARihTKhCbAYM12aD0WfpKb-UKmVtB471V9Qpn0uJsE",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "16.08 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/c65aab245a9db402f79dae95c47b3ad356009028-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUyMWJhZmUyMjBkMTliM2NkYTFmY2IwMmRiZjc0YTc3IiwiZXhwIjoxNzgwNjc1MTYyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.IiS4DZ62mUnKoktXs_NEEP-XV_H1bXOKjvVVznEhqQk"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "29.04 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian8.cdn.asset.aparat.com/aparat-video/c65aab245a9db402f79dae95c47b3ad356009028-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUyMWJhZmUyMjBkMTliM2NkYTFmY2IwMmRiZjc0YTc3IiwiZXhwIjoxNzgwNjc1MTYyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.IiS4DZ62mUnKoktXs_NEEP-XV_H1bXOKjvVVznEhqQk"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "56.03 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian8.cdn.asset.aparat.com/aparat-video/c65aab245a9db402f79dae95c47b3ad356009028-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUyMWJhZmUyMjBkMTliM2NkYTFmY2IwMmRiZjc0YTc3IiwiZXhwIjoxNzgwNjc1MTYyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.IiS4DZ62mUnKoktXs_NEEP-XV_H1bXOKjvVVznEhqQk"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "87.65 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/c65aab245a9db402f79dae95c47b3ad356009028-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUyMWJhZmUyMjBkMTliM2NkYTFmY2IwMmRiZjc0YTc3IiwiZXhwIjoxNzgwNjc1MTYyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.IiS4DZ62mUnKoktXs_NEEP-XV_H1bXOKjvVVznEhqQk"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "173.14 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/c65aab245a9db402f79dae95c47b3ad356009028-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUyMWJhZmUyMjBkMTliM2NkYTFmY2IwMmRiZjc0YTc3IiwiZXhwIjoxNzgwNjc1MTYyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.IiS4DZ62mUnKoktXs_NEEP-XV_H1bXOKjvVVznEhqQk"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "308.86 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/c65aab245a9db402f79dae95c47b3ad356009028-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImUyMWJhZmUyMjBkMTliM2NkYTFmY2IwMmRiZjc0YTc3IiwiZXhwIjoxNzgwNjc1MTYyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.IiS4DZ62mUnKoktXs_NEEP-XV_H1bXOKjvVVznEhqQk"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "55533239",
+      "title": "بهشت خوبان",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 264,
+      "uid": "j811h76",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/55533239-8780-l__2058.jpg?width=900&quality=90&secret=JpTciaY7IBWVE7m9Ycb8-w",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/55533239-8780-l__2058.jpg?width=300&quality=90&secret=S4jREELS-XdJ2yMEM8bqiQ",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 540,
+      "sdate": "11 آبان 1402 17:14",
+      "create_date": "2023-11-02 17:14:35",
+      "sdate_timediff": 81724488,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/j811h76/vt/frame",
+      "official": "no",
+      "tags": [
+        {
+          "name": "غزه",
+          "video_cnt": "5000"
+        },
+        {
+          "name": "فلسطین",
+          "video_cnt": "5000"
+        },
+        {
+          "name": "مقاومت",
+          "video_cnt": "4339"
+        },
+        {
+          "name": "هوش مصنوعی",
+          "video_cnt": "5000"
+        }
+      ],
+      "tag_str": "غزه,فلسطین,مقاومت,هوش مصنوعی",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "8235452",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 6,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=j811h76",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian8.cdn.asset.aparat.com/aparat-video/cd763bd5274034832b4e73a5b1f730b755533239-480p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImQ3ZGE0Yzc1MjE5MDE5OTYyOGNlMDQzNmYxZjI2MGFmIiwiZXhwIjoxNzgwNjc1MTYzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.2ITadvPHX4_WquRWHR6-S3RryS9dintPkLRQ7k0LVbg",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "7.85 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/cd763bd5274034832b4e73a5b1f730b755533239-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImI4YTAzMzY5OTRiZTEyYmZiYzg4OTJkNjgzODRiOTBjIiwiZXhwIjoxNzgwNjc1MTYzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.-KhfnyQY_uUPXyxxwX4wNn8b83pEsUlZk-ZvVt98Gpc"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "16.57 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian9.cdn.asset.aparat.com/aparat-video/cd763bd5274034832b4e73a5b1f730b755533239-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImI4YTAzMzY5OTRiZTEyYmZiYzg4OTJkNjgzODRiOTBjIiwiZXhwIjoxNzgwNjc1MTYzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.-KhfnyQY_uUPXyxxwX4wNn8b83pEsUlZk-ZvVt98Gpc"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "35.35 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian9.cdn.asset.aparat.com/aparat-video/cd763bd5274034832b4e73a5b1f730b755533239-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImI4YTAzMzY5OTRiZTEyYmZiYzg4OTJkNjgzODRiOTBjIiwiZXhwIjoxNzgwNjc1MTYzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.-KhfnyQY_uUPXyxxwX4wNn8b83pEsUlZk-ZvVt98Gpc"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "54.32 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/cd763bd5274034832b4e73a5b1f730b755533239-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImI4YTAzMzY5OTRiZTEyYmZiYzg4OTJkNjgzODRiOTBjIiwiZXhwIjoxNzgwNjc1MTYzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.-KhfnyQY_uUPXyxxwX4wNn8b83pEsUlZk-ZvVt98Gpc"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "55520883",
+      "title": "بشارت صبر",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 236,
+      "uid": "r654kx7",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/55520883-5044-l__8531.jpg?width=900&quality=90&secret=byf9Sc0cTKsC_u0dOluhqg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/55520883-5044-l__8531.jpg?width=300&quality=90&secret=EjhGJ3EfROLPcbS_yXpiUg",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 511,
+      "sdate": "10 آبان 1402 22:09",
+      "create_date": "2023-11-01 22:09:16",
+      "sdate_timediff": 81793208,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/r654kx7/vt/frame",
+      "official": "no",
+      "tags": [
+        {
+          "name": "غزه",
+          "video_cnt": "5000"
+        },
+        {
+          "name": "فلسطین",
+          "video_cnt": "5000"
+        },
+        {
+          "name": "مقاومت",
+          "video_cnt": "4339"
+        },
+        {
+          "name": "استاد طاهر زاده",
+          "video_cnt": "6"
+        }
+      ],
+      "tag_str": "فلسطین,مقاومت,غزه,استاد طاهر زاده",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "7590546",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 6,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=r654kx7",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian8.cdn.asset.aparat.com/aparat-video/a05a22b7af608912731f0fd47b4d1a6c55520883-480p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY0YTAzZWY5MjdlNWM3NTQ5Y2QzOTU4NmQyY2I5MzRjIiwiZXhwIjoxNzgwNjc1MTY0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.6IXGzqoym1RT8Qjt4rzELpXgEXy5w9Ayz8tqnrku3Jk",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "7.24 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/a05a22b7af608912731f0fd47b4d1a6c55520883-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJmNjQ3MmUxY2Y0YTAwZTkzMDdkOTNmN2ZiNjRlODk3IiwiZXhwIjoxNzgwNjc1MTY0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.vzNeuODsoJc5-l_1fAfquWAHCdZsIpENz4nbc9eV2Zc"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "14.65 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/a05a22b7af608912731f0fd47b4d1a6c55520883-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJmNjQ3MmUxY2Y0YTAwZTkzMDdkOTNmN2ZiNjRlODk3IiwiZXhwIjoxNzgwNjc1MTY0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.vzNeuODsoJc5-l_1fAfquWAHCdZsIpENz4nbc9eV2Zc"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "31.97 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/a05a22b7af608912731f0fd47b4d1a6c55520883-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJmNjQ3MmUxY2Y0YTAwZTkzMDdkOTNmN2ZiNjRlODk3IiwiZXhwIjoxNzgwNjc1MTY0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.vzNeuODsoJc5-l_1fAfquWAHCdZsIpENz4nbc9eV2Zc"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "51.31 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/a05a22b7af608912731f0fd47b4d1a6c55520883-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJmNjQ3MmUxY2Y0YTAwZTkzMDdkOTNmN2ZiNjRlODk3IiwiZXhwIjoxNzgwNjc1MTY0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.vzNeuODsoJc5-l_1fAfquWAHCdZsIpENz4nbc9eV2Zc"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "69672725",
+      "title": "خون دلی که لعل شد",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 278,
+      "uid": "llzsnsx",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/69672725-9704-l__9545.jpg?width=900&quality=90&secret=LWtO7iwzP-GrViSLaOLlAg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/69672725-9704-l__9545.jpg?width=300&quality=90&secret=Q9V56tT4w44qZ4KGjc4AMw",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 608,
+      "sdate": "27 فروردین 1405 19:41",
+      "create_date": "2026-04-16 19:41:40",
+      "sdate_timediff": 4301265,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/llzsnsx/vt/frame",
+      "official": "no",
+      "tags": [
+        {
+          "name": "اربعین حسینی خامنه ای",
+          "video_cnt": "1"
+        }
+      ],
+      "tag_str": "رهبر شهید انقلاب,خون دلی که لعل شد,انقلاب اسلامی,اربعین حسینی خامنه ای",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "8734595",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 9,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=llzsnsx",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian8.cdn.asset.aparat.com/aparat-video/d957009b7ddf18bcb813c54b9b2406dd69672725-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjkwMmVjMTc3YWU0ZTAzYWQyYWQ3MWM4YzhlZjRlM2I3IiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.KhF3MrBN7HtIENfoVedmw4AEHgEabh4DksxDuZiH_9M",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "8.33 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian9.cdn.asset.aparat.com/aparat-video/d957009b7ddf18bcb813c54b9b2406dd69672725-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNmOTg5NjVmMDI3ZDU2MTVhYjQxNzIyMzRhMDhjZGJhIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.cMTi4FXcX_rkn4IBXZwY1iwdVEkf_bGd14XpMFdHwD0"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "15.97 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian9.cdn.asset.aparat.com/aparat-video/d957009b7ddf18bcb813c54b9b2406dd69672725-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNmOTg5NjVmMDI3ZDU2MTVhYjQxNzIyMzRhMDhjZGJhIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.cMTi4FXcX_rkn4IBXZwY1iwdVEkf_bGd14XpMFdHwD0"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "32.15 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian9.cdn.asset.aparat.com/aparat-video/d957009b7ddf18bcb813c54b9b2406dd69672725-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNmOTg5NjVmMDI3ZDU2MTVhYjQxNzIyMzRhMDhjZGJhIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.cMTi4FXcX_rkn4IBXZwY1iwdVEkf_bGd14XpMFdHwD0"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "49.5 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian8.cdn.asset.aparat.com/aparat-video/d957009b7ddf18bcb813c54b9b2406dd69672725-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNmOTg5NjVmMDI3ZDU2MTVhYjQxNzIyMzRhMDhjZGJhIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.cMTi4FXcX_rkn4IBXZwY1iwdVEkf_bGd14XpMFdHwD0"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "96.87 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian8.cdn.asset.aparat.com/aparat-video/d957009b7ddf18bcb813c54b9b2406dd69672725-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNmOTg5NjVmMDI3ZDU2MTVhYjQxNzIyMzRhMDhjZGJhIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.cMTi4FXcX_rkn4IBXZwY1iwdVEkf_bGd14XpMFdHwD0"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "192.16 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian8.cdn.asset.aparat.com/aparat-video/d957009b7ddf18bcb813c54b9b2406dd69672725-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNmOTg5NjVmMDI3ZDU2MTVhYjQxNzIyMzRhMDhjZGJhIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.cMTi4FXcX_rkn4IBXZwY1iwdVEkf_bGd14XpMFdHwD0"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "69003129",
+      "title": "روایت بعثت",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 183,
+      "uid": "gmr9kpa",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/69003129-6035-l__1839.jpg?width=900&quality=90&secret=bzSwDNuKldKikGLdnS9EYg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/69003129-6035-l__1839.jpg?width=300&quality=90&secret=yCCB78p2j7NG0EJP89W8Xw",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 1069,
+      "sdate": "02 فروردین 1405 15:09",
+      "create_date": "2026-03-22 15:09:43",
+      "sdate_timediff": 6477583,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/gmr9kpa/vt/frame",
+      "official": "no",
+      "tags": [
+        {
+          "name": "روایت بعثت",
+          "video_cnt": "1"
+        }
+      ],
+      "tag_str": "روایت بعثت,بعثت مردم,شهادت رهبر انقلاب",
+      "description": "شب عاشورایی",
+      "cat_id": 6,
+      "cat_name": "مذهبی",
+      "cat_name_en": "religious",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "22992446",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 5,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=gmr9kpa",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian23.cdn.asset.aparat.com/aparat-video/27cd3929b9002ac9bd74423b5b8e4ec969003129-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjIwMTJjYzIzYzFkMjk3NGFkZTRiMGY2MTBjZGEyZTYyIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.9qOHYkXb_HZ_sh91IEsu3bf8G92xm8PkctNpP-7Fx8c",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "21.93 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian23.cdn.asset.aparat.com/aparat-video/27cd3929b9002ac9bd74423b5b8e4ec969003129-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFmZTNmNzRjMTE2YTI3ZTNkMTA4MGI2NWZjYmQ4NTcyIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.n97Xx2e1QdvZvrn6Fg89KnL9YzVSojtulqVkvUEwqLs"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "46.56 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian23.cdn.asset.aparat.com/aparat-video/27cd3929b9002ac9bd74423b5b8e4ec969003129-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFmZTNmNzRjMTE2YTI3ZTNkMTA4MGI2NWZjYmQ4NTcyIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.n97Xx2e1QdvZvrn6Fg89KnL9YzVSojtulqVkvUEwqLs"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "91.31 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian23.cdn.asset.aparat.com/aparat-video/27cd3929b9002ac9bd74423b5b8e4ec969003129-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFmZTNmNzRjMTE2YTI3ZTNkMTA4MGI2NWZjYmQ4NTcyIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.n97Xx2e1QdvZvrn6Fg89KnL9YzVSojtulqVkvUEwqLs"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "148.79 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian23.cdn.asset.aparat.com/aparat-video/27cd3929b9002ac9bd74423b5b8e4ec969003129-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFmZTNmNzRjMTE2YTI3ZTNkMTA4MGI2NWZjYmQ4NTcyIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.n97Xx2e1QdvZvrn6Fg89KnL9YzVSojtulqVkvUEwqLs"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "302.28 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian24.cdn.asset.aparat.com/aparat-video/27cd3929b9002ac9bd74423b5b8e4ec969003129-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFmZTNmNzRjMTE2YTI3ZTNkMTA4MGI2NWZjYmQ4NTcyIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.n97Xx2e1QdvZvrn6Fg89KnL9YzVSojtulqVkvUEwqLs"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "537.07 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian23.cdn.asset.aparat.com/aparat-video/27cd3929b9002ac9bd74423b5b8e4ec969003129-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjFmZTNmNzRjMTE2YTI3ZTNkMTA4MGI2NWZjYmQ4NTcyIiwiZXhwIjoxNzgwNjc1MTY1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.n97Xx2e1QdvZvrn6Fg89KnL9YzVSojtulqVkvUEwqLs"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "69294244",
+      "title": "روایت بعثت  |  قسمت دوم  |  امت صاحب الزمان عج",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 36,
+      "uid": "bazwm00",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/69294244-6061-l__6712.jpg?width=900&quality=90&secret=Iz2LOOM0_3t_cqxY_3M1-Q",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/69294244-6061-l__6712.jpg?width=300&quality=90&secret=O1RdDttUXlD4fTHRZFVpbQ",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 999,
+      "sdate": "15 فروردین 1405 15:29",
+      "create_date": "2026-04-04 15:29:28",
+      "sdate_timediff": 5353199,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/bazwm00/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "رهبر انقلاب,روایت بعثت,جنگ تحمیلی سوم",
+      "description": "",
+      "cat_id": 6,
+      "cat_name": "مذهبی",
+      "cat_name_en": "religious",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "19952108",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 1,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=bazwm00",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian14.cdn.asset.aparat.com/aparat-video/ce9526755706358cd32b8a2cac29e97869294244-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjVkYmU0ZmY0NDQ2YTQ3Zjc1NjgzNTZiNDEzMzNlNzEzIiwiZXhwIjoxNzgwNjc1MTY2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.Okz6OnNjD4bnUQbEexD0TEQNWDjy0Oims0Uogdgr1bg",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "19.03 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/ce9526755706358cd32b8a2cac29e97869294244-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImFmOTUxZGU3NWVjMjc5NWQ0N2E2MWRhMmMxNDQ4N2E3IiwiZXhwIjoxNzgwNjc1MTY2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.9g1yLzIHVn4eBNruNhKxKj-gEKMmK5ZefI_u02KGxGM"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "39.77 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/ce9526755706358cd32b8a2cac29e97869294244-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImFmOTUxZGU3NWVjMjc5NWQ0N2E2MWRhMmMxNDQ4N2E3IiwiZXhwIjoxNzgwNjc1MTY2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.9g1yLzIHVn4eBNruNhKxKj-gEKMmK5ZefI_u02KGxGM"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "77.31 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/ce9526755706358cd32b8a2cac29e97869294244-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImFmOTUxZGU3NWVjMjc5NWQ0N2E2MWRhMmMxNDQ4N2E3IiwiZXhwIjoxNzgwNjc1MTY2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.9g1yLzIHVn4eBNruNhKxKj-gEKMmK5ZefI_u02KGxGM"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "125.1 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/ce9526755706358cd32b8a2cac29e97869294244-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImFmOTUxZGU3NWVjMjc5NWQ0N2E2MWRhMmMxNDQ4N2E3IiwiZXhwIjoxNzgwNjc1MTY2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.9g1yLzIHVn4eBNruNhKxKj-gEKMmK5ZefI_u02KGxGM"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "253.06 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian15.cdn.asset.aparat.com/aparat-video/ce9526755706358cd32b8a2cac29e97869294244-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImFmOTUxZGU3NWVjMjc5NWQ0N2E2MWRhMmMxNDQ4N2E3IiwiZXhwIjoxNzgwNjc1MTY2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.9g1yLzIHVn4eBNruNhKxKj-gEKMmK5ZefI_u02KGxGM"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "474.89 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/ce9526755706358cd32b8a2cac29e97869294244-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImFmOTUxZGU3NWVjMjc5NWQ0N2E2MWRhMmMxNDQ4N2E3IiwiZXhwIjoxNzgwNjc1MTY2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.9g1yLzIHVn4eBNruNhKxKj-gEKMmK5ZefI_u02KGxGM"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "69970523",
+      "title": "روایت بعثت   |   چه کسی از جنگ خسته شده است",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 65,
+      "uid": "dvkn088",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/69970523-3121-l__8849.jpg?width=900&quality=90&secret=47DYCk9U0qOhq2OYBjId4w",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/69970523-3121-l__8849.jpg?width=300&quality=90&secret=VVMgRktwTjerghnlUyogSA",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 1045,
+      "sdate": "05 اردیبهشت 1405 20:59",
+      "create_date": "2026-04-25 20:59:30",
+      "sdate_timediff": 3518997,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/dvkn088/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "انقلاب اسلامی,بعثت مردم,شهادت رهبری",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "1418567781",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 5,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=dvkn088",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian13.cdn.asset.aparat.com/aparat-video/32c773fa94f0b991cebcb9f9efef351069970523-720p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImE4ODNhYWRiOGViNTY2NzY2YTE0MGFmYjZmZmE1Yzk3IiwiZXhwIjoxNzgwNjc1MTY3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.7W0XANr6CVVsu6gCP2HKgWCOWPDlhewXhENyXysz1vU",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "20.02 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian11.cdn.asset.aparat.com/aparat-video/32c773fa94f0b991cebcb9f9efef351069970523-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZjZDFjMzYwZDhhNTA5MTZjZDAxM2ExMzhlZDA4OGQ4IiwiZXhwIjoxNzgwNjc1MTY3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.37y1U3TlBYwaA99Fes-6WEzjM-sNM2sjRrRYzlKWFe0"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "39.42 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian11.cdn.asset.aparat.com/aparat-video/32c773fa94f0b991cebcb9f9efef351069970523-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZjZDFjMzYwZDhhNTA5MTZjZDAxM2ExMzhlZDA4OGQ4IiwiZXhwIjoxNzgwNjc1MTY3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.37y1U3TlBYwaA99Fes-6WEzjM-sNM2sjRrRYzlKWFe0"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "73.47 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/32c773fa94f0b991cebcb9f9efef351069970523-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZjZDFjMzYwZDhhNTA5MTZjZDAxM2ExMzhlZDA4OGQ4IiwiZXhwIjoxNzgwNjc1MTY3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.37y1U3TlBYwaA99Fes-6WEzjM-sNM2sjRrRYzlKWFe0"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "114.89 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian19.cdn.asset.aparat.com/aparat-video/32c773fa94f0b991cebcb9f9efef351069970523-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZjZDFjMzYwZDhhNTA5MTZjZDAxM2ExMzhlZDA4OGQ4IiwiZXhwIjoxNzgwNjc1MTY3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.37y1U3TlBYwaA99Fes-6WEzjM-sNM2sjRrRYzlKWFe0"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "218.32 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian13.cdn.asset.aparat.com/aparat-video/32c773fa94f0b991cebcb9f9efef351069970523-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZjZDFjMzYwZDhhNTA5MTZjZDAxM2ExMzhlZDA4OGQ4IiwiZXhwIjoxNzgwNjc1MTY3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.37y1U3TlBYwaA99Fes-6WEzjM-sNM2sjRrRYzlKWFe0"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "70553663",
+      "title": "&laquo;سَرای اُمید&raquo;",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 47,
+      "uid": "vsxcg4f",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/70553663-3752-l__4499.jpg?width=900&quality=90&secret=6GbWhOe-aEcSWPLeo-5QyQ",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/70553663-3752-l__4499.jpg?width=300&quality=90&secret=1EbVm51PtBbbp54VM0cEqw",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 169,
+      "sdate": "21 اردیبهشت 1405 15:01",
+      "create_date": "2026-05-11 15:01:17",
+      "sdate_timediff": 2158091,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/vsxcg4f/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "سرای امید,شهادت رهبر انقلاب,رهبر شهید,سیدعلی خامنه ای,سها",
+      "description": "",
+      "cat_id": 22,
+      "cat_name": "ویدئو گیم",
+      "cat_name_en": "game",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "215310556",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 1,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=vsxcg4f",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian1.cdn.asset.aparat.com/aparat-video/5f8cace8992d29f298915a267c8d4f0770553663-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjM5NGIwNDdmOGM2NzVkZWNhMzhhOTc5N2E2NzE0NDMxIiwiZXhwIjoxNzgwNjc1MTY4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.CLKtsT-e-Ynd9AnMTKecxWeAIdcrEj9AuagcMEVXhC8",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "2.33 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian24.cdn.asset.aparat.com/aparat-video/5f8cace8992d29f298915a267c8d4f0770553663-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI1ZTA5YTliYmEyNzhkNWEwNzA2ZDg4NmU0ZDg4ZjY4IiwiZXhwIjoxNzgwNjc1MTY4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.RRSzHa9Wp7H9puHqzKYcF9IsjYQExoNuIgVnfzuCA3g"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "3.7 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian15.cdn.asset.aparat.com/aparat-video/5f8cace8992d29f298915a267c8d4f0770553663-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI1ZTA5YTliYmEyNzhkNWEwNzA2ZDg4NmU0ZDg4ZjY4IiwiZXhwIjoxNzgwNjc1MTY4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.RRSzHa9Wp7H9puHqzKYcF9IsjYQExoNuIgVnfzuCA3g"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "6.89 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian11.cdn.asset.aparat.com/aparat-video/5f8cace8992d29f298915a267c8d4f0770553663-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI1ZTA5YTliYmEyNzhkNWEwNzA2ZDg4NmU0ZDg4ZjY4IiwiZXhwIjoxNzgwNjc1MTY4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.RRSzHa9Wp7H9puHqzKYcF9IsjYQExoNuIgVnfzuCA3g"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "9.93 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian13.cdn.asset.aparat.com/aparat-video/5f8cace8992d29f298915a267c8d4f0770553663-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI1ZTA5YTliYmEyNzhkNWEwNzA2ZDg4NmU0ZDg4ZjY4IiwiZXhwIjoxNzgwNjc1MTY4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.RRSzHa9Wp7H9puHqzKYcF9IsjYQExoNuIgVnfzuCA3g"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "18.17 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian24.cdn.asset.aparat.com/aparat-video/5f8cace8992d29f298915a267c8d4f0770553663-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI1ZTA5YTliYmEyNzhkNWEwNzA2ZDg4NmU0ZDg4ZjY4IiwiZXhwIjoxNzgwNjc1MTY4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.RRSzHa9Wp7H9puHqzKYcF9IsjYQExoNuIgVnfzuCA3g"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "36.81 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian1.cdn.asset.aparat.com/aparat-video/5f8cace8992d29f298915a267c8d4f0770553663-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI1ZTA5YTliYmEyNzhkNWEwNzA2ZDg4NmU0ZDg4ZjY4IiwiZXhwIjoxNzgwNjc1MTY4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.RRSzHa9Wp7H9puHqzKYcF9IsjYQExoNuIgVnfzuCA3g"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "68745750",
+      "title": "زان که بی شمشیر کشتن کار اوست",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 78,
+      "uid": "ypxo1ts",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/68745750-6644-l__1817.jpg?width=900&quality=90&secret=6q3hpPdcdv5q-cHOBMBScA",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/68745750-6644-l__1817.jpg?width=300&quality=90&secret=uTcuW-iUg3QEV7Ngqu3n7Q",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 467,
+      "sdate": "18 اسفند 1404 23:10",
+      "create_date": "2026-03-09 23:10:52",
+      "sdate_timediff": 7571917,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/ypxo1ts/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "شهادت رهبر انقلاب,استاد طاهرزاده,اصغر طاهرزاده",
+      "description": "ما و حضور نرم تمدنی در شهادت رهبر معظم انقلاب",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "7387935",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 1,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=ypxo1ts",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian21.cdn.asset.aparat.com/aparat-video/66672d4d0e9473fb30666f3f9e2f8b3868745750-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImViOWQ2MGQzNDE5ZWU1ODNjN2ZjMjdlYmNhNmExODExIiwiZXhwIjoxNzgwNjc1MTY5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.u8EhCgRWPcQlEu-xc7dpPTGAeBtA3aJUUB4kbfZQwic",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "7.05 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian22.cdn.asset.aparat.com/aparat-video/66672d4d0e9473fb30666f3f9e2f8b3868745750-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhjYTU3MDAxZTU3ZWYyZWRmYmJjNzI2YTJlYzM3M2M0IiwiZXhwIjoxNzgwNjc1MTY5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.6q1H8ZvtZj83aaDCSsUt4w5kMl-H6t2D8qtGno5uiJM"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "14.18 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian22.cdn.asset.aparat.com/aparat-video/66672d4d0e9473fb30666f3f9e2f8b3868745750-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhjYTU3MDAxZTU3ZWYyZWRmYmJjNzI2YTJlYzM3M2M0IiwiZXhwIjoxNzgwNjc1MTY5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.6q1H8ZvtZj83aaDCSsUt4w5kMl-H6t2D8qtGno5uiJM"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "28.5 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian22.cdn.asset.aparat.com/aparat-video/66672d4d0e9473fb30666f3f9e2f8b3868745750-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhjYTU3MDAxZTU3ZWYyZWRmYmJjNzI2YTJlYzM3M2M0IiwiZXhwIjoxNzgwNjc1MTY5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.6q1H8ZvtZj83aaDCSsUt4w5kMl-H6t2D8qtGno5uiJM"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "45.16 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian21.cdn.asset.aparat.com/aparat-video/66672d4d0e9473fb30666f3f9e2f8b3868745750-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhjYTU3MDAxZTU3ZWYyZWRmYmJjNzI2YTJlYzM3M2M0IiwiZXhwIjoxNzgwNjc1MTY5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.6q1H8ZvtZj83aaDCSsUt4w5kMl-H6t2D8qtGno5uiJM"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "88.65 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian21.cdn.asset.aparat.com/aparat-video/66672d4d0e9473fb30666f3f9e2f8b3868745750-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhjYTU3MDAxZTU3ZWYyZWRmYmJjNzI2YTJlYzM3M2M0IiwiZXhwIjoxNzgwNjc1MTY5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.6q1H8ZvtZj83aaDCSsUt4w5kMl-H6t2D8qtGno5uiJM"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "168.03 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian21.cdn.asset.aparat.com/aparat-video/66672d4d0e9473fb30666f3f9e2f8b3868745750-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhjYTU3MDAxZTU3ZWYyZWRmYmJjNzI2YTJlYzM3M2M0IiwiZXhwIjoxNzgwNjc1MTY5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.6q1H8ZvtZj83aaDCSsUt4w5kMl-H6t2D8qtGno5uiJM"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "67208132",
+      "title": "برنامه توسعه",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 62,
+      "uid": "yzmr821",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/67208132-3766-l__2627.jpg?width=900&quality=90&secret=AA3RZ9cYxxwBexndmtiVwQ",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/67208132-3766-l__2627.jpg?width=300&quality=90&secret=D45DyhtxiAufKwnOatmrUg",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 673,
+      "sdate": "07 آذر 1404 16:41",
+      "create_date": "2025-11-28 16:41:22",
+      "sdate_timediff": 16321688,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/yzmr821/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "برنامه توسعه,مجلس شورای اسلامی,دولت",
+      "description": "ما چگونه به آینده می&zwnj;اندیشیم؛ آنچه درک ماست از زندگی در دنیای امروز",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "8326566",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 1,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=yzmr821",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian25.cdn.asset.aparat.com/aparat-video/ebd7a3f40d8dd0515063aac323e89b8167208132-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjY0NTRlOWJjYmE4YmI5ZTJkMzY1NzcwNWYyMDBhMzkyIiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.zj-PfQwNsQQx9cOIF-hrEmRXqs9rKukhe5iN1PTufzc",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "7.94 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian25.cdn.asset.aparat.com/aparat-video/ebd7a3f40d8dd0515063aac323e89b8167208132-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY0OGE5ZDFiNGU1ODYzM2VkZDVjYzgwZWI4ZDhlODhlIiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.KdFbHPmoJiNgVWuUgxnkBKNgIrXt2IbmP-zhbtoo6NA"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "15.7 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian25.cdn.asset.aparat.com/aparat-video/ebd7a3f40d8dd0515063aac323e89b8167208132-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY0OGE5ZDFiNGU1ODYzM2VkZDVjYzgwZWI4ZDhlODhlIiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.KdFbHPmoJiNgVWuUgxnkBKNgIrXt2IbmP-zhbtoo6NA"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "33.48 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian25.cdn.asset.aparat.com/aparat-video/ebd7a3f40d8dd0515063aac323e89b8167208132-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY0OGE5ZDFiNGU1ODYzM2VkZDVjYzgwZWI4ZDhlODhlIiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.KdFbHPmoJiNgVWuUgxnkBKNgIrXt2IbmP-zhbtoo6NA"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "55.11 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian25.cdn.asset.aparat.com/aparat-video/ebd7a3f40d8dd0515063aac323e89b8167208132-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY0OGE5ZDFiNGU1ODYzM2VkZDVjYzgwZWI4ZDhlODhlIiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.KdFbHPmoJiNgVWuUgxnkBKNgIrXt2IbmP-zhbtoo6NA"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "120.93 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian25.cdn.asset.aparat.com/aparat-video/ebd7a3f40d8dd0515063aac323e89b8167208132-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY0OGE5ZDFiNGU1ODYzM2VkZDVjYzgwZWI4ZDhlODhlIiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.KdFbHPmoJiNgVWuUgxnkBKNgIrXt2IbmP-zhbtoo6NA"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "252.89 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian25.cdn.asset.aparat.com/aparat-video/ebd7a3f40d8dd0515063aac323e89b8167208132-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY0OGE5ZDFiNGU1ODYzM2VkZDVjYzgwZWI4ZDhlODhlIiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.KdFbHPmoJiNgVWuUgxnkBKNgIrXt2IbmP-zhbtoo6NA"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "66045145",
+      "title": "منزل",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 64,
+      "uid": "kmz9oz3",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/66045145-4340-l__9548.jpg?width=900&quality=90&secret=Xkhr7ZzXKpv-t-TXcEbaog",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/66045145-4340-l__9548.jpg?width=300&quality=90&secret=mAO1MPFDfzSwfEf_Wf3XvQ",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 816,
+      "sdate": "08 شهریور 1404 19:28",
+      "create_date": "2025-08-30 19:28:33",
+      "sdate_timediff": 24087658,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/kmz9oz3/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "استاد طاهرزاده,اربعین,استقبال",
+      "description": "جایگاه استقبال از زائر اربعینی",
+      "cat_id": 6,
+      "cat_name": "مذهبی",
+      "cat_name_en": "religious",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "13175478",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 0,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=kmz9oz3",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian20.cdn.asset.aparat.com/aparat-video/378e7ea1adde9ce4184c33026f289a1866045145-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNiYWYwNDk2NWM0M2YxYzAyNGEwNDNmN2JmYTQ3M2QzIiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.Cpax1hdjnyFQWPNBaE6uLO7h6i5nSHDL6Ozw44FBl_Y",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "12.57 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian20.cdn.asset.aparat.com/aparat-video/378e7ea1adde9ce4184c33026f289a1866045145-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI3NmE0ZjIxOGU0ZDAxZmRlYjI4ODRjNGU1YWY3Nzg5IiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.OpIo07oUTArZbfL0KXg8L6TOizZiY5eIxfJCXG-Aumk"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "26.83 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian20.cdn.asset.aparat.com/aparat-video/378e7ea1adde9ce4184c33026f289a1866045145-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI3NmE0ZjIxOGU0ZDAxZmRlYjI4ODRjNGU1YWY3Nzg5IiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.OpIo07oUTArZbfL0KXg8L6TOizZiY5eIxfJCXG-Aumk"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "56.96 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian20.cdn.asset.aparat.com/aparat-video/378e7ea1adde9ce4184c33026f289a1866045145-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI3NmE0ZjIxOGU0ZDAxZmRlYjI4ODRjNGU1YWY3Nzg5IiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.OpIo07oUTArZbfL0KXg8L6TOizZiY5eIxfJCXG-Aumk"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "93.93 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian13.cdn.asset.aparat.com/aparat-video/378e7ea1adde9ce4184c33026f289a1866045145-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI3NmE0ZjIxOGU0ZDAxZmRlYjI4ODRjNGU1YWY3Nzg5IiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.OpIo07oUTArZbfL0KXg8L6TOizZiY5eIxfJCXG-Aumk"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "197.71 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian13.cdn.asset.aparat.com/aparat-video/378e7ea1adde9ce4184c33026f289a1866045145-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI3NmE0ZjIxOGU0ZDAxZmRlYjI4ODRjNGU1YWY3Nzg5IiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.OpIo07oUTArZbfL0KXg8L6TOizZiY5eIxfJCXG-Aumk"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "416.22 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian20.cdn.asset.aparat.com/aparat-video/378e7ea1adde9ce4184c33026f289a1866045145-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjI3NmE0ZjIxOGU0ZDAxZmRlYjI4ODRjNGU1YWY3Nzg5IiwiZXhwIjoxNzgwNjc1MTcwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.OpIo07oUTArZbfL0KXg8L6TOizZiY5eIxfJCXG-Aumk"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "65073478",
+      "title": "ملت ایران",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 318,
+      "uid": "sdfl08i",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/65073478-3551-l__6884.jpg?width=900&quality=90&secret=hW0FYZWAhdOn4QsZU1SpeQ",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/65073478-3551-l__6884.jpg?width=300&quality=90&secret=6BwSn5Ct-VLEeY-qVbPD9Q",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 856,
+      "sdate": "06 تیر 1404 11:44",
+      "create_date": "2025-06-27 11:44:11",
+      "sdate_timediff": 29645120,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/sdfl08i/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "رهبر انقلاب,امام خمینی,ملت ایران",
+      "description": "روایتی از حرکت ملت ایران در میانه طوفان...",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "14689525",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 6,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=sdfl08i",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian12.cdn.asset.aparat.com/aparat-video/aac6270efaa499a79d3583177733a63d65073478-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjhhZmM5OWEzNTRhY2YyODQ1ODVhMDFhZTk2YjhiODE2IiwiZXhwIjoxNzgwNjc1MTcxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.SMVuWu6yqFVIBWO2M0gi8rYsjLs4Y5KeuQ97ar-lo5E",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "14.01 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/aac6270efaa499a79d3583177733a63d65073478-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ2NWM2OTZiYTcwMzg5ZjVkMjZkZGNmZDRlOWY4Nzc2IiwiZXhwIjoxNzgwNjc1MTcxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.sva_26x6FSotoTme_ViMc4Jowf4U70TH5YDNubsRUvc"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "29.96 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/aac6270efaa499a79d3583177733a63d65073478-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ2NWM2OTZiYTcwMzg5ZjVkMjZkZGNmZDRlOWY4Nzc2IiwiZXhwIjoxNzgwNjc1MTcxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.sva_26x6FSotoTme_ViMc4Jowf4U70TH5YDNubsRUvc"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "59.51 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/aac6270efaa499a79d3583177733a63d65073478-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ2NWM2OTZiYTcwMzg5ZjVkMjZkZGNmZDRlOWY4Nzc2IiwiZXhwIjoxNzgwNjc1MTcxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.sva_26x6FSotoTme_ViMc4Jowf4U70TH5YDNubsRUvc"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "94.48 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/aac6270efaa499a79d3583177733a63d65073478-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ2NWM2OTZiYTcwMzg5ZjVkMjZkZGNmZDRlOWY4Nzc2IiwiZXhwIjoxNzgwNjc1MTcxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.sva_26x6FSotoTme_ViMc4Jowf4U70TH5YDNubsRUvc"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "177.99 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/aac6270efaa499a79d3583177733a63d65073478-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ2NWM2OTZiYTcwMzg5ZjVkMjZkZGNmZDRlOWY4Nzc2IiwiZXhwIjoxNzgwNjc1MTcxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.sva_26x6FSotoTme_ViMc4Jowf4U70TH5YDNubsRUvc"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "299.65 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/aac6270efaa499a79d3583177733a63d65073478-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ2NWM2OTZiYTcwMzg5ZjVkMjZkZGNmZDRlOWY4Nzc2IiwiZXhwIjoxNzgwNjc1MTcxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.sva_26x6FSotoTme_ViMc4Jowf4U70TH5YDNubsRUvc"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "64962629",
+      "title": "اشاره‌ی فتح",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 121,
+      "uid": "fvga5g0",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/64962629-4673-l__8290.jpg?width=900&quality=90&secret=-o_DMBWLi0VRfVRmKEtePA",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/64962629-4673-l__8290.jpg?width=300&quality=90&secret=3cJqELIoPY1NS_g06huZsQ",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 246,
+      "sdate": "27 خرداد 1404 01:22",
+      "create_date": "2025-06-17 01:22:05",
+      "sdate_timediff": 30546447,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/fvga5g0/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "سحر امامی,وعده ی صادق 3,رهبر انقلاب",
+      "description": "ما از مرگ نمي&zwnj;ترسیم، كه مرگ ما شهادت است و شهادت، حیات عندالرب. عقل&zwnj;های محجوب به آیینه&zwnj;های قیراندود فطرت بشر غربی چگونه خواهند توانست كه معنای حیات عندالرب را دریابند؟",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "3124451",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 1,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=fvga5g0",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian5.cdn.asset.aparat.com/aparat-video/3ccea78d24160821c3a2e7f0ff26b46064962629-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImQ3YWU5YjliNmRkOTEzN2QwZjc5NDE2MjkxYWI4ZDRiIiwiZXhwIjoxNzgwNjc1MTcyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.wpY6vmEaedJzDfO-uNMegYVBWvO75W5Z_Aq8twaBWu4",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "2.98 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian5.cdn.asset.aparat.com/aparat-video/3ccea78d24160821c3a2e7f0ff26b46064962629-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZkNzEwYmYwMTA5ZWNiOGM4MWRmM2QyYTFmZmVkOGE3IiwiZXhwIjoxNzgwNjc1MTcyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5CRsc_AopLCmZB2AXjnqJx-1hkuumMKfShUL0zU8sD8"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "5.8 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian5.cdn.asset.aparat.com/aparat-video/3ccea78d24160821c3a2e7f0ff26b46064962629-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZkNzEwYmYwMTA5ZWNiOGM4MWRmM2QyYTFmZmVkOGE3IiwiZXhwIjoxNzgwNjc1MTcyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5CRsc_AopLCmZB2AXjnqJx-1hkuumMKfShUL0zU8sD8"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "11.84 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian5.cdn.asset.aparat.com/aparat-video/3ccea78d24160821c3a2e7f0ff26b46064962629-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZkNzEwYmYwMTA5ZWNiOGM4MWRmM2QyYTFmZmVkOGE3IiwiZXhwIjoxNzgwNjc1MTcyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5CRsc_AopLCmZB2AXjnqJx-1hkuumMKfShUL0zU8sD8"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "18.58 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian5.cdn.asset.aparat.com/aparat-video/3ccea78d24160821c3a2e7f0ff26b46064962629-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZkNzEwYmYwMTA5ZWNiOGM4MWRmM2QyYTFmZmVkOGE3IiwiZXhwIjoxNzgwNjc1MTcyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5CRsc_AopLCmZB2AXjnqJx-1hkuumMKfShUL0zU8sD8"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "36.74 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian5.cdn.asset.aparat.com/aparat-video/3ccea78d24160821c3a2e7f0ff26b46064962629-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZkNzEwYmYwMTA5ZWNiOGM4MWRmM2QyYTFmZmVkOGE3IiwiZXhwIjoxNzgwNjc1MTcyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5CRsc_AopLCmZB2AXjnqJx-1hkuumMKfShUL0zU8sD8"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "70.21 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian5.cdn.asset.aparat.com/aparat-video/3ccea78d24160821c3a2e7f0ff26b46064962629-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZkNzEwYmYwMTA5ZWNiOGM4MWRmM2QyYTFmZmVkOGE3IiwiZXhwIjoxNzgwNjc1MTcyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5CRsc_AopLCmZB2AXjnqJx-1hkuumMKfShUL0zU8sD8"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "64801936",
+      "title": "&laquo;سالک روح‌الله&raquo; روایت سلوک ذیل شخصیت امام خمینی &laquo;ره&laquo;",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 103,
+      "uid": "scpr14s",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/64801936-9681-l__5370.jpg?width=900&quality=90&secret=_CyTmZO79iGb1PrGLg4zbA",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/64801936-9681-l__5370.jpg?width=300&quality=90&secret=zP6VatSmTs2iB-y182cPZQ",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 1735,
+      "sdate": "14 خرداد 1404 14:04",
+      "create_date": "2025-06-04 14:04:54",
+      "sdate_timediff": 31623879,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/scpr14s/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "طبقه فیلم و مستند,رهبر انقلاب,روایت,مقام معظم رهبری,امام خمینی",
+      "description": "روایت &laquo;سالک روح الله&raquo; بیانگر این مسئله است که ما بدون یاد و عهد با امام هیچ میشویم...\nو مانند کالبدی هستیم که روح ندارد\nراوی این روایت رهبر انقلاب هستند که در مناسبت های مختلف به تبین عظمت شخصیت امام خمینی می پردازند.",
+      "cat_id": 5,
+      "cat_name": "فیلم، سریال و مستند",
+      "cat_name_en": "film",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "27851572",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 1,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=scpr14s",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian17.cdn.asset.aparat.com/aparat-video/0283ea0ea424af6642892c690c11414f64801936-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImVjYmQxMzdhNjg1YzIzZmJmNzRmM2E3MjgyNGU4MGJmIiwiZXhwIjoxNzgwNjc1MTczLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.eAUsBIEaPPVBCNG2kccqlbmHpjUGLVkWIuFpo2W3isE",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "26.56 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian17.cdn.asset.aparat.com/aparat-video/0283ea0ea424af6642892c690c11414f64801936-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImQ1ZjUzMDE3ZjgzMTlkZGQwOGE0NjgzZTgxN2ZjZjFhIiwiZXhwIjoxNzgwNjc1MTczLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.0WalPU-f8zrwO20wdhKaQOBI3NHGMaGDBfuBFKN4cVY"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "53.87 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian20.cdn.asset.aparat.com/aparat-video/0283ea0ea424af6642892c690c11414f64801936-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImQ1ZjUzMDE3ZjgzMTlkZGQwOGE0NjgzZTgxN2ZjZjFhIiwiZXhwIjoxNzgwNjc1MTczLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.0WalPU-f8zrwO20wdhKaQOBI3NHGMaGDBfuBFKN4cVY"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "110.84 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian19.cdn.asset.aparat.com/aparat-video/0283ea0ea424af6642892c690c11414f64801936-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImQ1ZjUzMDE3ZjgzMTlkZGQwOGE0NjgzZTgxN2ZjZjFhIiwiZXhwIjoxNzgwNjc1MTczLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.0WalPU-f8zrwO20wdhKaQOBI3NHGMaGDBfuBFKN4cVY"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "178.52 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian17.cdn.asset.aparat.com/aparat-video/0283ea0ea424af6642892c690c11414f64801936-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImQ1ZjUzMDE3ZjgzMTlkZGQwOGE0NjgzZTgxN2ZjZjFhIiwiZXhwIjoxNzgwNjc1MTczLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.0WalPU-f8zrwO20wdhKaQOBI3NHGMaGDBfuBFKN4cVY"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "362.52 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian17.cdn.asset.aparat.com/aparat-video/0283ea0ea424af6642892c690c11414f64801936-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImQ1ZjUzMDE3ZjgzMTlkZGQwOGE0NjgzZTgxN2ZjZjFhIiwiZXhwIjoxNzgwNjc1MTczLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.0WalPU-f8zrwO20wdhKaQOBI3NHGMaGDBfuBFKN4cVY"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "717.87 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian17.cdn.asset.aparat.com/aparat-video/0283ea0ea424af6642892c690c11414f64801936-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImQ1ZjUzMDE3ZjgzMTlkZGQwOGE0NjgzZTgxN2ZjZjFhIiwiZXhwIjoxNzgwNjc1MTczLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.0WalPU-f8zrwO20wdhKaQOBI3NHGMaGDBfuBFKN4cVY"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "64427406",
+      "title": "پیمان علم؛ پیمان کربلایی",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 102,
+      "uid": "irxz764",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/64427406-5270-l__3012.jpg?width=900&quality=90&secret=urkC0-T50seX_8UeeTAfBg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/64427406-5270-l__3012.jpg?width=300&quality=90&secret=oiCPoi10QUFpDXFA7vVUZw",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 355,
+      "sdate": "17 اردیبهشت 1404 09:24",
+      "create_date": "2025-05-07 09:24:22",
+      "sdate_timediff": 34059912,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/irxz764/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "شهید مطهری,روز معلم,امام خمینی",
+      "description": "شايد براي آنها كه هنوز نمي&zwnj;خواهند حقيقت را باور كنند بين فقه و اصول و جبهه&zwnj;هاي جنگ تناسبي نباشد، اما براي ما كه علما و فقها را ورثه&zwnj;ي انبيا مي&zwnj;دانيم حقيقت مسلم اين است كه فتح ما در جبهه&zwnj;هاي نبرد، در همين كلاس&zwnj;هاي فقه و اصول است كه پايه&zwnj;ريزي مي&zwnj;گردد. ما براي اسلام مي&zwnj;جنگيم و درخت تنومند اسلام ريشه در خاك فقه و اصول دارد و از خون عُشاق آبياري مي&zwnj;شود. پيمان علم، پيماني كربلايي است و آن كه اين پيمان را با خدا بست، در مدرسه درس فقه مي&zwnj;خواند و در جبهه درس عشق، و قربتاً الي الله بر سر اين هر دو درس با وضو وارد مي&zwnj;شود و اين هر دو را جبهه&zwnj;ي مبارزه با كفر و شرك مي&zwnj;داند، و مي&zwnj;داند كه اين راه، راه شهادت است.",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "4638662",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 2,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=irxz764",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian8.cdn.asset.aparat.com/aparat-video/961df9aad3eb4cad905090f599a145fe64427406-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg2OGFlMTViMWY2ODA4NjhjOGE5YzY2NzA3NGQxY2QwIiwiZXhwIjoxNzgwNjc1MTc0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.mQ1avyZkDXKy3p8mehnBgTaqIS03YgdgYdSlPssPv38",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "4.42 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/961df9aad3eb4cad905090f599a145fe64427406-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJkYWNiMTc0ZTg5N2Y4ZTA4MzRhYzRkYTA5NjAzNGZjIiwiZXhwIjoxNzgwNjc1MTc0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.s4IRVqirq7vk5eQxSEdHkPmktj5dKZqGdoNkM0UWK-Q"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "7.99 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian17.cdn.asset.aparat.com/aparat-video/961df9aad3eb4cad905090f599a145fe64427406-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJkYWNiMTc0ZTg5N2Y4ZTA4MzRhYzRkYTA5NjAzNGZjIiwiZXhwIjoxNzgwNjc1MTc0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.s4IRVqirq7vk5eQxSEdHkPmktj5dKZqGdoNkM0UWK-Q"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "15.75 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/961df9aad3eb4cad905090f599a145fe64427406-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJkYWNiMTc0ZTg5N2Y4ZTA4MzRhYzRkYTA5NjAzNGZjIiwiZXhwIjoxNzgwNjc1MTc0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.s4IRVqirq7vk5eQxSEdHkPmktj5dKZqGdoNkM0UWK-Q"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "24.09 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/961df9aad3eb4cad905090f599a145fe64427406-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJkYWNiMTc0ZTg5N2Y4ZTA4MzRhYzRkYTA5NjAzNGZjIiwiZXhwIjoxNzgwNjc1MTc0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.s4IRVqirq7vk5eQxSEdHkPmktj5dKZqGdoNkM0UWK-Q"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "48.22 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/961df9aad3eb4cad905090f599a145fe64427406-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJkYWNiMTc0ZTg5N2Y4ZTA4MzRhYzRkYTA5NjAzNGZjIiwiZXhwIjoxNzgwNjc1MTc0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.s4IRVqirq7vk5eQxSEdHkPmktj5dKZqGdoNkM0UWK-Q"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "91.36 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian8.cdn.asset.aparat.com/aparat-video/961df9aad3eb4cad905090f599a145fe64427406-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImJkYWNiMTc0ZTg5N2Y4ZTA4MzRhYzRkYTA5NjAzNGZjIiwiZXhwIjoxNzgwNjc1MTc0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.s4IRVqirq7vk5eQxSEdHkPmktj5dKZqGdoNkM0UWK-Q"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "64200075",
+      "title": "تماشاگه راز",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 313,
+      "uid": "gaz3auq",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/64200075-7115-l__4578.jpg?width=900&quality=90&secret=IEJTnVfQ3U75T4hVWJGywQ",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/64200075-7115-l__4578.jpg?width=300&quality=90&secret=HMMHSUnN6a_DWrD6ktISAg",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 720,
+      "sdate": "30 فروردین 1404 20:15",
+      "create_date": "2025-04-19 20:15:32",
+      "sdate_timediff": 35576043,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/gaz3auq/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "شهید آوینی,سیدمرتضی آوینی,روایت فتح,تماشاگه راز",
+      "description": "گروه های فیلمبرداری ما با همان انگیزه هایی که رزم آوران را به جبهه کشانده بود کار می کردند؛ داوطلبانه و بدون چشم داشت مالی در کمال قناعت و شجاعت و آماده برای شهادت. این آمادگی اصلی بود که باقی ضرورتها را ایجاب میکرد . یعنی اگر گروه های فیلمبرداری ما آماده برای مرگ نبودند دیگر قناعت و صداقت و دیگر صفات ممدوحشان فایده ای نمی توانست داشته باشد. اینجا عرصه ای نبود که فقط پای تکنیک و یا هنر در میان باشد. بهترین کارگردان های سینما اگر آمادگی برای کشته شدن در جنگ نمی داشتند نمی توانستند در میان ما مفید به فاید و ارجمند باشند. این کارها که ما می کردیم از پول یا بروکراسی یا سیستم ای نظامی و یا هر چیز دیگر بر نمی آمد عشق می خواهد و انگیزش ریشه انگیزش هم در عشق است هر انگیزش.",
+      "cat_id": 17,
+      "cat_name": "فرهنگ و هنر",
+      "cat_name_en": "art",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "11173911",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 6,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=gaz3auq",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian9.cdn.asset.aparat.com/aparat-video/18bd7097427a7dcc5a9d93002f3a938364200075-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjczNWYxZjI2YWZiN2I2Mjg3NzBhZjQ4ZDFkYWFkNDE3IiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.N5js3yJR-VNrrvbWjVBNq9g_oySYbR2VJYgdmuowuBo",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "10.66 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian6.cdn.asset.aparat.com/aparat-video/18bd7097427a7dcc5a9d93002f3a938364200075-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImU3M2I0MWY5MWFmY2E5OTdjYWUzMzZjM2E4OWJkYjgwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.1rwMfeSDlAe95vxnaHmIMFjNR975iOpgQhpP7g-xwC4"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "21.42 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian6.cdn.asset.aparat.com/aparat-video/18bd7097427a7dcc5a9d93002f3a938364200075-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImU3M2I0MWY5MWFmY2E5OTdjYWUzMzZjM2E4OWJkYjgwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.1rwMfeSDlAe95vxnaHmIMFjNR975iOpgQhpP7g-xwC4"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "43.63 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian9.cdn.asset.aparat.com/aparat-video/18bd7097427a7dcc5a9d93002f3a938364200075-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImU3M2I0MWY5MWFmY2E5OTdjYWUzMzZjM2E4OWJkYjgwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.1rwMfeSDlAe95vxnaHmIMFjNR975iOpgQhpP7g-xwC4"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "68.46 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian6.cdn.asset.aparat.com/aparat-video/18bd7097427a7dcc5a9d93002f3a938364200075-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImU3M2I0MWY5MWFmY2E5OTdjYWUzMzZjM2E4OWJkYjgwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.1rwMfeSDlAe95vxnaHmIMFjNR975iOpgQhpP7g-xwC4"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "135.42 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian9.cdn.asset.aparat.com/aparat-video/18bd7097427a7dcc5a9d93002f3a938364200075-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImU3M2I0MWY5MWFmY2E5OTdjYWUzMzZjM2E4OWJkYjgwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.1rwMfeSDlAe95vxnaHmIMFjNR975iOpgQhpP7g-xwC4"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "245.31 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian9.cdn.asset.aparat.com/aparat-video/18bd7097427a7dcc5a9d93002f3a938364200075-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImU3M2I0MWY5MWFmY2E5OTdjYWUzMzZjM2E4OWJkYjgwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.1rwMfeSDlAe95vxnaHmIMFjNR975iOpgQhpP7g-xwC4"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "63709102",
+      "title": "سرانگشت فاطمی",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 357,
+      "uid": "ovcp8c3",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/63709102-8295-l__8130.jpg?width=900&quality=90&secret=KioHzWbfW2aBPE5fdU9oQg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/63709102-8295-l__8130.jpg?width=300&quality=90&secret=1EtfAYD8OtqjZTBSKhzgFg",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 2260,
+      "sdate": "26 اسفند 1403 18:03",
+      "create_date": "2025-03-16 18:03:53",
+      "sdate_timediff": 38521543,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/ovcp8c3/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "دانش&zwnj;بنیان,رهبر انقلاب,بهیار صنعت سپاهان,صنعت",
+      "description": "&zwnj;\n&zwnj; آیا خط مقدم را فقط در میدان جنگ نظامی باید جست؟\nخط مقدم آنجاست که خانه را در دهانه آتشفشان بنا می&zwnj;کنیم و از زندگی سرد و خاموش هر روزی که جانمان را فرسوده می&zwnj;کند طمع می&zwnj;بُریم.\nملت ایران با حضور در خط مقدم مبارزه با شیطان بزرگ زندگی را در معنای اصیلش آزمود و مقاومت را به مثابه راه جدیدی برای زندگی در جهان امروز متذکر شد.\nآری از یک طرف علم و فناوری تقدیر جهان امروز است و از طرف دیگر گویا انسان امروز با وعده شیطان زمین گیر جهان مصرف شده است.\n روایتی از شب&zwnj;های قدر انقلاب اسلامی \n(حضور مردم در سرچشمه های اقتصاد و مسائل کشور)\n#جنگ_اقتصادی \n#شب_های_قدر_انقلاب_اسلامی",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "29989797",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 10,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=ovcp8c3",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian19.cdn.asset.aparat.com/aparat-video/a152f048337bc7a22f56084499837ad463709102-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjZhZjM1ZDkwZDBkZTRlYmFhZjhhZDM5NWFmNjFiZDE5IiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.ECTSUbOJ8AWQmW-nkRRnYg49LqW73AQbl5LQb9eWgWI",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "28.6 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian19.cdn.asset.aparat.com/aparat-video/a152f048337bc7a22f56084499837ad463709102-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIwYTIyMTkzNmU2NzFmMmM0ZDFkNmIxOGY0MzI2MTQwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.zjg2TCF7B8yX7mD0yQuPF6lPFxAxDis6pu7mlX5YMac"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "53.88 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian19.cdn.asset.aparat.com/aparat-video/a152f048337bc7a22f56084499837ad463709102-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIwYTIyMTkzNmU2NzFmMmM0ZDFkNmIxOGY0MzI2MTQwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.zjg2TCF7B8yX7mD0yQuPF6lPFxAxDis6pu7mlX5YMac"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "109.25 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian19.cdn.asset.aparat.com/aparat-video/a152f048337bc7a22f56084499837ad463709102-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIwYTIyMTkzNmU2NzFmMmM0ZDFkNmIxOGY0MzI2MTQwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.zjg2TCF7B8yX7mD0yQuPF6lPFxAxDis6pu7mlX5YMac"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "170.68 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian19.cdn.asset.aparat.com/aparat-video/a152f048337bc7a22f56084499837ad463709102-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIwYTIyMTkzNmU2NzFmMmM0ZDFkNmIxOGY0MzI2MTQwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.zjg2TCF7B8yX7mD0yQuPF6lPFxAxDis6pu7mlX5YMac"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "340.24 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian16.cdn.asset.aparat.com/aparat-video/a152f048337bc7a22f56084499837ad463709102-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIwYTIyMTkzNmU2NzFmMmM0ZDFkNmIxOGY0MzI2MTQwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.zjg2TCF7B8yX7mD0yQuPF6lPFxAxDis6pu7mlX5YMac"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "677.67 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian19.cdn.asset.aparat.com/aparat-video/a152f048337bc7a22f56084499837ad463709102-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIwYTIyMTkzNmU2NzFmMmM0ZDFkNmIxOGY0MzI2MTQwIiwiZXhwIjoxNzgwNjc1MTc1LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.zjg2TCF7B8yX7mD0yQuPF6lPFxAxDis6pu7mlX5YMac"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "62476375",
+      "title": "سرِ یحیی",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 175,
+      "uid": "gsjx0q1",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/62476375-1811-l__7903.jpg?width=900&quality=90&secret=4YhoIhAith2t5LTmItoESw",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/62476375-1811-l__7903.jpg?width=300&quality=90&secret=jUFZrHX9ofcP9PHrmSpbxg",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 232,
+      "sdate": "12 دی 1403 22:53",
+      "create_date": "2025-01-01 22:53:23",
+      "sdate_timediff": 44897773,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/gsjx0q1/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "یحیی سنوار,رهبر انقلاب,ادبیات مقاومت",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "3452167",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 5,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=gsjx0q1",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian20.cdn.asset.aparat.com/aparat-video/e1204f39a2ca8b2768c443c015c192b962476375-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjdlYjE0MTRiNDU1YjQ2NDgwZDI1YjdlNDUzYWYyYWIwIiwiZXhwIjoxNzgwNjc1MTc2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VPWW8fs03eoGX-iRiD6iq6yIGGVL2Heb1Hxejq3klzk",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "3.29 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian17.cdn.asset.aparat.com/aparat-video/e1204f39a2ca8b2768c443c015c192b962476375-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIxNjZhYzMzYWI5ZTNiNjM0MWI1NTNlNDM2ODgzYThkIiwiZXhwIjoxNzgwNjc1MTc2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VM-UEMXZ6N9iW7U30eghsa_N2TPh22ytxGKbLd5Yh6c"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "6.34 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian20.cdn.asset.aparat.com/aparat-video/e1204f39a2ca8b2768c443c015c192b962476375-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIxNjZhYzMzYWI5ZTNiNjM0MWI1NTNlNDM2ODgzYThkIiwiZXhwIjoxNzgwNjc1MTc2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VM-UEMXZ6N9iW7U30eghsa_N2TPh22ytxGKbLd5Yh6c"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "12.66 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian20.cdn.asset.aparat.com/aparat-video/e1204f39a2ca8b2768c443c015c192b962476375-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIxNjZhYzMzYWI5ZTNiNjM0MWI1NTNlNDM2ODgzYThkIiwiZXhwIjoxNzgwNjc1MTc2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VM-UEMXZ6N9iW7U30eghsa_N2TPh22ytxGKbLd5Yh6c"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "19.99 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian20.cdn.asset.aparat.com/aparat-video/e1204f39a2ca8b2768c443c015c192b962476375-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIxNjZhYzMzYWI5ZTNiNjM0MWI1NTNlNDM2ODgzYThkIiwiZXhwIjoxNzgwNjc1MTc2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VM-UEMXZ6N9iW7U30eghsa_N2TPh22ytxGKbLd5Yh6c"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "39.34 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian17.cdn.asset.aparat.com/aparat-video/e1204f39a2ca8b2768c443c015c192b962476375-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIxNjZhYzMzYWI5ZTNiNjM0MWI1NTNlNDM2ODgzYThkIiwiZXhwIjoxNzgwNjc1MTc2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VM-UEMXZ6N9iW7U30eghsa_N2TPh22ytxGKbLd5Yh6c"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "67.68 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian20.cdn.asset.aparat.com/aparat-video/e1204f39a2ca8b2768c443c015c192b962476375-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImIxNjZhYzMzYWI5ZTNiNjM0MWI1NTNlNDM2ODgzYThkIiwiZXhwIjoxNzgwNjc1MTc2LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.VM-UEMXZ6N9iW7U30eghsa_N2TPh22ytxGKbLd5Yh6c"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "62146061",
+      "title": "اقرا",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 354,
+      "uid": "tyb705r",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/62146061-9277-l__7289.jpg?width=900&quality=90&secret=lhzF1nb0sj-hBxsD-Ao7nQ",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/62146061-9277-l__7289.jpg?width=300&quality=90&secret=VA-i6nGJYUYcL7rcbYIp4A",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 560,
+      "sdate": "23 آذر 1403 01:33",
+      "create_date": "2024-12-13 01:33:26",
+      "sdate_timediff": 46616171,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/tyb705r/vt/frame",
+      "official": "no",
+      "tags": [
+        {
+          "name": "امام خمینی",
+          "video_cnt": "5000"
+        },
+        {
+          "name": "سوریه",
+          "video_cnt": "21402"
+        },
+        {
+          "name": "رهبر انقلاب",
+          "video_cnt": "5000"
+        }
+      ],
+      "tag_str": "امام خمینی,رهبر انقلاب,سوریه",
+      "description": "ما با فریاد، محمد رضا خان را بیرونش کردیم. شما خیال می&zwnj;کنید با تفنگ بیرون کردیم؟ با فریاد، با &laquo;الله اکبر&raquo;! این قدر &laquo;الله اکبر&raquo; بر مغز اینها کوبیده شد که خودشان را باختند و فرار کردند. از این مملکت رفتن",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "8029693",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 6,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=tyb705r",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian19.cdn.asset.aparat.com/aparat-video/7c0865a3dbcd56e27cf8acc7981902bf62146061-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImE3NTk4ZmIyOWJiZWZjY2JmNmExMjExOGY0NTc5ZDI5IiwiZXhwIjoxNzgwNjc1MTc3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9._IR4lEhI6M8RrA7bvgJBusRQ1QYPJ37JPTvQfuZuS-g",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "7.66 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian19.cdn.asset.aparat.com/aparat-video/7c0865a3dbcd56e27cf8acc7981902bf62146061-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQxOGI4NDg2MGQ5NzFhYThhZjY0Y2YyMjc2MzRhNmM1IiwiZXhwIjoxNzgwNjc1MTc3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBcUL1sXpMO3Ao6_NZILqnVCRtG0LLplKJG0POib-MI"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "14.75 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian18.cdn.asset.aparat.com/aparat-video/7c0865a3dbcd56e27cf8acc7981902bf62146061-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQxOGI4NDg2MGQ5NzFhYThhZjY0Y2YyMjc2MzRhNmM1IiwiZXhwIjoxNzgwNjc1MTc3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBcUL1sXpMO3Ao6_NZILqnVCRtG0LLplKJG0POib-MI"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "30.27 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian19.cdn.asset.aparat.com/aparat-video/7c0865a3dbcd56e27cf8acc7981902bf62146061-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQxOGI4NDg2MGQ5NzFhYThhZjY0Y2YyMjc2MzRhNmM1IiwiZXhwIjoxNzgwNjc1MTc3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBcUL1sXpMO3Ao6_NZILqnVCRtG0LLplKJG0POib-MI"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "48.29 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian18.cdn.asset.aparat.com/aparat-video/7c0865a3dbcd56e27cf8acc7981902bf62146061-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQxOGI4NDg2MGQ5NzFhYThhZjY0Y2YyMjc2MzRhNmM1IiwiZXhwIjoxNzgwNjc1MTc3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBcUL1sXpMO3Ao6_NZILqnVCRtG0LLplKJG0POib-MI"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "98.48 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian18.cdn.asset.aparat.com/aparat-video/7c0865a3dbcd56e27cf8acc7981902bf62146061-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQxOGI4NDg2MGQ5NzFhYThhZjY0Y2YyMjc2MzRhNmM1IiwiZXhwIjoxNzgwNjc1MTc3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBcUL1sXpMO3Ao6_NZILqnVCRtG0LLplKJG0POib-MI"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "189.28 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian19.cdn.asset.aparat.com/aparat-video/7c0865a3dbcd56e27cf8acc7981902bf62146061-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQxOGI4NDg2MGQ5NzFhYThhZjY0Y2YyMjc2MzRhNmM1IiwiZXhwIjoxNzgwNjc1MTc3LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBcUL1sXpMO3Ao6_NZILqnVCRtG0LLplKJG0POib-MI"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "62083087",
+      "title": "وعده‌های صادق",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 199,
+      "uid": "kdx2a31",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/62083087-2263-l__9586.jpg?width=900&quality=90&secret=kZn2XLJppC1JYCDmB0xS8w",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/62083087-2263-l__9586.jpg?width=300&quality=90&secret=DSSWVSYSFhsvMLyj3kOqZA",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 752,
+      "sdate": "19 آذر 1403 10:11",
+      "create_date": "2024-12-09 10:11:11",
+      "sdate_timediff": 46930707,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/kdx2a31/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "امام خمینی,رهبر انقلاب,استاد طاهرزاده",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "11187424",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 6,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=kdx2a31",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian17.cdn.asset.aparat.com/aparat-video/273e87c5b0daa31b2f14ed4fc767685062083087-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjU0ZWQ0NGNmZjQ0ZDRmYzEwYTc4NmZlMjUwNDk5NWYzIiwiZXhwIjoxNzgwNjc1MTc4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.XBCLEtTow7GTdk4Ojzn-TamrItBcFVlIAWAzo9Gy2QY",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "10.67 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian17.cdn.asset.aparat.com/aparat-video/273e87c5b0daa31b2f14ed4fc767685062083087-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJhOWVkNzBhMTdmNWNjN2FhNWMwNDJiZjYwNWJkZTNhIiwiZXhwIjoxNzgwNjc1MTc4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5lyb0XiHc7t_LUGtsKrir0Bg1zXdmWLluoFqZtpRYo0"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "21.04 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian17.cdn.asset.aparat.com/aparat-video/273e87c5b0daa31b2f14ed4fc767685062083087-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJhOWVkNzBhMTdmNWNjN2FhNWMwNDJiZjYwNWJkZTNhIiwiZXhwIjoxNzgwNjc1MTc4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5lyb0XiHc7t_LUGtsKrir0Bg1zXdmWLluoFqZtpRYo0"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "44.07 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian16.cdn.asset.aparat.com/aparat-video/273e87c5b0daa31b2f14ed4fc767685062083087-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJhOWVkNzBhMTdmNWNjN2FhNWMwNDJiZjYwNWJkZTNhIiwiZXhwIjoxNzgwNjc1MTc4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5lyb0XiHc7t_LUGtsKrir0Bg1zXdmWLluoFqZtpRYo0"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "72.76 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://persian16.cdn.asset.aparat.com/aparat-video/273e87c5b0daa31b2f14ed4fc767685062083087-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJhOWVkNzBhMTdmNWNjN2FhNWMwNDJiZjYwNWJkZTNhIiwiZXhwIjoxNzgwNjc1MTc4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5lyb0XiHc7t_LUGtsKrir0Bg1zXdmWLluoFqZtpRYo0"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "151.88 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian16.cdn.asset.aparat.com/aparat-video/273e87c5b0daa31b2f14ed4fc767685062083087-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJhOWVkNzBhMTdmNWNjN2FhNWMwNDJiZjYwNWJkZTNhIiwiZXhwIjoxNzgwNjc1MTc4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5lyb0XiHc7t_LUGtsKrir0Bg1zXdmWLluoFqZtpRYo0"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "280.03 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian17.cdn.asset.aparat.com/aparat-video/273e87c5b0daa31b2f14ed4fc767685062083087-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJhOWVkNzBhMTdmNWNjN2FhNWMwNDJiZjYwNWJkZTNhIiwiZXhwIjoxNzgwNjc1MTc4LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.5lyb0XiHc7t_LUGtsKrir0Bg1zXdmWLluoFqZtpRYo0"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "68623030",
+      "title": "شهادت رهبر معظم انقلاب",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 1514,
+      "uid": "wvbw3s2",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/68623030-4606-l__2587.jpg?width=900&quality=90&secret=X59L-kvgLg_7rV5TCJjSlw",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/68623030-4606-l__2587.jpg?width=300&quality=90&secret=TZaMuu7K3huu_gLg1Cq1Iw",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 3471,
+      "sdate": "10 اسفند 1404 21:13",
+      "create_date": "2026-03-01 21:13:25",
+      "sdate_timediff": 8270174,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/wvbw3s2/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "رهبر انقلاب,امام خامنه&zwnj;ای,استاد اصغر طاهرزاده",
+      "description": "حضور فعال انقلاب اسلامی در جهان بشری",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "32570010",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 13,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=wvbw3s2",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian21.cdn.asset.aparat.com/aparat-video/b7be2c2cae3b8e6a50869c6d25f4da6d68623030-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImNlZWU5YTQ1ODVjODkzYzNlOTk0Mzg4NmIxNWM4YzA3IiwiZXhwIjoxNzgwNjc1MTc5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.QkoO-snn5ebDMwIVMtf_t5NQD0ZO0lH0VVotvD8ecBY",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "31.06 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian22.cdn.asset.aparat.com/aparat-video/b7be2c2cae3b8e6a50869c6d25f4da6d68623030-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkODE2NTI5MTU1MGVmOGNmZjdkYzNmMGFiODUwY2QwIiwiZXhwIjoxNzgwNjc1MTc5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.fWegte4-TBf_2-9oC5rwaG_2fvChn33qtwwQJoDIjRU"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "47.57 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian21.cdn.asset.aparat.com/aparat-video/b7be2c2cae3b8e6a50869c6d25f4da6d68623030-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkODE2NTI5MTU1MGVmOGNmZjdkYzNmMGFiODUwY2QwIiwiZXhwIjoxNzgwNjc1MTc5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.fWegte4-TBf_2-9oC5rwaG_2fvChn33qtwwQJoDIjRU"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "99.14 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian25.cdn.asset.aparat.com/aparat-video/b7be2c2cae3b8e6a50869c6d25f4da6d68623030-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkODE2NTI5MTU1MGVmOGNmZjdkYzNmMGFiODUwY2QwIiwiZXhwIjoxNzgwNjc1MTc5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.fWegte4-TBf_2-9oC5rwaG_2fvChn33qtwwQJoDIjRU"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "143.06 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian25.cdn.asset.aparat.com/aparat-video/b7be2c2cae3b8e6a50869c6d25f4da6d68623030-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkODE2NTI5MTU1MGVmOGNmZjdkYzNmMGFiODUwY2QwIiwiZXhwIjoxNzgwNjc1MTc5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.fWegte4-TBf_2-9oC5rwaG_2fvChn33qtwwQJoDIjRU"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "292.92 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian25.cdn.asset.aparat.com/aparat-video/b7be2c2cae3b8e6a50869c6d25f4da6d68623030-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkODE2NTI5MTU1MGVmOGNmZjdkYzNmMGFiODUwY2QwIiwiZXhwIjoxNzgwNjc1MTc5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.fWegte4-TBf_2-9oC5rwaG_2fvChn33qtwwQJoDIjRU"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "608.89 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian21.cdn.asset.aparat.com/aparat-video/b7be2c2cae3b8e6a50869c6d25f4da6d68623030-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjJkODE2NTI5MTU1MGVmOGNmZjdkYzNmMGFiODUwY2QwIiwiZXhwIjoxNzgwNjc1MTc5LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.fWegte4-TBf_2-9oC5rwaG_2fvChn33qtwwQJoDIjRU"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "70828555",
+      "title": "رهبر شهید و خلق معانی جدید در کلام  |  قسمت دوم",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 31,
+      "uid": "cvh4675",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/70828555-6390-l__3392.jpg?width=900&quality=90&secret=RKQRfxlgOTh5YLjdssbWOA",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/70828555-6390-l__3392.jpg?width=300&quality=90&secret=iS6tPlreuvFlAajdub1baw",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 3219,
+      "sdate": "28 اردیبهشت 1405 15:41",
+      "create_date": "2026-05-18 15:41:05",
+      "sdate_timediff": 1550915,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/cvh4675/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "رهبر شهید,استاد طاهرزاده,رهبر انقلاب",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "2147483647",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 0,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=cvh4675",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian14.cdn.asset.aparat.com/aparat-video/b6160c7e1515d078af5daf96390d311570828555-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImMyMDlhODMzY2ZhNjQwMDJjMGQ1ZWE3ZTljYjU5ZTU3IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.oI4kSvafHiS_DYMhNoeVkGE8EgkIvfWmakjLORAhhNs",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "35.18 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian19.cdn.asset.aparat.com/aparat-video/b6160c7e1515d078af5daf96390d311570828555-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY4MjI3NTNmNjc0YjFkMmIxY2U1NTY5Yjk3OTcxMDQ1IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.PSsYDaLLeUiMuOc-dqZE6hP5CYJST3qEgEqJetffeyw"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "46.39 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian25.cdn.asset.aparat.com/aparat-video/b6160c7e1515d078af5daf96390d311570828555-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY4MjI3NTNmNjc0YjFkMmIxY2U1NTY5Yjk3OTcxMDQ1IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.PSsYDaLLeUiMuOc-dqZE6hP5CYJST3qEgEqJetffeyw"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "87.08 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian23.cdn.asset.aparat.com/aparat-video/b6160c7e1515d078af5daf96390d311570828555-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY4MjI3NTNmNjc0YjFkMmIxY2U1NTY5Yjk3OTcxMDQ1IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.PSsYDaLLeUiMuOc-dqZE6hP5CYJST3qEgEqJetffeyw"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "112.76 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/b6160c7e1515d078af5daf96390d311570828555-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY4MjI3NTNmNjc0YjFkMmIxY2U1NTY5Yjk3OTcxMDQ1IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.PSsYDaLLeUiMuOc-dqZE6hP5CYJST3qEgEqJetffeyw"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "188.23 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian11.cdn.asset.aparat.com/aparat-video/b6160c7e1515d078af5daf96390d311570828555-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY4MjI3NTNmNjc0YjFkMmIxY2U1NTY5Yjk3OTcxMDQ1IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.PSsYDaLLeUiMuOc-dqZE6hP5CYJST3qEgEqJetffeyw"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "440.1 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/b6160c7e1515d078af5daf96390d311570828555-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6ImY4MjI3NTNmNjc0YjFkMmIxY2U1NTY5Yjk3OTcxMDQ1IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.PSsYDaLLeUiMuOc-dqZE6hP5CYJST3qEgEqJetffeyw"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "70645790",
+      "title": "رهبر شهید و خلق معانی جدید در کلام   |  نشست اول",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 122,
+      "uid": "tannb0t",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/70645790-6868-l__9784.jpg?width=900&quality=90&secret=HhcNahxeaJl1mF6UTqFngg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/70645790-6868-l__9784.jpg?width=300&quality=90&secret=rubj2mFSmYEjWqzoiPtFLw",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 4242,
+      "sdate": "23 اردیبهشت 1405 19:57",
+      "create_date": "2026-05-13 19:57:07",
+      "sdate_timediff": 1967554,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/tannb0t/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "استاد طاهرزاده,رهبر شهید انقلاب,سیدالشهدای انقلاب اسلامی",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "2147483647",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 1,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=tannb0t",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian1.cdn.asset.aparat.com/aparat-video/17a53f567941906f73f71855cbe420b670645790-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQxODg4MjI3YzJmNWE2N2JmYTI4NTI1MWM4ODdiZDhjIiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.0d6iuHaEXlb-1wM3lpBNP0Gi7kzg0_bA37ZBbouEz7w",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "48.58 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian3.cdn.asset.aparat.com/aparat-video/17a53f567941906f73f71855cbe420b670645790-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1NWYyNDNiMzEzODBjNzJhYjlkNzk4OWU3ZmQ3N2E2IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.FA2ffO9yhY0iFBhyhmuK3gczwIaIhbGNOPgLyFHqRT8"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "70.18 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian23.cdn.asset.aparat.com/aparat-video/17a53f567941906f73f71855cbe420b670645790-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1NWYyNDNiMzEzODBjNzJhYjlkNzk4OWU3ZmQ3N2E2IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.FA2ffO9yhY0iFBhyhmuK3gczwIaIhbGNOPgLyFHqRT8"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "135.1 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/17a53f567941906f73f71855cbe420b670645790-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1NWYyNDNiMzEzODBjNzJhYjlkNzk4OWU3ZmQ3N2E2IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.FA2ffO9yhY0iFBhyhmuK3gczwIaIhbGNOPgLyFHqRT8"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "188.33 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian3.cdn.asset.aparat.com/aparat-video/17a53f567941906f73f71855cbe420b670645790-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1NWYyNDNiMzEzODBjNzJhYjlkNzk4OWU3ZmQ3N2E2IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.FA2ffO9yhY0iFBhyhmuK3gczwIaIhbGNOPgLyFHqRT8"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "357.71 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian1.cdn.asset.aparat.com/aparat-video/17a53f567941906f73f71855cbe420b670645790-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1NWYyNDNiMzEzODBjNzJhYjlkNzk4OWU3ZmQ3N2E2IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.FA2ffO9yhY0iFBhyhmuK3gczwIaIhbGNOPgLyFHqRT8"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "816.29 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian1.cdn.asset.aparat.com/aparat-video/17a53f567941906f73f71855cbe420b670645790-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1NWYyNDNiMzEzODBjNzJhYjlkNzk4OWU3ZmQ3N2E2IiwiZXhwIjoxNzgwNjc1MTgwLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.FA2ffO9yhY0iFBhyhmuK3gczwIaIhbGNOPgLyFHqRT8"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "71069042",
+      "title": "رهبر شهید و خلق معانی جدید در کلام  |  قسمت سوم",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 21,
+      "uid": "sndqam4",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/71069042-2819-l__9454.jpg?width=900&quality=90&secret=D5_Huc5chlAyRbBUwLbQgQ",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/71069042-2819-l__9454.jpg?width=300&quality=90&secret=5nXkk542B9Ph00FtdJ1Lbg",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 3704,
+      "sdate": "03 خرداد 1405 21:50",
+      "create_date": "2026-05-24 21:50:41",
+      "sdate_timediff": 1010340,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/sndqam4/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "رهبر شهید,انقلاب اسلامی,استاد طاهرزاده",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "2147483647",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 0,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=sndqam4",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian3.cdn.asset.aparat.com/aparat-video/b2c1286216935b908cd8b27f0fb3b64b71069042-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjVjNmYxY2U0NGNiYzQ0NTY1OGZmN2E3YTdmNmZhZWIxIiwiZXhwIjoxNzgwNjc1MTgxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.71yPu_WhijkbhkciGatY64ms2kQNHhrCXmv35KKFqF4",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "41.45 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian22.cdn.asset.aparat.com/aparat-video/b2c1286216935b908cd8b27f0fb3b64b71069042-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg3ZDUxMDc3NmMyNzE3MGRjODdhZTg3Y2UxNjEzMDRjIiwiZXhwIjoxNzgwNjc1MTgxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.NCI9TVCF-gN65mscWB4YtxZLJ9uB4ZbuWEqSlZ96sAE"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "56.21 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian22.cdn.asset.aparat.com/aparat-video/b2c1286216935b908cd8b27f0fb3b64b71069042-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg3ZDUxMDc3NmMyNzE3MGRjODdhZTg3Y2UxNjEzMDRjIiwiZXhwIjoxNzgwNjc1MTgxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.NCI9TVCF-gN65mscWB4YtxZLJ9uB4ZbuWEqSlZ96sAE"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "106.3 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian22.cdn.asset.aparat.com/aparat-video/b2c1286216935b908cd8b27f0fb3b64b71069042-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg3ZDUxMDc3NmMyNzE3MGRjODdhZTg3Y2UxNjEzMDRjIiwiZXhwIjoxNzgwNjc1MTgxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.NCI9TVCF-gN65mscWB4YtxZLJ9uB4ZbuWEqSlZ96sAE"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "142.45 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian13.cdn.asset.aparat.com/aparat-video/b2c1286216935b908cd8b27f0fb3b64b71069042-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg3ZDUxMDc3NmMyNzE3MGRjODdhZTg3Y2UxNjEzMDRjIiwiZXhwIjoxNzgwNjc1MTgxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.NCI9TVCF-gN65mscWB4YtxZLJ9uB4ZbuWEqSlZ96sAE"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "249.79 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian10.cdn.asset.aparat.com/aparat-video/b2c1286216935b908cd8b27f0fb3b64b71069042-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg3ZDUxMDc3NmMyNzE3MGRjODdhZTg3Y2UxNjEzMDRjIiwiZXhwIjoxNzgwNjc1MTgxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.NCI9TVCF-gN65mscWB4YtxZLJ9uB4ZbuWEqSlZ96sAE"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "574.51 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian3.cdn.asset.aparat.com/aparat-video/b2c1286216935b908cd8b27f0fb3b64b71069042-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijg3ZDUxMDc3NmMyNzE3MGRjODdhZTg3Y2UxNjEzMDRjIiwiZXhwIjoxNzgwNjc1MTgxLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.NCI9TVCF-gN65mscWB4YtxZLJ9uB4ZbuWEqSlZ96sAE"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "59216581",
+      "title": "سیدابراهیم",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 431,
+      "uid": "stc91du",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/59216581-8721-l__7322.jpg?width=900&quality=90&secret=95TLx7ONKUNjwmYLi8T_ow",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/59216581-8721-l__7322.jpg?width=300&quality=90&secret=FjkRXLNutpBbH2Sirp-1Qg",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 551,
+      "sdate": "14 خرداد 1403 23:57",
+      "create_date": "2024-06-03 23:57:56",
+      "sdate_timediff": 63210706,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/stc91du/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "شهید جمهور,آیت الله رئیسی,انتخابات,ایران امام رضا",
+      "description": "",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "8879613",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 13,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=stc91du",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian14.cdn.asset.aparat.com/aparat-video/58fbb240e86aa177ec0b774f38b9a8a359216581-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjQ1ZWE5ZGVkZTA3MjA5ZThjODUwZDE2ZWQ2YzkwODA4IiwiZXhwIjoxNzgwNjc1MTgyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.G3WYvvt8MhJ1JCl9XuHg0TLbAEksfANjTD7l_VIvF80",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "8.47 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/58fbb240e86aa177ec0b774f38b9a8a359216581-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijk5M2Q1ZDA5ZWIzMmIzYjM2Nzk0NjNhM2M5MDkyMmIzIiwiZXhwIjoxNzgwNjc1MTgyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.50FTcmyrR-vc5_gqkcHA9-poYLZE2V8wexMAVhwRkeM"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "14.78 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/58fbb240e86aa177ec0b774f38b9a8a359216581-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijk5M2Q1ZDA5ZWIzMmIzYjM2Nzk0NjNhM2M5MDkyMmIzIiwiZXhwIjoxNzgwNjc1MTgyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.50FTcmyrR-vc5_gqkcHA9-poYLZE2V8wexMAVhwRkeM"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "29.97 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://persian11.cdn.asset.aparat.com/aparat-video/58fbb240e86aa177ec0b774f38b9a8a359216581-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijk5M2Q1ZDA5ZWIzMmIzYjM2Nzk0NjNhM2M5MDkyMmIzIiwiZXhwIjoxNzgwNjc1MTgyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.50FTcmyrR-vc5_gqkcHA9-poYLZE2V8wexMAVhwRkeM"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "47.37 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/58fbb240e86aa177ec0b774f38b9a8a359216581-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijk5M2Q1ZDA5ZWIzMmIzYjM2Nzk0NjNhM2M5MDkyMmIzIiwiZXhwIjoxNzgwNjc1MTgyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.50FTcmyrR-vc5_gqkcHA9-poYLZE2V8wexMAVhwRkeM"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "95.36 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/58fbb240e86aa177ec0b774f38b9a8a359216581-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijk5M2Q1ZDA5ZWIzMmIzYjM2Nzk0NjNhM2M5MDkyMmIzIiwiZXhwIjoxNzgwNjc1MTgyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.50FTcmyrR-vc5_gqkcHA9-poYLZE2V8wexMAVhwRkeM"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "163.84 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian14.cdn.asset.aparat.com/aparat-video/58fbb240e86aa177ec0b774f38b9a8a359216581-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6Ijk5M2Q1ZDA5ZWIzMmIzYjM2Nzk0NjNhM2M5MDkyMmIzIiwiZXhwIjoxNzgwNjc1MTgyLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.50FTcmyrR-vc5_gqkcHA9-poYLZE2V8wexMAVhwRkeM"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "59414604",
+      "title": "سفیر",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 189,
+      "uid": "upkqyeb",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/59414604-2396-l__8765.jpg?width=900&quality=90&secret=mAVZochI8TknazKkRayeVg",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/59414604-2396-l__8765.jpg?width=300&quality=90&secret=6mgR5UhYnIyJOxEmM3VfQQ",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 486,
+      "sdate": "27 خرداد 1403 16:33",
+      "create_date": "2024-06-16 16:33:47",
+      "sdate_timediff": 62114156,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/upkqyeb/vt/frame",
+      "official": "no",
+      "tags": null,
+      "tag_str": "رئیسی,آیت الله رئیسی,مسلم بن عقیل",
+      "description": "مردم و رهبر انقلاب شعید رئیسی را به کوفه ی جنگ اقتصادی فرستادند تا از او بیعت بگیرد و کار جنگ را یکسره کند. ما همه خوش گمان بودیم و فکر می کردیم حل مشکلات مردم کاری ندارد ولی ازین کوفه ی بی وفا که سود و زیان ها در میان است بوی بی وفایی می آمد.",
+      "cat_id": 9,
+      "cat_name": "قانون و سیاست",
+      "cat_name_en": "political",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "9872529",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 6,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=upkqyeb",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://persian12.cdn.asset.aparat.com/aparat-video/3c933568fc8f1098e55135eb184e7b2759414604-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjM2MzllNjcxNWU0N2RkYzM1MmZlZDUzNDE0YWFjYzkxIiwiZXhwIjoxNzgwNjc1MTgzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.maQRUYiYZZ8JlSX6Xe_4EePF1xLevD5J-7dNAv-SNQw",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "9.42 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://persian12.cdn.asset.aparat.com/aparat-video/3c933568fc8f1098e55135eb184e7b2759414604-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjBhYWMwNmJjYTdhOGU3YjUzZWE5YTMyZmQ5ODgxOGE3IiwiZXhwIjoxNzgwNjc1MTgzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.W_SpDK9YOD0f6Bf27esc1JrHHepL1Z2p2XF7IxA2VRA"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "17.47 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://persian12.cdn.asset.aparat.com/aparat-video/3c933568fc8f1098e55135eb184e7b2759414604-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjBhYWMwNmJjYTdhOGU3YjUzZWE5YTMyZmQ5ODgxOGE3IiwiZXhwIjoxNzgwNjc1MTgzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.W_SpDK9YOD0f6Bf27esc1JrHHepL1Z2p2XF7IxA2VRA"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "33.91 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/3c933568fc8f1098e55135eb184e7b2759414604-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjBhYWMwNmJjYTdhOGU3YjUzZWE5YTMyZmQ5ODgxOGE3IiwiZXhwIjoxNzgwNjc1MTgzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.W_SpDK9YOD0f6Bf27esc1JrHHepL1Z2p2XF7IxA2VRA"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "53.27 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian12.cdn.asset.aparat.com/aparat-video/3c933568fc8f1098e55135eb184e7b2759414604-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjBhYWMwNmJjYTdhOGU3YjUzZWE5YTMyZmQ5ODgxOGE3IiwiZXhwIjoxNzgwNjc1MTgzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.W_SpDK9YOD0f6Bf27esc1JrHHepL1Z2p2XF7IxA2VRA"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "102.13 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://persian12.cdn.asset.aparat.com/aparat-video/3c933568fc8f1098e55135eb184e7b2759414604-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjBhYWMwNmJjYTdhOGU3YjUzZWE5YTMyZmQ5ODgxOGE3IiwiZXhwIjoxNzgwNjc1MTgzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.W_SpDK9YOD0f6Bf27esc1JrHHepL1Z2p2XF7IxA2VRA"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "177.69 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://persian12.cdn.asset.aparat.com/aparat-video/3c933568fc8f1098e55135eb184e7b2759414604-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjBhYWMwNmJjYTdhOGU3YjUzZWE5YTMyZmQ5ODgxOGE3IiwiZXhwIjoxNzgwNjc1MTgzLCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.W_SpDK9YOD0f6Bf27esc1JrHHepL1Z2p2XF7IxA2VRA"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "video": {
+      "id": "71232284",
+      "title": "ما و هنر و آینده پیش رو",
+      "username": "soha_sima",
+      "userid": "5943035",
+      "visit_cnt": 28,
+      "uid": "syvair0",
+      "isHidden": null,
+      "process": "done",
+      "sender_name": "سها (سیمای هنر و اندیشه)",
+      "big_poster": "https://static.cdn.asset.aparat.com/avt/71232284-7262-l__3990.jpg?width=900&quality=90&secret=1bfBSLgv8QXNqHQI8ftE6A",
+      "small_poster": "https://static.cdn.asset.aparat.com/avt/71232284-7262-l__3990.jpg?width=300&quality=90&secret=ofP4zu_sZAQu2XcemNSP-A",
+      "profilePhoto": "https://static.cdn.asset.aparat.com/profile-photo/5943035-504511-m.jpg",
+      "duration": 406,
+      "sdate": "09 خرداد 1405 18:50",
+      "create_date": "2026-05-30 18:50:09",
+      "sdate_timediff": 502775,
+      "frame": "https://www.aparat.com/video/video/embed/videohash/syvair0/vt/frame",
+      "official": "no",
+      "tags": [
+        {
+          "name": "استاد بدرالسماء",
+          "video_cnt": "1"
+        },
+        {
+          "name": "هنر انقلاب اسلام",
+          "video_cnt": "1"
+        }
+      ],
+      "tag_str": "استاد بدرالسماء,استاد طاهرزاده,هنر انقلاب اسلام",
+      "description": "دیدار استاد بدرالسماء و استاد طاهزاده",
+      "cat_id": 17,
+      "cat_name": "فرهنگ و هنر",
+      "cat_name_en": "art",
+      "autoplay": true,
+      "video_date_status": "notset",
+      "360d": false,
+      "deleteurl": "",
+      "playeradvertcornel": "",
+      "has_comment": "yes",
+      "has_comment_txt": "",
+      "size": "531268406",
+      "watch_action": {
+        "type": "watch"
+      },
+      "cost_type": {
+        "type": "free"
+      },
+      "can_download": true,
+      "like_cnt": 1,
+      "follow_link": "https://www.aparat.com/api/fa/v1/login?afterlogin=follow&userid=5943035&visited_name=سها (سیمای هنر و اندیشه)&uid=syvair0",
+      "follow_status": "login",
+      "ip_address": "5.22.85.7",
+      "file_link": "https://caspian20.cdn.asset.aparat.com/aparat-video/08fbd1ca17a32524b7cf48f50140291071232284-1080p.apt?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjNhMDkxNmVkNzI2MjhkZGIzNzk4NTQ0MDYyZTlmMzdjIiwiZXhwIjoxNzgwNjc1MTg0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.7OdRDiytpPT73v_jMpIv-wh501NgAbfMXLBehnzMwig",
+      "file_link_all": [
+        {
+          "text": "با کیفیت 144p",
+          "size": "5.31 مگابایت",
+          "profile": "144p",
+          "urls": [
+            "https://caspian18.cdn.asset.aparat.com/aparat-video/08fbd1ca17a32524b7cf48f50140291071232284-144p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjMwNzRkZGNjMTBlMTgwZWJiOGI3OTFiZTQwOWM3ZTk5IiwiZXhwIjoxNzgwNjc1MTg0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBb1d6Gt8PQjYd_cNInXCXp2tI5qej0czY3i-q9F7dQ"
+          ]
+        },
+        {
+          "text": "با کیفیت 240p",
+          "size": "8.13 مگابایت",
+          "profile": "240p",
+          "urls": [
+            "https://caspian18.cdn.asset.aparat.com/aparat-video/08fbd1ca17a32524b7cf48f50140291071232284-240p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjMwNzRkZGNjMTBlMTgwZWJiOGI3OTFiZTQwOWM3ZTk5IiwiZXhwIjoxNzgwNjc1MTg0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBb1d6Gt8PQjYd_cNInXCXp2tI5qej0czY3i-q9F7dQ"
+          ]
+        },
+        {
+          "text": "با کیفیت 360p",
+          "size": "15.48 مگابایت",
+          "profile": "360p",
+          "urls": [
+            "https://caspian18.cdn.asset.aparat.com/aparat-video/08fbd1ca17a32524b7cf48f50140291071232284-360p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjMwNzRkZGNjMTBlMTgwZWJiOGI3OTFiZTQwOWM3ZTk5IiwiZXhwIjoxNzgwNjc1MTg0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBb1d6Gt8PQjYd_cNInXCXp2tI5qej0czY3i-q9F7dQ"
+          ]
+        },
+        {
+          "text": "با کیفیت 480p",
+          "size": "22.31 مگابایت",
+          "profile": "480p",
+          "urls": [
+            "https://caspian7.cdn.asset.aparat.com/aparat-video/08fbd1ca17a32524b7cf48f50140291071232284-480p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjMwNzRkZGNjMTBlMTgwZWJiOGI3OTFiZTQwOWM3ZTk5IiwiZXhwIjoxNzgwNjc1MTg0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBb1d6Gt8PQjYd_cNInXCXp2tI5qej0czY3i-q9F7dQ"
+          ]
+        },
+        {
+          "text": "با کیفیت 720p",
+          "size": "40.17 مگابایت",
+          "profile": "720p",
+          "urls": [
+            "https://caspian24.cdn.asset.aparat.com/aparat-video/08fbd1ca17a32524b7cf48f50140291071232284-720p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjMwNzRkZGNjMTBlMTgwZWJiOGI3OTFiZTQwOWM3ZTk5IiwiZXhwIjoxNzgwNjc1MTg0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBb1d6Gt8PQjYd_cNInXCXp2tI5qej0czY3i-q9F7dQ"
+          ]
+        },
+        {
+          "text": "با کیفیت 1080p",
+          "size": "80.75 مگابایت",
+          "profile": "1080p",
+          "urls": [
+            "https://caspian20.cdn.asset.aparat.com/aparat-video/08fbd1ca17a32524b7cf48f50140291071232284-1080p.mp4?wmsAuthSign=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbiI6IjMwNzRkZGNjMTBlMTgwZWJiOGI3OTFiZTQwOWM3ZTk5IiwiZXhwIjoxNzgwNjc1MTg0LCJpc3MiOiJTYWJhIElkZWEgR1NJRyJ9.nBb1d6Gt8PQjYd_cNInXCXp2tI5qej0czY3i-q9F7dQ"
+          ]
+        }
+      ]
+    }
+  }
+]

@@ -1,0 +1,74 @@
+
+/**
+ * این یک فایل نمونه برای بک‌اِند است.
+ * برای اجرای این فایل در کامپیوتر خودتان یا روی سرور لیارا:
+ * 1. ابتدا Node.js را نصب کنید.
+ * 2. دستور npm init -y را بزنید.
+ * 3. دستور npm install express mongoose cors dotenv را بزنید.
+ */
+
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv').config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+// اتصال به دیتابیس (آدرس را در فایل .env باید بگذارید)
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/soha_db';
+mongoose.connect(MONGODB_URI)
+  .then(() => console.log('✅ به دیتابیس متصل شدیم'))
+  .catch(err => console.error('❌ خطا در اتصال به دیتابیس:', err));
+
+// تعریف ساختار پیام‌های محفل (Schema)
+const PostSchema = new mongoose.Schema({
+  author: String,
+  authorAvatarUrl: String,
+  text: String,
+  isoDate: { type: String, default: () => new Date().toISOString() },
+  likes: { type: Number, default: 0 },
+  replyToId: Number,
+  isEdited: { type: Boolean, default: false }
+});
+
+const Post = mongoose.model('Post', PostSchema);
+
+// مسیرهای API (Endpoints)
+
+// 1. دریافت همه پیام‌ها
+app.get('/api/posts', async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ isoDate: -1 });
+    res.json(posts);
+  } catch (err) {
+    res.status(500).json({ message: 'خطا در دریافت پیام‌ها' });
+  }
+});
+
+// 2. ارسال پیام جدید
+app.post('/api/posts', async (req, res) => {
+  try {
+    const newPost = new Post(req.body);
+    await newPost.save();
+    res.status(201).json(newPost);
+  } catch (err) {
+    res.status(400).json({ message: 'خطا در ثبت پیام' });
+  }
+});
+
+// 3. حذف پیام (برای ادمین)
+app.delete('/api/posts/:id', async (req, res) => {
+  try {
+    await Post.findByIdAndDelete(req.params.id);
+    res.json({ message: 'پیام حذف شد' });
+  } catch (err) {
+    res.status(400).json({ message: 'خطا در حذف' });
+  }
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 سرور روی پورت ${PORT} روشن شد`);
+});

@@ -1,0 +1,56 @@
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
+
+export const auth = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+      req.user = null;
+      return next();
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) {
+      req.user = null;
+      return next();
+    }
+    req.user = user;
+    next();
+  } catch (error) {
+    req.user = null;
+    next();
+  }
+};
+
+export const requireAuth = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) return res.status(401).json({ error: 'احراز هویت لازم است' });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(401).json({ error: 'کاربر یافت نشد' });
+
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'توکن نامعتبر است' });
+  }
+};
+
+export const requireRole = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) return res.status(401).json({ error: 'احراز هویت لازم است' });
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({ error: 'دسترسی غیرمجاز' });
+    }
+    next();
+  };
+};
+
+export const generateToken = (userId) => {
+  return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN || '7d',
+  });
+};

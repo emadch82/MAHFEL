@@ -1,0 +1,8 @@
+{
+  "name": "Soha Podcast App",
+  "description": "A modern podcast application with live audio streaming and recording capabilities.",
+  "requestFramePermissions": [
+    "microphone"
+  ],
+  "majorCapabilities": []
+}

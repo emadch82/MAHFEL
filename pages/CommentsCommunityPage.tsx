@@ -1,0 +1,1747 @@
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import type { Post, Video, Comment, Podcast, Episode, Author, PublishedBook, PostComment } from '../types';
+import { toPersianDigits, isSameDay, formatDateSeparator, formatTimeFromISO, formatTime, DEFAULT_COVER } from '../utils/helpers';
+import AudioPlayer from '../components/AudioPlayer';
+import MinimizedPlayer from '../components/MinimizedPlayer';
+import TimestampThumbnail from '../components/TimestampThumbnail';
+import { createPost, addPostComment } from '../services/api';
+import { ImageLightbox, VideoLightbox } from '../components/MediaLightbox';
+
+const formatTimestamp = (sec: number) => {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = Math.floor(sec % 60);
+  if (h > 0) return toPersianDigits(`${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`);
+  return toPersianDigits(`${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`);
+};
+
+const DateSeparator: React.FC<{ date: string }> = ({ date }) => (
+  <div className="text-center my-4 date-separator">
+    <span className="backdrop-blur-md text-[10px] font-black px-4 py-1.5 rounded-full shadow-sm"
+      style={{ background: 'color-mix(in srgb, var(--surface-3) 80%, transparent)', color: 'var(--text-3)', border: '1px solid var(--border)' }}>
+      {formatDateSeparator(date)}
+    </span>
+  </div>
+);
+
+const MediaCard: React.FC<{
+    video?: Video;
+    podcast?: Podcast;
+    episode?: Episode | null;
+    book?: PublishedBook;
+    onPlayVideo: (video: Video) => void;
+    onPlayPodcast: (podcast: Podcast, episodeIndex: number) => void;
+    onShowBook: (book: PublishedBook) => void;
+}> = React.memo(({ video, podcast, episode, book, onPlayVideo, onPlayPodcast, onShowBook }) => {
+    if (video) return (
+        <div className="my-2 rounded-xl overflow-hidden group cursor-pointer transition-all duration-300 hover:shadow-lg" onClick={(e) => { e.stopPropagation(); onPlayVideo(video); }}
+          style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
+            <div className="aspect-video relative">
+                <img src={video.thumbnailUrl} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" alt={video.title} />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <div className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/25">
+                    <i className="fas fa-play text-white text-sm mr-[-2px]"></i>
+                  </div>
+                </div>
+            </div>
+        </div>
+    );
+    if (book) return (
+        <div onClick={(e) => { e.stopPropagation(); onShowBook(book); }} className="flex items-center gap-3 p-2.5 my-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md active:scale-[0.98]"
+          style={{ background: 'color-mix(in srgb, var(--primary) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--primary) 10%, transparent)' }}>
+            <div className="w-10 h-14 rounded-lg overflow-hidden flex-shrink-0 shadow-sm"
+              style={{ background: 'var(--primary)' }}>
+                {book.cover && <img src={book.cover} className="w-full h-full object-cover" alt={book.title} />}
+            </div>
+            <div className="flex-1 min-w-0 text-right">
+                <p className="font-black text-[11px] leading-tight mb-1" style={{ color: 'var(--text)' }}>{book.title}</p>
+                <span className="text-[8px] font-bold" style={{ color: 'var(--text-3)' }}>{book.type === 'note' ? 'یادداشت' : 'نشر سرای هنر و اندیشه'}</span>
+            </div>
+            <i className="fas fa-chevron-left text-[8px]" style={{ color: 'var(--text-3)' }}></i>
+        </div>
+    );
+    const ep = episode || (podcast?.episodes ? podcast.episodes[0] : null);
+    if (podcast && ep) return (
+        <div onClick={(e) => { e.stopPropagation(); onPlayPodcast(podcast, podcast.episodes.findIndex(e => e.title === ep.title)); }}
+          className="flex items-center gap-3 p-2.5 my-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md active:scale-[0.98]"
+          style={{ background: 'color-mix(in srgb, var(--primary) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--primary) 10%, transparent)' }}>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center text-[9px] shadow-sm"
+              style={{ background: 'var(--primary)', color: 'white' }}><i className="fas fa-play ml-0.5"></i></div>
+            <div className="flex-1 min-w-0 text-right">
+                <p className="font-black text-[10px] truncate" style={{ color: 'var(--text)' }}>{ep.title}</p>
+                <p className="text-[8px] font-bold mt-0.5 opacity-80" style={{ color: 'var(--primary)' }}>{podcast.title}</p>
+            </div>
+            <img src={ep.cover || podcast.cover || DEFAULT_COVER} className="w-9 h-9 rounded-lg object-cover" alt={ep.title} />
+        </div>
+    );
+    return null;
+});
+
+type RenderReplyProps = {
+  comment: PostComment;
+  depth: number;
+  postId: number;
+  localComments: PostComment[];
+  currentUser?: string;
+  likedReplies: Set<string>;
+  touchStartX: React.MutableRefObject<number>;
+  onSwipeReply?: (target: { postId: number; author: string; text: string; commentId?: string }) => void;
+  getCommentId: (c: any) => string;
+  handleLikeReply: (id: string) => void;
+  handleDeleteReply: (id: string) => void;
+};
+
+const RenderReply = React.memo<RenderReplyProps>(({ comment, depth, postId, localComments, currentUser, likedReplies, touchStartX, onSwipeReply, getCommentId, handleLikeReply, handleDeleteReply }) => {
+  const commentId = getCommentId(comment);
+  const repliedTo = comment.replyTo ? localComments.find(c => getCommentId(c) === comment.replyTo) : null;
+  const children = localComments.filter(c => c.replyTo === commentId);
+  const [showChildReplies, setShowChildReplies] = useState(depth < 3);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(comment.text);
+  const isOwn = currentUser && comment.author === currentUser;
+  const colorSeed = comment.author.charCodeAt(0) * 37;
+  const [imgLightbox, setImgLightbox] = useState<{ src: string; text?: string; author?: string; authorAvatar?: string; time?: string } | null>(null);
+  const [vidLightbox, setVidLightbox] = useState<string | null>(null);
+
+  const handleSaveEdit = async () => {
+    if (!editText.trim() || editText === comment.text) { setIsEditing(false); return; }
+    try {
+      const { updatePostComment } = await import('../services/api');
+      const updated = await updatePostComment(String(postId), commentId, { text: editText.trim() });
+      if (updated) {
+        comment.text = editText.trim();
+        setIsEditing(false);
+      }
+    } catch { setIsEditing(false); }
+  };
+
+  return (<>
+    <div className="flex items-start gap-2 group/reply py-1"
+      onTouchStart={(e) => { touchStartX.current = e.touches[0].clientX; }}
+      onTouchEnd={(e) => { const d = e.changedTouches[0].clientX - touchStartX.current; if (d > 50 && onSwipeReply) onSwipeReply({ postId, author: comment.author, text: comment.text, commentId }); }}>
+      <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0 mt-0.5 shadow-sm" style={{ background: `linear-gradient(135deg, hsl(${colorSeed % 360}, 55%, 50%), hsl(${(colorSeed + 40) % 360}, 55%, 40%))` }}>
+        {comment.authorAvatarUrl ? (
+          <img src={comment.authorAvatarUrl} className="w-full h-full object-cover" alt="" />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-white text-[7px] font-black">{comment.author?.charAt(0)}</div>
+        )}
+      </div>
+      <div className="flex-1 min-w-0">
+          <div className="rounded-xl px-3 py-2 transition-all duration-200 relative" style={{ background: 'color-mix(in srgb, var(--surface-3) 80%, transparent)', border: '1px solid color-mix(in srgb, var(--border) 40%, transparent)' }}>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="font-bold text-[10px]" style={{ color: 'var(--text-1)' }}>{comment.author}</span>
+              <div className="w-0.5 h-0.5 rounded-full" style={{ background: 'var(--text-3)' }}></div>
+              <span className="text-[8px] font-medium" style={{ color: 'var(--text-3)' }}>{formatTimeFromISO(comment.isoDate)}</span>
+            </div>
+            {repliedTo && (
+              <div className="mb-1.5 pr-2 py-1.5 rounded-lg" style={{ background: 'color-mix(in srgb, var(--primary) 6%, transparent)', borderRight: '2px solid var(--primary)' }}>
+                <div className="flex items-center gap-1">
+                  <i className="fas fa-reply text-[6px]" style={{ color: 'var(--primary)' }}></i>
+                  <span className="text-[8px] font-black" style={{ color: 'var(--primary)' }}>{repliedTo.author}</span>
+                </div>
+                <div className="text-[8px] font-medium mt-0.5 leading-relaxed line-clamp-1 opacity-70" style={{ color: 'var(--text-3)' }}>{repliedTo.text}</div>
+              </div>
+            )}
+            {comment.media && comment.media.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-1 mb-1.5">
+                {comment.media.map((m, i) => {
+                  const isSingle = comment.media!.length === 1;
+                  const imgWidth = m.type === 'image' ? (isSingle ? '100%' : 'calc(50% - 3px)') : '100%';
+                  return (
+                  <div key={i} className="rounded-xl overflow-hidden shadow-sm" style={{ border: '1px solid var(--border)', width: imgWidth, background: 'var(--surface-3)' }}>
+                    {m.type === 'image' ? (
+                      <img src={m.url} className="w-full h-auto object-cover cursor-pointer hover:opacity-90 transition-opacity duration-300" alt="" loading="lazy" onClick={(e) => { e.stopPropagation(); setImgLightbox({ src: m.url, text: comment.text, author: comment.author, authorAvatar: comment.authorAvatarUrl, time: formatTimeFromISO(comment.isoDate) }); }} />
+                    ) : m.type === 'audio' ? (
+                      <div onClick={(e) => e.stopPropagation()}>
+                        <AudioPlayer src={m.url} compact />
+                      </div>
+                    ) : (
+                      <div className="aspect-video relative group flex items-center justify-center cursor-pointer" style={{ background: 'var(--surface-3)' }} onClick={(e) => { e.stopPropagation(); setVidLightbox(m.url); }}>
+                        <div className="w-10 h-10 rounded-full bg-black/25 backdrop-blur-sm flex items-center justify-center border border-white/20 transition-transform group-hover:scale-110">
+                          <i className="fas fa-play text-white text-xs mr-[-1px]"></i>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  );
+                })}
+              </div>
+            )}
+            {isEditing ? (
+              <div>
+                <input value={editText} onChange={(e) => setEditText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') setIsEditing(false); }}
+                  className="w-full bg-transparent outline-none text-[11px] leading-relaxed px-1 py-0.5 rounded" autoFocus
+                  style={{ color: 'var(--text)', border: '1px solid var(--primary)' }} />
+                <div className="flex gap-1.5 mt-1">
+                  <button onClick={handleSaveEdit} className="text-[8px] font-bold px-2 py-0.5 rounded-md" style={{ background: 'var(--primary)', color: 'white' }}>ذخیره</button>
+                  <button onClick={() => { setIsEditing(false); setEditText(comment.text); }} className="text-[8px] font-bold px-2 py-0.5 rounded-md" style={{ background: 'var(--surface-3)', color: 'var(--text-3)' }}>لغو</button>
+                </div>
+              </div>
+            ) : (
+              <>
+                {comment.audioTimestamp != null && (
+                  <button onClick={() => { const el = document.querySelector('audio'); if (el) { el.currentTime = comment.audioTimestamp; el.play().catch(() => {}); } }}
+                    className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded-lg transition-all active:scale-95"
+                    style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '8px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+                    <i className="fas fa-music text-[7px]"></i>
+                    <span className="font-medium">پاسخ به </span>
+                    <span className="font-bold" style={{ fontSize: '9px' }}>{toPersianDigits(Math.floor(comment.audioTimestamp / 60))}:{toPersianDigits(String(Math.floor(comment.audioTimestamp % 60)).padStart(2, '0'))}</span>
+                    <span className="font-medium"> از صوت</span>
+                  </button>
+                )}
+                <p className="text-[11px] leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text)' }}>{comment.text}</p>
+              </>
+            )}
+            {isOwn && !isEditing && (
+              <button onClick={(e) => { e.stopPropagation(); setIsEditing(true); }}
+                className="absolute top-1.5 left-1.5 w-5 h-5 rounded-md flex items-center justify-center transition-all hover:bg-black/5 active:scale-90 opacity-0 group-hover/reply:opacity-40 hover:!opacity-70"
+                style={{ color: 'var(--text-3)' }}>
+                <i className="fas fa-pen text-[7px]"></i>
+              </button>
+            )}
+          </div>
+        <div className="flex items-center gap-1 pr-1 pt-0.5 transition-opacity mr-auto">
+          <button onClick={(e) => { e.stopPropagation(); onSwipeReply?.({ postId, author: comment.author, text: comment.text, commentId }); }}
+            className="text-[7px] font-bold transition-all duration-200 hover:bg-black/5 px-1.5 py-0.5 rounded-lg flex items-center gap-0.5" style={{ color: 'var(--text-3)' }}>
+            <i className="fas fa-reply text-[7px]"></i><span>پاسخ</span>
+          </button>
+          <button onClick={(e) => { e.stopPropagation(); handleLikeReply(commentId); }}
+            className="text-[7px] font-bold transition-all duration-200 hover:bg-black/5 px-1.5 py-0.5 rounded-lg flex items-center gap-0.5" style={{ color: likedReplies.has(commentId) ? '#ef4444' : 'var(--text-3)' }}>
+            <i className={`${likedReplies.has(commentId) ? 'fas' : 'far'} fa-heart text-[7px]`}></i><span>{toPersianDigits((comment.likes || 0) + (likedReplies.has(commentId) ? 1 : 0))}</span>
+          </button>
+          {isOwn && (
+            <button onClick={(e) => { e.stopPropagation(); handleDeleteReply(commentId); }}
+              className="text-[7px] font-bold transition-all duration-200 hover:bg-red-500/5 px-1.5 py-0.5 rounded-lg flex items-center gap-0.5" style={{ color: 'var(--text-3)' }}>
+              <i className="fas fa-trash-alt text-[7px]"></i>
+            </button>
+          )}
+          {children.length > 0 && (
+            <button onClick={(e) => { e.stopPropagation(); setShowChildReplies(!showChildReplies); }}
+              className="flex items-center gap-1.5 py-1 px-2.5 rounded-full text-[8px] font-bold transition-all duration-300 hover:shadow-sm active:scale-95"
+              style={{ background: 'color-mix(in srgb, var(--primary) 8%, transparent)', color: 'var(--primary)' }}>
+              <i className={`fas ${showChildReplies ? 'fa-chevron-up' : 'fa-chevron-down'} text-[7px] transition-transform duration-300`}></i>
+              <span>{toPersianDigits(children.length)} پاسخ</span>
+            </button>
+          )}
+        </div>
+        {showChildReplies && children.length > 0 && (
+          <div className="pr-3 mt-1 space-y-1" style={{ borderRight: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+            {children.map(child => (
+              <RenderReply key={getCommentId(child)} comment={child} depth={depth + 1} postId={postId} localComments={localComments} currentUser={currentUser} likedReplies={likedReplies} touchStartX={touchStartX} onSwipeReply={onSwipeReply} getCommentId={getCommentId} handleLikeReply={handleLikeReply} handleDeleteReply={handleDeleteReply} />
+            ))}
+          </div>
+               )}
+           </div>
+    </div>
+    {imgLightbox && <ImageLightbox src={imgLightbox.src} onClose={() => setImgLightbox(null)} text={imgLightbox.text} author={imgLightbox.author} authorAvatar={imgLightbox.authorAvatar} time={imgLightbox.time} />}
+    {vidLightbox && <VideoLightbox url={vidLightbox} onClose={() => setVidLightbox(null)} />}
+    </>
+  );
+});
+
+const PostBubble: React.FC<{
+  post: Post;
+  video?: Video;
+  podcast?: Podcast;
+  publishedBook?: PublishedBook;
+  onShowComments: (post: Post) => void;
+  onPlayVideo: (video: Video) => void;
+  onPlayPodcast: (podcast: Podcast, episodeIndex: number) => void;
+  onShowBook: (book: PublishedBook) => void;
+  onOpenMenu: (post: Post, rect: DOMRect) => void;
+  isFirstInGroup: boolean;
+  isLastInGroup: boolean;
+  onShowInstantView: (title: string, content: string) => void;
+  onAddComment?: (text: string, video: any, videoTimestamp?: number, parentId?: string, audioTimestamp?: number) => void;
+  onNewPost?: (post: Post) => void;
+  onUpdatePost?: (post: Post) => void;
+  onDeletePost?: (postId: number) => void;
+  currentUser?: string;
+  onSwipeReply?: (target: { postId: number; author: string; text: string; commentId?: string }) => void;
+}> = React.memo(({ post, video, podcast, publishedBook, onShowComments, onPlayVideo, onPlayPodcast, onShowBook, onOpenMenu, isFirstInGroup, isLastInGroup, onShowInstantView, onAddComment, onNewPost, onUpdatePost, onDeletePost, currentUser, onSwipeReply }) => {
+  const isAdminPost = post.author === 'سرای هنر و اندیشه' || post.author?.includes('مجموعه:');
+  const [liked, setLiked] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('soha_liked_posts') || '[]').includes(String(post.id)); } catch { return false; }
+  });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [isEditingPost, setIsEditingPost] = useState(false);
+  const [editPostText, setEditPostText] = useState(post.text);
+  const [localComments, setLocalComments] = useState<PostComment[]>(post.comments);
+  const [showReplies, setShowReplies] = useState(false);
+  const [likedReplies, setLikedReplies] = useState<Set<string>>(() => {
+    try { return new Set(JSON.parse(localStorage.getItem('soha_liked_replies') || '[]')); } catch { return new Set(); }
+  });
+  const [imgLightbox, setImgLightbox] = useState<{ src: string; text?: string; author?: string; authorAvatar?: string; time?: string } | null>(null);
+  const [vidLightbox, setVidLightbox] = useState<string | null>(null);
+  const touchStartX = useRef<number>(0);
+
+  const getCommentId = (c: any): string => String(c._id ?? c.id);
+
+  useEffect(() => {
+    setLocalComments(post.comments);
+  }, [post.comments]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    if (deltaX > 50 && onSwipeReply) {
+      onSwipeReply({ postId: post.id, author: post.author, text: post.text || '' });
+    }
+  };
+
+  const toggleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const next = !liked;
+    setLiked(next);
+    try {
+      const arr = JSON.parse(localStorage.getItem('soha_liked_posts') || '[]');
+      const id = String(post.id);
+      if (next) {
+        arr.push(id);
+      } else {
+        const idx = arr.indexOf(id);
+        if (idx > -1) arr.splice(idx, 1);
+      }
+      localStorage.setItem('soha_liked_posts', JSON.stringify(arr));
+    } catch {}
+  };
+
+  const handleDelete = () => {
+    if (onDeletePost) onDeletePost(post.id);
+    setShowDeleteConfirm(false);
+  };
+
+  const handleLikeReply = (commentId: string) => {
+    const next = new Set(likedReplies);
+    if (next.has(commentId)) {
+      next.delete(commentId);
+    } else {
+      next.add(commentId);
+    }
+    setLikedReplies(next);
+    try { localStorage.setItem('soha_liked_replies', JSON.stringify([...next])); } catch {}
+  };
+
+  const handleDeleteReply = async (commentId: string) => {
+    try {
+      const { deletePostComment } = await import('../services/api');
+      const ok = await deletePostComment(String(post.id), commentId);
+      if (ok) {
+        setLocalComments(prev => prev.filter(c => getCommentId(c) !== commentId));
+        if (onUpdatePost) {
+          const updated = { ...post, comments: post.comments.filter(c => getCommentId(c) !== commentId) };
+          onUpdatePost(updated);
+        }
+      }
+    } catch {}
+  };
+
+  const handleSavePostEdit = async () => {
+    if (!editPostText.trim() || editPostText.trim() === post.text) { setIsEditingPost(false); return; }
+    try {
+      const { updatePost } = await import('../services/api');
+      const updated = await updatePost(String(post.id), { text: editPostText.trim() });
+      if (updated) {
+        if (onUpdatePost) onUpdatePost({ ...updated, id: updated.id ?? post.id });
+        setIsEditingPost(false);
+      }
+    } catch { setIsEditingPost(false); }
+  };
+
+  return (<>
+    <div className={`flex items-start gap-1.5 ${isAdminPost ? 'flex-row-reverse' : ''} ${isFirstInGroup ? 'mt-4' : 'mt-0.5'}`}>
+       <div className={`w-8 flex-shrink-0 ${isFirstInGroup ? '' : 'invisible'}`}>
+         {isFirstInGroup && (post.authorAvatarUrl ? <img src={post.authorAvatarUrl} className="w-8 h-8 rounded-full object-cover shadow-sm" alt={post.author} /> : <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] font-bold shadow-sm" style={{ background: `hsl(${post.author.charCodeAt(0) * 37 % 360}, 55%, 45%)` }}>{post.author[0]}</div>)}
+       </div>
+
+       <div className={`flex flex-col flex-1 min-w-0 ${isAdminPost ? 'items-end' : 'items-start'}`}>
+          <div
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            className={`relative w-[92%] lg:w-[88%] transition-all duration-200 hover:shadow-md cursor-default ${isFirstInGroup ? 'rounded-2xl' : isAdminPost ? 'rounded-2xl rounded-br-sm' : 'rounded-2xl rounded-bl-sm'}`}
+            style={{
+              background: isAdminPost
+                ? 'linear-gradient(145deg, color-mix(in srgb, var(--primary) 14%, var(--surface-2)), color-mix(in srgb, var(--primary) 4%, var(--surface-2)))'
+                : 'var(--surface-2)',
+              boxShadow: isAdminPost
+                ? '0 1px 6px color-mix(in srgb, var(--primary) 10%, transparent)'
+                : '0 1px 4px rgba(0,0,0,0.03)',
+              border: isAdminPost ? '1px solid color-mix(in srgb, var(--primary) 12%, transparent)' : '1px solid var(--border)',
+            }}>
+            {isAdminPost && (
+              <div className="h-[2px] rounded-t-2xl" style={{ background: 'linear-gradient(to left, var(--primary), transparent)' }}></div>
+            )}
+
+           <div className="px-3 pt-2.5 pb-1.5">
+               {/* Header */}
+               <div className="flex items-center justify-between mb-1">
+                 <div className="flex items-center gap-1.5">
+                   <span className="font-black text-[11px]" style={{ color: isAdminPost ? 'var(--primary)' : 'var(--text-1)' }}>{post.author}</span>
+                   <span className="text-[8px]" style={{ color: 'var(--text-3)' }}>{formatTimeFromISO(post.isoDate)}</span>
+                 </div>
+                  {currentUser && post.author === currentUser && (
+                    <button onClick={(e) => { e.stopPropagation(); setIsEditingPost(true); setEditPostText(post.text || ''); }}
+                      className="w-6 h-6 rounded-lg flex items-center justify-center transition-all hover:bg-black/5 active:scale-90 opacity-50 hover:opacity-80"
+                      style={{ color: 'var(--text-3)' }}>
+                      <i className="fas fa-pen text-[8px]"></i>
+                    </button>
+                  )}
+               </div>
+
+               {/* Text */}
+               {post.text && (
+                 <div className="text-right mb-1.5">
+                   {isEditingPost ? (
+                     <div>
+                       <input value={editPostText} onChange={(e) => setEditPostText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSavePostEdit(); } if (e.key === 'Escape') setIsEditingPost(false); }}
+                         className="w-full bg-transparent outline-none text-[13px] leading-[1.7] font-medium px-2 py-1 rounded-lg" autoFocus
+                         style={{ color: 'var(--text)', border: '1px solid var(--primary)' }} />
+                       <div className="flex gap-1.5 mt-1">
+                         <button onClick={handleSavePostEdit} className="text-[9px] font-bold px-3 py-1 rounded-lg" style={{ background: 'var(--primary)', color: 'white' }}>ذخیره</button>
+                         <button onClick={() => { setIsEditingPost(false); setEditPostText(post.text || ''); }} className="text-[9px] font-bold px-3 py-1 rounded-lg" style={{ background: 'var(--surface-3)', color: 'var(--text-3)' }}>لغو</button>
+                       </div>
+                     </div>
+                   ) : (
+                     <div className="text-[13px] leading-[1.7] font-medium whitespace-pre-wrap" style={{ color: 'var(--text)' }}>{post.text}</div>
+                   )}
+                 </div>
+               )}
+
+               {/* Media */}
+                 {post.media && post.media.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mb-1.5">
+                    {post.media.map((m, i) => {
+                      const imgWidth = m.type === 'image' ? (post.media!.length === 1 ? '100%' : 'calc(50% - 2px)') : '100%';
+                      return (
+                      <div key={i} className="rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)', width: imgWidth, background: 'var(--surface-3)' }}>
+                         {m.type === 'image' ? (
+                           <img src={m.url} className="w-full h-auto object-cover cursor-pointer hover:opacity-90 transition-opacity" alt="" loading="lazy" onClick={(e) => { e.stopPropagation(); setImgLightbox({ src: m.url, text: post.text, author: post.author, authorAvatar: post.authorAvatarUrl, time: formatTimeFromISO(post.isoDate) }); }} />
+                          ) : m.type === 'audio' ? (
+                           <div onClick={(e) => e.stopPropagation()}>
+                             <AudioPlayer src={m.url} compact />
+                           </div>
+                        ) : (
+                          <div className="aspect-video relative group flex items-center justify-center cursor-pointer" style={{ background: 'var(--surface-3)' }} onClick={(e) => { e.stopPropagation(); setVidLightbox(m.url); }}>
+                           <div className="w-10 h-10 rounded-full bg-black/30 backdrop-blur-md flex items-center justify-center border border-white/20 transition-all group-hover:scale-110">
+                             <i className="fas fa-play text-white text-sm mr-[-2px]"></i>
+                           </div>
+                         </div>
+                       )}
+                     </div>
+                     );
+                   })}
+                 </div>
+               )}
+               <MediaCard video={video} podcast={podcast} book={publishedBook} onPlayVideo={onPlayVideo} onPlayPodcast={onPlayPodcast} onShowBook={onShowBook} />
+           </div>
+
+             {/* Action buttons */}
+            <div className="flex items-center gap-2 px-3 pb-2 pt-1" onClick={(e) => e.stopPropagation()}>
+               <button onClick={(e) => { e.stopPropagation(); onSwipeReply?.({ postId: post.id, author: post.author, text: post.text || '' }); }}
+                 className="flex items-center gap-1.5 rounded-lg py-1 px-2 transition-all active:scale-90"
+                 style={{ color: '#475569' }}>
+                 <i className="fas fa-reply text-[11px]"></i>
+                 <span className="text-[10px] font-bold">پاسخ</span>
+               </button>
+               <button onClick={toggleLike}
+                 className="flex items-center gap-1.5 rounded-lg py-1 px-2 transition-all active:scale-90"
+                 style={{ color: liked ? '#ef4444' : '#475569' }}>
+                 <i className={`${liked ? 'fas' : 'far'} fa-heart text-[11px]`}></i>
+                 <span className="text-[10px] font-bold">{toPersianDigits(post.likes + (liked ? 1 : 0))}</span>
+               </button>
+               {currentUser && post.author === currentUser && (
+               <button onClick={(e) => { e.stopPropagation(); setShowDeleteConfirm(true); }}
+                 className="rounded-lg py-1 px-2 transition-all active:scale-90"
+                 style={{ color: '#475569' }}>
+                 <i className="fas fa-trash text-[11px]"></i>
+               </button>
+               )}
+               {showDeleteConfirm && (
+                 <div className="flex items-center gap-1.5 animate-fadeIn">
+                   <button onClick={handleDelete}
+                     className="px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all active:scale-90 hover:opacity-80"
+                     style={{ background: '#ef4444', color: 'white' }}>
+                     حذف
+                   </button>
+                   <button onClick={() => setShowDeleteConfirm(false)}
+                     className="px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all active:scale-90 hover:opacity-80"
+                     style={{ background: 'var(--surface-3)', color: 'var(--text-2)' }}>
+                     انصراف
+            </button>
+            <div className="flex gap-1.5 mr-2">
+              <button onClick={() => setFeedMode('all')}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                  feedMode === 'all' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: feedMode === 'all' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                  color: feedMode === 'all' ? 'white' : 'var(--text-3)',
+                  border: `1px solid ${feedMode === 'all' ? 'transparent' : 'var(--border)'}`
+                }}>همه</button>
+              <button onClick={() => setFeedMode('posts')}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                  feedMode === 'posts' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: feedMode === 'posts' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                  color: feedMode === 'posts' ? 'white' : 'var(--text-3)',
+                  border: `1px solid ${feedMode === 'posts' ? 'transparent' : 'var(--border)'}`
+                }}>یادداشت‌ها</button>
+              <button onClick={() => setFeedMode('video-comments')}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                  feedMode === 'video-comments' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: feedMode === 'video-comments' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                  color: feedMode === 'video-comments' ? 'white' : 'var(--text-3)',
+                  border: `1px solid ${feedMode === 'video-comments' ? 'transparent' : 'var(--border)'}`
+                }}>نظرات ویدیوها</button>
+              <button onClick={() => setFeedMode('podcast-comments')}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                  feedMode === 'podcast-comments' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: feedMode === 'podcast-comments' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                  color: feedMode === 'podcast-comments' ? 'white' : 'var(--text-3)',
+                  border: `1px solid ${feedMode === 'podcast-comments' ? 'transparent' : 'var(--border)'}`
+                }}>نظرات صوت‌ها</button>
+            </div>
+           </div>
+                )}
+                <button onClick={(e) => { e.stopPropagation(); onShowComments(post); }}
+                 className="flex items-center gap-1.5 rounded-lg py-1 px-2 transition-all active:scale-90 mr-auto"
+                 style={{ color: 'var(--primary)' }}>
+                 <i className="fas fa-comments text-[11px]"></i>
+                 <span className="text-[10px] font-bold">گفتگو</span>
+               </button>
+            </div>
+            {/* Replies */}
+            {localComments.length > 0 && (
+              <div onClick={(e) => e.stopPropagation()}>
+                <div className="px-2 pb-1">
+                 <button onClick={(e) => { e.stopPropagation(); setShowReplies(v => !v); }}
+                  className="flex items-center gap-1.5 py-1 px-3 rounded-full text-[9px] font-bold transition-all duration-300 hover:shadow-sm active:scale-95"
+                  style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}>
+                  <i className={`fas fa-chevron-${showReplies ? 'up' : 'down'} text-[8px] transition-transform duration-300`}></i>
+                  <span>{toPersianDigits(localComments.length)} پاسخ</span>
+                </button>
+                </div>
+                 {showReplies && (
+                   <div className="pb-2 px-2 ml-2 border-r-2" style={{ borderColor: 'color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+                      {localComments.filter(c => !c.replyTo || !localComments.find(x => getCommentId(x) === c.replyTo)).map((rootComment) => (
+                         <RenderReply key={getCommentId(rootComment)} comment={rootComment} depth={0} postId={post.id} localComments={localComments} currentUser={currentUser} likedReplies={likedReplies} touchStartX={touchStartX} onSwipeReply={onSwipeReply} getCommentId={getCommentId} handleLikeReply={handleLikeReply} handleDeleteReply={handleDeleteReply} />
+                      ))}
+                   </div>
+                )}
+           </div>
+)}
+           </div>
+    </div>
+    </div>
+    {imgLightbox && <ImageLightbox src={imgLightbox.src} onClose={() => setImgLightbox(null)} text={imgLightbox.text} author={imgLightbox.author} authorAvatar={imgLightbox.authorAvatar} time={imgLightbox.time} />}
+    {vidLightbox && <VideoLightbox url={vidLightbox} onClose={() => setVidLightbox(null)} />}
+  </>
+  );
+});
+
+const VideoCommentItem: React.FC<{
+  comment: Comment;
+  video: Video;
+  allComments: Comment[];
+  onOpenVideo: (video: Video, timestamp?: number, highlightId?: string) => void;
+  onAddComment: (text: string, video: Video, videoTimestamp?: number, parentId?: string, audioTimestamp?: number) => void;
+  onDeleteComment?: (commentId: string) => void;
+  onLikeComment?: (commentId: string) => void;
+  onUpdateComment?: (commentId: string, newText: string) => void;
+  onShowDiscussion?: (comment: Comment, video: Video) => void;
+  currentUserName?: string;
+  userRole?: string;
+  depth?: number;
+  likedComments?: Set<string>;
+}> = ({ comment, video, allComments, onOpenVideo, onAddComment, onDeleteComment, onLikeComment, onUpdateComment, onShowDiscussion, currentUserName, userRole, depth = 0, likedComments = new Set() }) => {
+  const [showReplies, setShowReplies] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
+  const [replyText, setReplyText] = useState('');
+  const [replyTo, setReplyTo] = useState('');
+  const [replyTimestamp, setReplyTimestamp] = useState<number | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [includeAudioTs, setIncludeAudioTs] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(comment.text);
+  const [commentText, setCommentText] = useState(comment.text);
+  const replyTimerRef = useRef<number | null>(null);
+
+  const childReplies = comment.replies || allComments.filter(c => c.parentId === (comment._id || String(comment.id)));
+  const hasTimestamp = typeof comment.videoTimestamp === 'number' && comment.videoTimestamp >= 0;
+  const isOwner = comment.author === currentUserName;
+  const isAdmin = userRole === 'admin';
+  const cid = comment._id || String(comment.id);
+  const isLiked = likedComments.has(cid);
+
+  const startRecordingTimestamp = () => {
+    setIsRecording(true);
+    setReplyTimestamp(0);
+    let sec = 0;
+    replyTimerRef.current = window.setInterval(() => {
+      sec += 1;
+      setReplyTimestamp(sec);
+    }, 1000);
+  };
+
+  const stopRecordingTimestamp = () => {
+    setIsRecording(false);
+    if (replyTimerRef.current) clearInterval(replyTimerRef.current);
+  };
+
+  useEffect(() => {
+    return () => { if (replyTimerRef.current) clearInterval(replyTimerRef.current); };
+  }, []);
+
+  const handleReply = (commentId: string, authorName: string) => {
+    setReplyTo(commentId);
+    setIsReplying(true);
+    setReplyText('');
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editText.trim() || editText.trim() === comment.text) { setIsEditing(false); return; }
+    try {
+      const { updateComment } = await import('../services/api');
+      const newText = await updateComment(cid, editText.trim());
+      if (newText) {
+        onUpdateComment?.(cid, editText.trim());
+        setIsEditing(false);
+      }
+    } catch { setIsEditing(false); }
+  };
+
+
+  const handleSendReply = () => {
+    if (!replyText.trim()) return;
+    const audioTs = includeAudioTs && (comment as any).audioTimestamp != null ? (comment as any).audioTimestamp : undefined;
+    onAddComment(replyText, video, replyTimestamp || undefined, replyTo || (comment._id || String(comment.id)), audioTs);
+    setReplyText('');
+    setReplyTo('');
+    setIsReplying(false);
+    setReplyTimestamp(null);
+    setIncludeAudioTs(false);
+    setShowReplies(true);
+  };
+
+    if (depth === 0) {
+    return (
+      <div className="mb-4 lg:mb-5">
+        <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-lg"
+          style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
+          <div
+            className="relative aspect-video lg:aspect-[2.2/1] cursor-pointer group overflow-hidden"
+            onClick={() => onOpenVideo(video, comment.videoTimestamp || 0)}
+          >
+            {hasTimestamp ? (
+              <TimestampThumbnail
+                videoId={String((video as any)._id || video.id)}
+                timestamp={comment.videoTimestamp!}
+                alt={video.title}
+                poster={video.thumbnailUrl}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              />
+            ) : (
+              <img
+                src={video.thumbnailUrl}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                alt={video.title}
+              />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-black/20" />
+
+            {hasTimestamp && (
+              <div className="absolute top-3 left-3 flex items-center gap-1.5 bg-black/50 backdrop-blur-md text-white rounded-xl px-3 py-1.5 shadow-2xl border border-white/10">
+                <i className="fas fa-clock text-[9px] text-primary-300"></i>
+                <span className="text-[11px] font-black font-mono">{formatTimestamp(comment.videoTimestamp!)}</span>
+              </div>
+            )}
+
+            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
+              <div className="w-16 h-16 rounded-full bg-white/15 backdrop-blur-md flex items-center justify-center border border-white/25 shadow-2xl scale-75 group-hover:scale-100 transition-transform duration-300">
+                <i className="fas fa-play text-white text-xl mr-[-3px]"></i>
+              </div>
+            </div>
+
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
+              <p className="text-white text-[13px] font-black truncate drop-shadow-lg leading-relaxed">{video.title}</p>
+            </div>
+          </div>
+
+            <div className="p-4 relative">
+            {(isOwner || isAdmin) && !isEditing && (
+              <button onClick={() => { setIsEditing(true); setEditText(comment.text); }}
+                className="absolute top-3 left-3 w-6 h-6 rounded-md flex items-center justify-center transition-all hover:bg-black/5 active:scale-90 opacity-40 hover:!opacity-70"
+                style={{ color: 'var(--text-3)' }}>
+                <i className="fas fa-pen text-[8px]"></i>
+              </button>
+            )}
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full flex-shrink-0 flex items-center justify-center text-white text-[11px] font-bold shadow-lg transition-transform group-hover:scale-105 overflow-hidden"
+                style={{ background: `linear-gradient(135deg, hsl(${(comment.author.charCodeAt(0) * 37) % 360}, 60%, 50%), hsl(${(comment.author.charCodeAt(0) * 73) % 360}, 60%, 40%))` }}>
+                {comment.authorAvatarUrl ? (
+                  <img src={comment.authorAvatarUrl} alt={comment.author} className="w-full h-full object-cover" />
+                ) : comment.author.charAt(0)}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="font-black text-[12px]" style={{ color: 'var(--primary)' }}>{comment.author}</span>
+                  <span className="text-[10px]" style={{ color: 'var(--text-3)' }}>{formatTimeFromISO(comment.isoDate)}</span>
+                </div>
+                {isEditing ? (
+                  <div>
+                    <input value={editText} onChange={(e) => setEditText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') setIsEditing(false); }}
+                      className="w-full bg-transparent outline-none text-[12px] leading-[2] font-medium px-2 py-1 rounded-lg" autoFocus
+                      style={{ color: 'var(--text)', border: '1px solid var(--primary)' }} />
+                    <div className="flex gap-1.5 mt-1.5">
+                      <button onClick={handleSaveEdit} className="text-[9px] font-bold px-3 py-1 rounded-lg" style={{ background: 'var(--primary)', color: 'white' }}>ذخیره</button>
+                      <button onClick={() => { setIsEditing(false); setEditText(comment.text); }} className="text-[9px] font-bold px-3 py-1 rounded-lg" style={{ background: 'var(--surface-3)', color: 'var(--text-3)' }}>لغو</button>
+                    </div>
+                  </div>
+                ) : (
+                  <>
+                    {(comment as any).audioTimestamp != null && (
+                      <button onClick={() => {
+                        const el = document.querySelector('audio');
+                        if (el) { el.currentTime = (comment as any).audioTimestamp; el.play().catch(() => {}); }
+                      }}
+                        className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded-lg transition-all active:scale-95"
+                        style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '8px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+                        <i className="fas fa-music text-[7px]"></i>
+                        <span className="font-medium">پاسخ به </span>
+                        <span className="font-bold" style={{ fontSize: '9px' }}>{toPersianDigits(Math.floor((comment as any).audioTimestamp / 60))}:{toPersianDigits(String(Math.floor((comment as any).audioTimestamp % 60)).padStart(2, '0'))}</span>
+                        <span className="font-medium"> از صوت</span>
+                      </button>
+                    )}
+                    <p className="text-[12px] leading-[2] font-medium whitespace-pre-wrap" style={{ color: 'var(--text-2)' }}>{commentText}</p>
+                  </>
+                  )}
+
+                <div className="flex items-center gap-3.5 mt-2.5">
+                  {hasTimestamp && (
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onOpenVideo(video, comment.videoTimestamp!, comment._id || String(comment.id)); }}
+                      className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 transition-all active:scale-95"
+                      style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}
+                    >
+                      <i className="fas fa-play text-[7px]"></i>
+                      <span className="text-[10px] font-black">{formatTimestamp(comment.videoTimestamp!)}</span>
+                    </button>
+                  )}
+                  <button onClick={() => { if (!isReplying) handleReply(comment._id || String(comment.id), comment.author?.name || ''); else { setIsReplying(false); setReplyTo(''); } }} className="text-[10px] font-bold transition-colors" style={{ color: 'var(--text-3)' }}>
+                    <i className="fas fa-reply ml-1"></i>پاسخ
+                  </button>
+                  {onLikeComment && (
+                    <button onClick={() => onLikeComment(cid)} className="text-[10px] font-bold flex items-center gap-1 transition-colors" style={{ color: isLiked ? 'var(--primary)' : 'var(--text-3)' }}>
+                      <i className={`${isLiked ? 'fas' : 'far'} fa-heart ml-1 ${isLiked ? 'text-primary' : ''}`}></i>{toPersianDigits(comment.likes || 0)}
+                    </button>
+                  )}
+                  {(isOwner || isAdmin) && onDeleteComment && (
+                    <button onClick={() => onDeleteComment(comment._id || String(comment.id))} className="text-[10px] font-bold transition-colors text-red-400/70 hover:text-red-400">
+                      <i className="fas fa-trash-alt ml-1"></i>حذف
+                    </button>
+                  )}
+                  {onShowDiscussion && (
+                    <button onClick={(e) => { e.stopPropagation(); onShowDiscussion(comment, video); }} className="text-[10px] font-bold transition-colors" style={{ color: 'var(--primary)' }}>
+                      <i className="fas fa-comments ml-1"></i>گفتگو
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {isReplying && replyTo && replyTo === (comment._id || String(comment.id)) && (
+              <div className="mt-3 pt-3 border-t animate-fadeIn" style={{ borderColor: 'var(--border)' }}>
+                {(comment as any).audioTimestamp != null && (
+                  <button type="button" onClick={() => setIncludeAudioTs(!includeAudioTs)}
+                    className="flex items-center gap-1.5 mb-2 px-2 py-1 rounded-lg transition-all active:scale-95 cursor-pointer"
+                    style={{ background: includeAudioTs ? 'color-mix(in srgb, var(--primary) 12%, transparent)' : 'color-mix(in srgb, var(--primary) 5%, transparent)', border: `1px solid ${includeAudioTs ? 'var(--primary)' : 'color-mix(in srgb, var(--primary) 12%, transparent)'}` }}>
+                    <i className={`fas ${includeAudioTs ? 'fa-check-circle' : 'fa-music'} text-[9px]`} style={{ color: 'var(--primary)' }}></i>
+                    <span className="text-[9px] font-bold" style={{ color: 'var(--primary)' }}>
+                      {includeAudioTs ? `پاسخ به ${toPersianDigits(Math.floor((comment as any).audioTimestamp / 60))}:${toPersianDigits(String(Math.floor((comment as any).audioTimestamp % 60)).padStart(2, '0'))}` : `ارسال ریپلای به این تیکه از صوت`}
+                    </span>
+                  </button>
+                )}
+                <div className="flex gap-2">
+                  <input
+                    autoFocus
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendReply(); } }}
+                    placeholder="پاسخ خود را بنویسید..."
+                    className="flex-1 rounded-xl px-3 py-2.5 text-[11px] font-medium outline-none transition-all duration-200 focus:ring-2"
+                    style={{ background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', '--tw-ring-color': 'color-mix(in srgb, var(--primary) 25%, transparent)' } as any}
+                  />
+                  <button
+                    onClick={handleSendReply}
+                    disabled={!replyText.trim()}
+                    className="w-9 h-9 rounded-xl text-white flex items-center justify-center shadow-md disabled:opacity-30 active:scale-95 transition-all flex-shrink-0 hover:shadow-lg"
+                    style={{ background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))' }}
+                  >
+                    <i className="fas fa-paper-plane text-[9px]"></i>
+                  </button>
+                  <button
+                    onClick={() => { setIsReplying(false); setReplyTo(''); setReplyText(''); }}
+                    className="w-9 h-9 rounded-xl flex items-center justify-center transition-all active:scale-95 flex-shrink-0"
+                    style={{ background: 'var(--surface-3)', color: 'var(--text-3)', border: '1px solid var(--border)' }}
+                  >
+                    <i className="fas fa-times text-[9px]"></i>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {childReplies.length > 0 && (
+              <div className="mt-3 pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
+                {!showReplies ? (
+                  <button onClick={() => setShowReplies(true)} className="text-[11px] font-bold hover:underline transition-colors" style={{ color: 'var(--primary)' }}>
+                    <i className="fas fa-chevron-down ml-1"></i>
+                    {toPersianDigits(childReplies.length)} پاسخ بیشتر
+                  </button>
+                ) : (
+                  <button onClick={() => setShowReplies(false)} className="text-[10px] font-bold mb-2 transition-colors" style={{ color: 'var(--text-3)' }}>
+                    <i className="fas fa-chevron-up ml-1"></i>بستن
+                  </button>
+                )}
+                {showReplies && (
+                  <div className="space-y-2.5 mt-2">
+                    {childReplies.map(reply => (
+                       <ReplyItem
+                        key={reply._id || reply.id}
+                        reply={reply}
+                        allComments={allComments}
+                        onOpenVideo={onOpenVideo}
+                        onDeleteComment={onDeleteComment}
+                        onLikeComment={onLikeComment}
+                        onUpdateComment={onUpdateComment}
+                        onReply={(rid, author) => { handleReply(rid, author); }}
+                        currentUserName={currentUserName}
+                        userRole={userRole}
+                        likedComments={likedComments}
+                        isReplyingHere={isReplying && replyTo === (reply._id || String(reply.id))}
+                        replyText={isReplying && replyTo === (reply._id || String(reply.id)) ? replyText : ''}
+                        onReplyTextChange={setReplyText}
+                        onSendReply={handleSendReply}
+                        onCancelReply={() => { setIsReplying(false); setReplyTo(''); setReplyText(''); }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return null;
+};
+
+const ReplyItem: React.FC<{
+  reply: Comment;
+  allComments: Comment[];
+  onOpenVideo: (video: Video, timestamp?: number, highlightId?: string) => void;
+  onDeleteComment?: (commentId: string) => void;
+  onLikeComment?: (commentId: string) => void;
+  onUpdateComment?: (commentId: string, newText: string) => void;
+  onReply?: (commentId: string, authorName: string) => void;
+  currentUserName?: string;
+  userRole?: string;
+  likedComments?: Set<string>;
+  isReplyingHere?: boolean;
+  replyText?: string;
+  onReplyTextChange?: (text: string) => void;
+  onSendReply?: () => void;
+  onCancelReply?: () => void;
+}> = ({ reply, allComments, onOpenVideo, onDeleteComment, onLikeComment, onUpdateComment, onReply, currentUserName, userRole, likedComments = new Set(), isReplyingHere, replyText, onReplyTextChange, onSendReply, onCancelReply }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(reply.text);
+  const hasTimestamp = typeof reply.videoTimestamp === 'number' && reply.videoTimestamp >= 0;
+  const isOwner = reply.author === currentUserName;
+  const isAdmin = userRole === 'admin';
+  const rid = reply._id || String(reply.id);
+  const isLiked = likedComments.has(rid);
+
+  const handleSaveEdit = async () => {
+    if (!editText.trim() || editText === reply.text) { setIsEditing(false); return; }
+    try {
+      const { updateComment } = await import('../services/api');
+      const newText = await updateComment(rid, editText.trim());
+      if (newText) {
+        onUpdateComment?.(rid, editText.trim());
+        setIsEditing(false);
+      }
+    } catch { setIsEditing(false); }
+  };
+
+  return (
+    <div>
+    <div className="relative">
+    {(isOwner || isAdmin) && !isEditing && (
+      <button onClick={() => { setIsEditing(true); setEditText(reply.text); }}
+        className="absolute top-2.5 left-2.5 w-5 h-5 rounded-md flex items-center justify-center transition-all hover:bg-black/5 active:scale-90 opacity-40 hover:!opacity-70"
+        style={{ color: 'var(--text-3)' }}>
+        <i className="fas fa-pen text-[7px]"></i>
+      </button>
+    )}
+    <div className="flex gap-2.5 p-3 rounded-xl transition-all"
+      style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
+      <div className="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center text-white text-[9px] font-bold shadow-sm overflow-hidden"
+        style={{ background: `linear-gradient(135deg, hsl(${(reply.author.charCodeAt(0) * 37) % 360}, 60%, 50%), hsl(${(reply.author.charCodeAt(0) * 73) % 360}, 60%, 40%))` }}>
+        {reply.authorAvatarUrl ? (
+          <img src={reply.authorAvatarUrl} alt={reply.author} className="w-full h-full object-cover" />
+        ) : reply.author.charAt(0)}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-1">
+          <span className="font-bold text-[11px]" style={{ color: 'var(--primary)' }}>{reply.author}</span>
+          <span className="text-[9px]" style={{ color: 'var(--text-3)' }}>{formatTimeFromISO(reply.isoDate)}</span>
+        </div>
+        {isEditing ? (
+          <div>
+            <input value={editText} onChange={(e) => setEditText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') setIsEditing(false); }}
+              className="w-full bg-transparent outline-none text-[11px] leading-relaxed px-2 py-1 rounded-lg" autoFocus
+              style={{ color: 'var(--text)', border: '1px solid var(--primary)' }} />
+            <div className="flex gap-1.5 mt-1">
+              <button onClick={handleSaveEdit} className="text-[8px] font-bold px-2 py-0.5 rounded-md" style={{ background: 'var(--primary)', color: 'white' }}>ذخیره</button>
+              <button onClick={() => { setIsEditing(false); setEditText(reply.text); }} className="text-[8px] font-bold px-2 py-0.5 rounded-md" style={{ background: 'var(--surface-3)', color: 'var(--text-3)' }}>لغو</button>
+            </div>
+          </div>
+        ) : reply.text ? (
+          <>
+            {reply.audioTimestamp != null && (
+              <button onClick={() => { const el = document.querySelector('audio'); if (el) { el.currentTime = reply.audioTimestamp; el.play().catch(() => {}); } }}
+                className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded-lg transition-all active:scale-95"
+                style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '8px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+                <i className="fas fa-music text-[7px]"></i>
+                <span className="font-medium">پاسخ به </span>
+                <span className="font-bold" style={{ fontSize: '9px' }}>{toPersianDigits(Math.floor(reply.audioTimestamp / 60))}:{toPersianDigits(String(Math.floor(reply.audioTimestamp % 60)).padStart(2, '0'))}</span>
+                <span className="font-medium"> از صوت</span>
+              </button>
+            )}
+            <p className="text-[11px] leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text-2)' }}>{reply.text}</p>
+          </>
+        ) : null}
+        <div className="flex items-center gap-2.5 mt-1.5">
+          {hasTimestamp && (
+            <span className="flex items-center gap-1 text-[9px] font-bold" style={{ color: 'var(--primary)' }}>
+              <i className="fas fa-clock text-[7px]"></i>{formatTimestamp(reply.videoTimestamp!)}
+            </span>
+          )}
+          {onReply && (
+            <button onClick={() => onReply(rid, reply.author)} className="text-[9px] font-bold flex items-center gap-1 transition-colors" style={{ color: isReplyingHere ? 'var(--primary)' : 'var(--text-3)' }}>
+              <i className="fas fa-reply text-[7px]"></i> پاسخ
+            </button>
+          )}
+          {onLikeComment && (
+            <button onClick={() => onLikeComment(rid)} className="text-[9px] font-bold flex items-center gap-1 transition-colors" style={{ color: isLiked ? 'var(--primary)' : 'var(--text-3)' }}>
+              <i className={`${isLiked ? 'fas' : 'far'} fa-heart ${isLiked ? 'text-primary' : ''}`}></i>{toPersianDigits(reply.likes || 0)}
+            </button>
+          )}
+          {(isOwner || isAdmin) && onDeleteComment && (
+            <button onClick={() => onDeleteComment(reply._id || String(reply.id))} className="text-[9px] font-bold transition-colors text-red-400/70 hover:text-red-400">
+              <i className="fas fa-trash-alt"></i>
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+    {isReplyingHere && (
+      <div className="mt-2 ml-9 animate-fadeIn">
+        <div className="flex gap-2">
+          <input
+            autoFocus
+            value={replyText || ''}
+            onChange={(e) => onReplyTextChange?.(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSendReply?.(); } }}
+            placeholder="پاسخ خود را بنویسید..."
+            className="flex-1 rounded-xl px-3 py-2 text-[10px] font-medium outline-none transition-all duration-200 focus:ring-2"
+            style={{ background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', '--tw-ring-color': 'color-mix(in srgb, var(--primary) 25%, transparent)' } as any}
+          />
+          <button
+            onClick={onSendReply}
+            disabled={!replyText?.trim()}
+            className="w-8 h-8 rounded-xl text-white flex items-center justify-center shadow-md disabled:opacity-30 active:scale-95 transition-all flex-shrink-0"
+            style={{ background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))' }}
+          >
+            <i className="fas fa-paper-plane text-[8px]"></i>
+          </button>
+          {onCancelReply && (
+            <button
+              onClick={onCancelReply}
+              className="w-8 h-8 rounded-xl flex items-center justify-center transition-all active:scale-95 flex-shrink-0"
+              style={{ background: 'var(--surface-3)', color: 'var(--text-3)', border: '1px solid var(--border)' }}
+            >
+              <i className="fas fa-times text-[8px]"></i>
+            </button>
+          )}
+        </div>
+      </div>
+    )}
+    </div>
+    </div>
+  );
+};
+
+const PodcastCommentItem: React.FC<{
+  comment: Comment;
+  podcast: Podcast;
+  allComments: Comment[];
+  onPlayPodcast: (podcast: Podcast, episodeIndex: number, seekTime?: number, expandPlayer?: boolean) => void;
+  onAddComment: (text: string, video: any, videoTimestamp?: number, parentId?: string, audioTimestamp?: number) => void;
+  onDeleteComment?: (commentId: string) => void;
+  onLikeComment?: (commentId: string) => void;
+  onUpdateComment?: (commentId: string, newText: string) => void;
+  currentUserName?: string;
+  userRole?: string;
+  depth?: number;
+  likedComments?: Set<string>;
+  currentPlayingPodcastId?: number | string;
+  currentPlayingEpIdx?: number;
+  isGloballyPlaying?: boolean;
+  onGlobalTogglePlay?: () => void;
+}> = ({ comment, podcast, allComments, onPlayPodcast, onAddComment, onDeleteComment, onLikeComment, onUpdateComment, currentUserName, userRole, depth = 0, likedComments = new Set(), currentPlayingPodcastId, currentPlayingEpIdx, isGloballyPlaying, onGlobalTogglePlay }) => {
+  const [showReplies, setShowReplies] = useState(false);
+  const [isReplying, setIsReplying] = useState(false);
+  const [replyText, setReplyText] = useState('');
+  const [replyTo, setReplyTo] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(comment.text);
+  const [commentText, setCommentText] = useState(comment.text);
+  const epIdx = comment.episodeIndex != null ? comment.episodeIndex : 0;
+  const episode = podcast.episodes?.[epIdx];
+  const hasAudioTs = (comment.audioTimestamp ?? comment.timestamp) != null;
+  const isOwner = comment.author === currentUserName;
+  const isAdmin = userRole === 'admin';
+  const cid = comment._id || String(comment.id);
+  const isLiked = likedComments.has(cid);
+  const childReplies = comment.replies || allComments.filter(c => c.parentId === cid);
+
+  const handleReply = (commentId: string) => {
+    setReplyTo(commentId);
+    setIsReplying(true);
+    setReplyText('');
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editText.trim() || editText.trim() === comment.text) { setIsEditing(false); return; }
+    try {
+      const { updateComment } = await import('../services/api');
+      const newText = await updateComment(cid, editText.trim());
+      if (newText) {
+        onUpdateComment?.(cid, editText.trim());
+        setIsEditing(false);
+      }
+    } catch { setIsEditing(false); }
+  };
+
+  const handleSendReply = () => {
+    if (!replyText.trim() || !onAddComment) return;
+    const audioTs = hasAudioTs ? Number(comment.audioTimestamp ?? comment.timestamp) : undefined;
+    onAddComment(replyText, { id: (podcast as any)._id || podcast.id, title: podcast.title }, undefined, replyTo || cid, audioTs);
+    setReplyText('');
+    setReplyTo('');
+    setIsReplying(false);
+    setShowReplies(true);
+  };
+
+  if (depth === 0) {
+    const ts = Number(comment.audioTimestamp ?? comment.timestamp);
+    return (
+      <div className="mb-5">
+        <div className="rounded-2xl overflow-hidden transition-all duration-300 hover:shadow-xl"
+          style={{
+            background: 'var(--surface-2)',
+            border: '1px solid var(--border)',
+            boxShadow: '0 2px 20px rgba(6, 182, 212, 0.04)'
+          }}>
+          <div className="p-3 pb-0">
+            <div className="flex items-center gap-2.5 mb-3" dir="rtl">
+              <div className="relative w-14 h-14 lg:w-16 lg:h-16 rounded-xl overflow-hidden flex-shrink-0 shadow-lg ring-2 ring-white/10 cursor-pointer group"
+                onClick={() => {
+                  if (String(currentPlayingPodcastId) === String(podcast.id) && currentPlayingEpIdx === epIdx && isGloballyPlaying) {
+                    onGlobalTogglePlay?.();
+                  } else {
+                    if (onPlayPodcast) onPlayPodcast(podcast, epIdx, undefined, true);
+                  }
+                }}>
+                <img src={episode?.cover || podcast.cover || DEFAULT_COVER} className="w-full h-full object-cover" alt="" />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 transition-all duration-200 group-hover:bg-black/35">
+                  {String(currentPlayingPodcastId) === String(podcast.id) && currentPlayingEpIdx === epIdx && isGloballyPlaying ? (
+                    <div className="w-8 h-8 lg:w-9 lg:h-9 rounded-full flex items-center justify-center shadow-lg backdrop-blur-md"
+                      style={{ background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.4)' }}>
+                      <i className="fas fa-pause text-xs text-white"></i>
+                    </div>
+                  ) : (
+                    <div className="w-8 h-8 lg:w-9 lg:h-9 rounded-full flex items-center justify-center shadow-lg backdrop-blur-md"
+                      style={{ background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.4)' }}>
+                      <i className="fas fa-play text-xs text-white" style={{ marginRight: '-1px' }}></i>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="flex-1 min-w-0 cursor-pointer"
+                onClick={() => {
+                  if (String(currentPlayingPodcastId) === String(podcast.id) && currentPlayingEpIdx === epIdx && isGloballyPlaying) {
+                    onGlobalTogglePlay?.();
+                  } else {
+                    if (onPlayPodcast) onPlayPodcast(podcast, epIdx, undefined, true);
+                  }
+                }}>
+                <p className="text-sm font-black truncate" style={{ color: 'var(--text)' }}>{episode?.title || podcast.title}</p>
+                <p className="text-[10px] font-bold mt-0.5 flex items-center gap-1.5" style={{ color: 'var(--primary)' }}>
+                  <i className="fas fa-podcast text-[8px]"></i>
+                  {podcast.title}
+                </p>
+              </div>
+              <div className="flex items-center flex-shrink-0">
+                {hasAudioTs && (
+                  <button onClick={() => { if (onPlayPodcast) onPlayPodcast(podcast, epIdx, Number(comment.audioTimestamp ?? comment.timestamp), true); }}
+                    className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg"
+                    style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '8px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+                    {String(currentPlayingPodcastId) === String(podcast.id) && currentPlayingEpIdx === epIdx && isGloballyPlaying ? (
+                      <i className="fas fa-pause text-[7px]"></i>
+                    ) : (
+                      <i className="fas fa-play text-[7px]"></i>
+                    )}
+                    <span className="font-bold">{formatTime(ts)}</span>
+                  </button>
+                )}
+                {!hasAudioTs && (
+                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg"
+                    style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '8px' }}>
+                    <i className="fas fa-headphones text-[9px]"></i>
+                    <span className="font-bold">{formatTime(episode?.duration ? parseInt(episode.duration) : 0)}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="px-3 pb-3 relative">
+            {(isOwner || isAdmin) && !isEditing && (
+              <button onClick={() => { setIsEditing(true); setEditText(comment.text); }}
+                className="absolute top-0 left-2 w-5 h-5 rounded-md flex items-center justify-center transition-all hover:bg-black/5 active:scale-90 opacity-30 hover:!opacity-70"
+                style={{ color: 'var(--text-3)' }}>
+                <i className="fas fa-pen text-[7px]"></i>
+              </button>
+            )}
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-white text-[8px] font-bold overflow-hidden shadow-sm"
+                style={{ background: `linear-gradient(135deg, hsl(${(comment.author.charCodeAt(0) * 37) % 360}, 60%, 50%), hsl(${(comment.author.charCodeAt(0) * 73) % 360}, 60%, 40%))` }}>
+                {comment.authorAvatarUrl ? <img src={comment.authorAvatarUrl} alt="" className="w-full h-full object-cover" /> : comment.author.charAt(0)}
+              </div>
+              <span className="text-[11px] font-bold" style={{ color: 'var(--primary)' }}>{comment.author}</span>
+              <span className="text-[8px]" style={{ color: 'var(--text-3)' }}>{formatTimeFromISO(comment.isoDate)}</span>
+            </div>
+            {isEditing ? (
+              <div>
+                <input value={editText} onChange={(e) => setEditText(e.target.value)} onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') setIsEditing(false); }}
+                  className="w-full bg-transparent outline-none text-[11px] leading-relaxed px-2 py-1 rounded-lg" autoFocus
+                  style={{ color: 'var(--text)', border: '1px solid var(--primary)' }} />
+                <div className="flex gap-1.5 mt-1">
+                  <button onClick={handleSaveEdit} className="text-[8px] font-bold px-2 py-0.5 rounded-lg" style={{ background: 'var(--primary)', color: 'white' }}>ذخیره</button>
+                  <button onClick={() => { setIsEditing(false); setEditText(comment.text); }} className="text-[8px] font-bold px-2 py-0.5 rounded-lg" style={{ background: 'var(--surface-3)', color: 'var(--text-3)' }}>لغو</button>
+                </div>
+              </div>
+            ) : (
+              <p className="text-[11px] leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text-2)' }}>{commentText}</p>
+            )}
+            <div className="flex items-center gap-3 mt-2">
+              <button onClick={() => { if (!isReplying) handleReply(cid); else { setIsReplying(false); setReplyTo(''); } }} className="text-[9px] font-bold transition-colors flex items-center gap-1" style={{ color: 'var(--text-3)' }}>
+                <i className="fas fa-reply text-[7px]"></i>پاسخ
+              </button>
+              {onLikeComment && (
+                <button onClick={() => onLikeComment(cid)} className="text-[9px] font-bold flex items-center gap-1 transition-colors" style={{ color: isLiked ? 'var(--primary)' : 'var(--text-3)' }}>
+                  <i className={`${isLiked ? 'fas' : 'far'} fa-heart text-[8px]`}></i>{toPersianDigits(comment.likes || 0)}
+                </button>
+              )}
+              {(isOwner || isAdmin) && onDeleteComment && (
+                <button onClick={() => onDeleteComment(cid)} className="text-[9px] font-bold transition-colors text-red-400/70 hover:text-red-400">
+                  <i className="fas fa-trash-alt text-[8px]"></i>
+                </button>
+              )}
+            </div>
+
+            {isReplying && replyTo === cid && (
+              <div className="mt-2 animate-fadeIn">
+                <div className="flex gap-2">
+                  <input autoFocus value={replyText} onChange={(e) => setReplyText(e.target.value)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendReply(); } }}
+                    placeholder="پاسخ..."
+                    className="flex-1 rounded-xl px-3 py-2 text-[10px] font-medium outline-none transition-all duration-200 focus:ring-2"
+                    style={{ background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', '--tw-ring-color': 'color-mix(in srgb, var(--primary) 25%, transparent)' } as any}
+                  />
+                  <button onClick={handleSendReply} disabled={!replyText.trim()}
+                    className="w-8 h-8 rounded-xl text-white flex items-center justify-center shadow-md disabled:opacity-30 active:scale-95 transition-all flex-shrink-0"
+                    style={{ background: 'linear-gradient(135deg, var(--primary), #0d9488)' }}>
+                    <i className="fas fa-paper-plane text-[8px]"></i>
+                  </button>
+                  <button onClick={() => { setIsReplying(false); setReplyTo(''); setReplyText(''); }}
+                    className="w-8 h-8 rounded-xl flex items-center justify-center transition-all active:scale-95 flex-shrink-0"
+                    style={{ background: 'var(--surface-3)', color: 'var(--text-3)', border: '1px solid var(--border)' }}>
+                    <i className="fas fa-times text-[8px]"></i>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {childReplies.length > 0 && (
+            <div className="px-3 pb-3">
+              {!showReplies ? (
+                <button onClick={() => setShowReplies(true)} className="text-[10px] font-bold hover:underline transition-colors flex items-center gap-1" style={{ color: 'var(--primary)' }}>
+                  <i className="fas fa-chevron-down text-[7px]"></i>
+                  {toPersianDigits(childReplies.length)} پاسخ
+                </button>
+              ) : (
+                <button onClick={() => setShowReplies(false)} className="text-[9px] font-bold mb-1 transition-colors flex items-center gap-1" style={{ color: 'var(--text-3)' }}>
+                  <i className="fas fa-chevron-up text-[7px]"></i>بستن
+                </button>
+              )}
+              {showReplies && (
+                <div className="space-y-2 mt-2">
+                  {childReplies.map(reply => (
+                    <div key={reply._id || reply.id}>
+                      <div className="flex gap-2 p-2.5 rounded-xl" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
+                        <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-white text-[7px] font-bold overflow-hidden"
+                          style={{ background: `linear-gradient(135deg, hsl(${(reply.author.charCodeAt(0) * 37) % 360}, 60%, 50%), hsl(${(reply.author.charCodeAt(0) * 73) % 360}, 60%, 40%))` }}>
+                          {reply.authorAvatarUrl ? <img src={reply.authorAvatarUrl} alt="" className="w-full h-full object-cover" /> : reply.author.charAt(0)}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-1.5 mb-0.5">
+                            <span className="font-bold text-[10px]" style={{ color: 'var(--primary)' }}>{reply.author}</span>
+                            <span className="text-[8px]" style={{ color: 'var(--text-3)' }}>{formatTimeFromISO(reply.isoDate)}</span>
+                          </div>
+                          {(reply.audioTimestamp ?? reply.timestamp) != null && (
+                            <button onClick={() => { if (onPlayPodcast) onPlayPodcast(podcast, epIdx, Number(reply.audioTimestamp ?? reply.timestamp), true); }}
+                              className="flex items-center gap-1 mb-1 px-1.5 py-0.5 rounded-lg"
+                              style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '7px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+                              <i className="fas fa-music text-[6px]"></i>
+                              <span className="font-bold">{formatTime(Number(reply.audioTimestamp ?? reply.timestamp))}</span>
+                            </button>
+                          )}
+                          <p className="text-[10px] leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text-2)' }}>{reply.text}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            <button onClick={() => handleReply(reply._id || String(reply.id))} className="text-[8px] font-bold transition-colors" style={{ color: 'var(--text-3)' }}>
+                              <i className="fas fa-reply text-[6px] ml-1"></i>پاسخ
+                            </button>
+                            {onLikeComment && (
+                              <button onClick={() => onLikeComment(reply._id || String(reply.id))} className="text-[8px] font-bold flex items-center gap-1 transition-colors"
+                                style={{ color: likedComments.has(reply._id || String(reply.id)) ? 'var(--primary)' : 'var(--text-3)' }}>
+                                <i className={`${likedComments.has(reply._id || String(reply.id)) ? 'fas' : 'far'} fa-heart text-[7px]`}></i>{toPersianDigits(reply.likes || 0)}
+                              </button>
+                            )}
+                            {(reply.author === currentUserName || isAdmin) && onDeleteComment && (
+                              <button onClick={() => onDeleteComment(reply._id || String(reply.id))} className="text-[8px] font-bold text-red-400/70 hover:text-red-400">
+                                <i className="fas fa-trash-alt text-[7px]"></i>
+                              </button>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
+const MahfelPage: React.FC<any> = ({ tabsHidden, showInput, onToggleInput, posts, videos, podcasts, authors, publishedBooks, comments, currentUser, userRole, onPlayVideoFromFeed, onPlayPodcastFromFeed, onPlayPodcastComment, onShowComments, onShowVideoDiscussion, onDeletePost, onShowBook, onShowInstantView, onDeleteComment, onAddComment, onLikeComment, onUpdateComment, onNewPost, onUpdatePost, onToggleSidebar, user, onOpenSearch, onOpenProfile, miniPlayerProps }) => {
+  const [menuState, setMenuState] = useState<{ post: Post | null, rect: DOMRect | null }>({ post: null, rect: null });
+  const [feedMode, setFeedMode] = useState<'all' | 'posts' | 'video-comments' | 'podcast-comments'>('all');
+  const [likedComments, setLikedComments] = useState<Set<string>>(() => {
+    try { return new Set(JSON.parse(localStorage.getItem('soha_liked_comments') || '[]')); } catch { return new Set(); }
+  });
+  const [inputText, setInputText] = useState('');
+  const [inputMedia, setInputMedia] = useState<{ type: 'image' | 'audio' | 'video'; url: string } | null>(null);
+  const [sending, setSending] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [showAttachMenu, setShowAttachMenu] = useState(false);
+  const [replyTarget, setReplyTarget] = useState<{ postId: number; author: string; text: string; commentId?: string } | null>(null);
+  const [markAudioTimestamp, setMarkAudioTimestamp] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const touchStartX = useRef<number>(0);
+
+  useEffect(() => {
+    const el = messagesEndRef.current;
+    if (el) {
+      const main = el.closest('main');
+      if (main && main.scrollHeight > main.clientHeight) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      }
+    }
+  }, [posts.length, comments.length]);
+
+  useEffect(() => {
+    if (replyTarget) {
+      inputRef.current?.focus();
+      setMarkAudioTimestamp(false);
+    }
+  }, [replyTarget]);
+
+  const handleCreatePost = async () => {
+    if ((!inputText.trim() && !inputMedia) || sending || !currentUser) return;
+    setSending(true);
+    if (replyTarget) {
+      try {
+        const { addPostComment } = await import('../services/api');
+        const text = inputText.trim() || '[attachment]';
+        const media = inputMedia ? [inputMedia] : [];
+        const replyPost = posts.find((p: Post) => String(p.id) === String(replyTarget.postId));
+        const hasAudio = replyPost?.media?.some(m => m.type === 'audio');
+        const audioTs = markAudioTimestamp && hasAudio ? Math.floor((document.querySelector('audio') as HTMLAudioElement)?.currentTime || 0) : undefined;
+        const updated = await addPostComment(String(replyTarget.postId), text, replyTarget.commentId ? String(replyTarget.commentId) : undefined, media.length > 0 ? media : undefined, undefined, audioTs);
+        if (updated) {
+          if (onUpdatePost) onUpdatePost(updated);
+          setInputText('');
+          setInputMedia(null);
+          setReplyTarget(null);
+          setMarkAudioTimestamp(false);
+          if (inputRef.current) inputRef.current.style.height = 'auto';
+          setTimeout(() => {
+            const main = messagesEndRef.current?.closest('main');
+            if (main && main.scrollHeight > main.clientHeight) {
+              main.scrollTo({ top: main.scrollHeight, behavior: 'smooth' });
+            }
+          }, 100);
+        }
+      } catch {}
+    } else {
+      const media = inputMedia ? [{ type: inputMedia.type, url: inputMedia.url }] : [];
+      const postData = { text: inputText.trim(), media: media.length > 0 ? media : undefined };
+      const newPost = await createPost(postData);
+      if (newPost) {
+        if (onNewPost) onNewPost(newPost);
+        setInputText('');
+        setInputMedia(null);
+        if (inputRef.current) inputRef.current.style.height = 'auto';
+        setTimeout(() => {
+          const main = messagesEndRef.current?.closest('main');
+          if (main && main.scrollHeight > main.clientHeight) {
+            main.scrollTo({ top: main.scrollHeight, behavior: 'smooth' });
+          }
+        }, 100);
+      }
+    }
+    setSending(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleCreatePost();
+    }
+  };
+
+  const handleAttachFile = () => {
+    setShowAttachMenu(false);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const type = file.type.startsWith('image/') ? 'image' : file.type.startsWith('audio/') ? 'audio' : 'video';
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      setInputMedia({ type, url: ev.target?.result as string });
+    };
+    reader.readAsDataURL(file);
+    e.target.value = '';
+  };
+
+  const videoComments = useMemo(() => {
+    return (comments || []).filter(c => c.type === 'video');
+  }, [comments]);
+
+  const rootVideoComments = useMemo(() => {
+    return videoComments.filter(c => !c.parentId);
+  }, [videoComments]);
+
+  const podcastComments = useMemo(() => {
+    return (comments || []).filter(c => c.type === 'podcast');
+  }, [comments]);
+
+  const rootPodcastComments = useMemo(() => {
+    return podcastComments.filter(c => !c.parentId);
+  }, [podcastComments]);
+
+  const feedItems = useMemo(() => {
+    const items: any[] = [];
+    const q = searchQuery.trim().toLowerCase();
+
+    const matchesQuery = (text?: string) => {
+      if (!q) return true;
+      return text && text.toLowerCase().includes(q);
+    };
+
+    if (feedMode === 'all' || feedMode === 'posts') {
+      const sorted = [...posts].sort((a, b) => new Date(a.isoDate).getTime() - new Date(b.isoDate).getTime());
+      let lastDate: Date | null = null;
+      for (let i = 0; i < sorted.length; i++) {
+        const current = sorted[i];
+        if (!matchesQuery(current.text)) continue;
+        const currentDate = new Date(current.isoDate);
+        if (!lastDate || !isSameDay(currentDate, lastDate)) items.push({ itemType: 'date', date: current.isoDate });
+        const isFirstInGroup = !sorted[i-1] || sorted[i-1].author !== current.author || !isSameDay(new Date(sorted[i-1].isoDate), currentDate);
+        const isLastInGroup = !sorted[i+1] || sorted[i+1].author !== current.author || !isSameDay(new Date(sorted[i+1].isoDate), currentDate);
+        items.push({ ...current, itemType: 'post', sortDate: new Date(current.isoDate).getTime(), isFirst: isFirstInGroup, isLast: isLastInGroup });
+        lastDate = currentDate;
+      }
+    }
+
+    if (feedMode === 'all' || feedMode === 'video-comments') {
+      rootVideoComments.forEach(c => {
+        if (!matchesQuery(c.text)) return;
+        const video = videos.find((v: any) => String(v.id) === String(c.videoId));
+        if (video) {
+          items.push({ itemType: 'video-comment', comment: c, video, sortDate: new Date(c.isoDate).getTime() });
+        }
+      });
+    }
+
+    if (feedMode === 'all' || feedMode === 'podcast-comments') {
+      rootPodcastComments.forEach(c => {
+        if (!matchesQuery(c.text)) return;
+        const podcast = podcasts.find((p: any) => String(p.id) === String(c.podcastId));
+        if (podcast) {
+          items.push({ itemType: 'podcast-comment', comment: c, podcast, sortDate: new Date(c.isoDate).getTime() });
+        }
+      });
+    }
+
+    return items.sort((a, b) => a.sortDate - b.sortDate);
+  }, [posts, rootVideoComments, rootPodcastComments, videos, podcasts, feedMode, searchQuery]);
+
+  const handleOpenVideo = (video: Video, timestamp: number) => {
+    (window as any).__pendingVideoTimestamp = timestamp;
+    onPlayVideoFromFeed(video);
+  };
+
+  const handleLikeComment = (commentId: string) => {
+    const next = new Set(likedComments);
+    if (next.has(commentId)) next.delete(commentId); else next.add(commentId);
+    setLikedComments(next);
+    localStorage.setItem('soha_liked_comments', JSON.stringify([...next]));
+    if (onLikeComment) onLikeComment(commentId);
+  };
+
+  return (
+    <div className="flex flex-col h-screen overflow-hidden chat-bg" style={{ position: 'relative' }}>
+        <div className="border-b px-3 py-3 flex-shrink-0"
+          style={{ background: 'color-mix(in srgb, var(--surface) 85%, transparent)', borderColor: 'var(--border)' }}>
+          <div className="flex items-center gap-2 mb-2 px-1">
+            <button onClick={onToggleSidebar}
+              className="w-8 h-8 rounded-xl flex items-center justify-center active:scale-90 transition-all hover:opacity-70 flex-shrink-0"
+              style={{ color: 'var(--text-3)' }}>
+              <i className="fas fa-bars text-sm"></i>
+            </button>
+            <div className="w-8 h-8 rounded-xl flex items-center justify-center text-white text-sm shadow-md flex-shrink-0" style={{ background: 'linear-gradient(135deg, var(--primary), #0d9488)' }}>
+              <i className="fas fa-comments"></i>
+            </div>
+            <div className="flex items-center gap-1.5 flex-1 min-w-0 justify-center mx-2">
+              <div className="flex items-center gap-1.5 h-8 px-2.5 rounded-xl flex-1 min-w-0 transition-all duration-200"
+                style={{ background: 'var(--surface-2)', color: 'var(--text-3)', border: `1px solid ${searchFocused ? 'var(--primary)' : 'var(--border)'}` }}>
+                <i className="fas fa-search text-[10px] flex-shrink-0"></i>
+                <input value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} onFocus={() => setSearchFocused(true)} onBlur={() => setSearchFocused(false)} placeholder="جستجو..." className="w-full bg-transparent outline-none text-[10px] font-bold" style={{ color: 'var(--text)', outline: 'none', boxShadow: 'none' }} />
+                {searchQuery && (
+                  <button onClick={() => setSearchQuery('')} className="flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center hover:opacity-70">
+                    <i className="fas fa-times text-[8px]"></i>
+                  </button>
+                )}
+              </div>
+            </div>
+            <div className="hidden lg:flex gap-1.5 ml-2">
+              <button onClick={() => setFeedMode('all')}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                  feedMode === 'all' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: feedMode === 'all' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                  color: feedMode === 'all' ? 'white' : 'var(--text-3)',
+                  border: `1px solid ${feedMode === 'all' ? 'transparent' : 'var(--border)'}`
+                }}>همه</button>
+              <button onClick={() => setFeedMode('posts')}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                  feedMode === 'posts' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: feedMode === 'posts' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                  color: feedMode === 'posts' ? 'white' : 'var(--text-3)',
+                  border: `1px solid ${feedMode === 'posts' ? 'transparent' : 'var(--border)'}`
+                }}>یادداشت‌ها</button>
+              <button onClick={() => setFeedMode('video-comments')}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                  feedMode === 'video-comments' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: feedMode === 'video-comments' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                  color: feedMode === 'video-comments' ? 'white' : 'var(--text-3)',
+                  border: `1px solid ${feedMode === 'video-comments' ? 'transparent' : 'var(--border)'}`
+                }}>نظرات ویدیوها</button>
+              <button onClick={() => setFeedMode('podcast-comments')}
+                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                  feedMode === 'podcast-comments' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+                }`}
+                style={{
+                  background: feedMode === 'podcast-comments' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                  color: feedMode === 'podcast-comments' ? 'white' : 'var(--text-3)',
+                  border: `1px solid ${feedMode === 'podcast-comments' ? 'transparent' : 'var(--border)'}`
+                }}>نظرات صوت‌ها</button>
+            </div>
+            <button onClick={onOpenProfile}
+              className="w-8 h-8 rounded-xl flex items-center justify-center active:scale-90 transition-all hover:opacity-70 overflow-hidden flex-shrink-0"
+              style={{ color: 'var(--text-3)' }}>
+              {user?.avatar ? (
+                <img src={user.avatar} className="w-full h-full object-cover" alt="" />
+              ) : (
+                <i className="fas fa-user text-sm"></i>
+              )}
+            </button>
+          </div>
+        </div>
+        <main className="flex-1 overflow-y-auto">
+          <div className="pt-4 px-3 lg:px-0 lg:max-w-2xl lg:mx-auto xl:max-w-3xl">
+          <div className="flex lg:hidden gap-2 justify-center mb-4">
+            <button onClick={() => setFeedMode('all')}
+              className={`px-4 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                feedMode === 'all' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+              }`}
+              style={{
+                background: feedMode === 'all' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                color: feedMode === 'all' ? 'white' : 'var(--text-3)',
+                border: `1px solid ${feedMode === 'all' ? 'transparent' : 'var(--border)'}`
+              }}>همه</button>
+            <button onClick={() => setFeedMode('posts')}
+              className={`px-4 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                feedMode === 'posts' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+              }`}
+              style={{
+                background: feedMode === 'posts' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                color: feedMode === 'posts' ? 'white' : 'var(--text-3)',
+                border: `1px solid ${feedMode === 'posts' ? 'transparent' : 'var(--border)'}`
+              }}>یادداشت‌ها</button>
+            <button onClick={() => setFeedMode('video-comments')}
+              className={`px-4 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                feedMode === 'video-comments' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+              }`}
+              style={{
+                background: feedMode === 'video-comments' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                color: feedMode === 'video-comments' ? 'white' : 'var(--text-3)',
+                border: `1px solid ${feedMode === 'video-comments' ? 'transparent' : 'var(--border)'}`
+              }}>نظرات ویدیوها</button>
+            <button onClick={() => setFeedMode('podcast-comments')}
+              className={`px-4 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
+                feedMode === 'podcast-comments' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
+              }`}
+              style={{
+                background: feedMode === 'podcast-comments' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
+                color: feedMode === 'podcast-comments' ? 'white' : 'var(--text-3)',
+                border: `1px solid ${feedMode === 'podcast-comments' ? 'transparent' : 'var(--border)'}`
+              }}>نظرات صوت‌ها</button>
+          </div>
+          {feedItems.length === 0 && (
+            <div className="text-center py-20 animate-fadeIn" style={{ color: 'var(--text-3)' }}>
+              <div className="w-24 h-24 mx-auto mb-5 rounded-[2rem] flex items-center justify-center shadow-lg"
+                style={{ background: 'linear-gradient(135deg, color-mix(in srgb, var(--primary) 10%, transparent), color-mix(in srgb, #0d9488 8%, transparent))', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+                <i className="fas fa-feather-alt text-3xl" style={{ color: 'color-mix(in srgb, var(--primary) 50%, transparent)' }}></i>
+              </div>
+              <p className="text-sm font-nastaliq mb-2" style={{ color: 'var(--text-2)', fontFamily: 'IranNastaliq, serif' }}>هنوز گفتگویی آغاز نشده</p>
+              <p className="text-[10px] font-bold opacity-60">اولین یادداشت را شما بنویسید</p>
+            </div>
+          )}
+          {feedItems.map((item, index) => {
+            if (item.itemType === 'date') return <DateSeparator key={`${item.date}-${index}`} date={item.date} />;
+            if (item.itemType === 'post') {
+              return (
+                <div key={item.id}>
+                    <PostBubble post={item} video={videos.find((v:any) => String(v.id) === String(item.videoId))} podcast={podcasts.find((p:any) => String(p.id) === String(item.podcastId))} publishedBook={publishedBooks.find((b:any) => String(b.id) === String(item.bookId))} onShowComments={onShowComments} onPlayVideo={onPlayVideoFromFeed} onPlayPodcast={onPlayPodcastFromFeed} onShowBook={onShowBook} onOpenMenu={(post, rect) => setMenuState({ post, rect })} isFirstInGroup={item.isFirst} isLastInGroup={item.isLast} onShowInstantView={onShowInstantView} onNewPost={onNewPost} onUpdatePost={onUpdatePost} onDeletePost={onDeletePost} currentUser={currentUser} onSwipeReply={(t) => { setReplyTarget(t); inputRef.current?.focus(); }} />
+                </div>
+              );
+            }
+            if (item.itemType === 'video-comment') {
+              return (
+                <div key={item.comment._id || item.comment.id} className="animate-fadeIn">
+                   <VideoCommentItem
+                    comment={item.comment}
+                    video={item.video}
+                    allComments={videoComments}
+                    onOpenVideo={handleOpenVideo}
+                    onAddComment={onAddComment}
+                    onDeleteComment={onDeleteComment}
+                    onLikeComment={handleLikeComment}
+                    onUpdateComment={onUpdateComment}
+                    onShowDiscussion={onShowVideoDiscussion}
+                    currentUserName={currentUser}
+                    userRole={userRole}
+                    likedComments={likedComments}
+                  />
+                </div>
+              );
+            }
+            if (item.itemType === 'podcast-comment') {
+              return (
+                <div key={item.comment._id || item.comment.id} className="animate-fadeIn">
+                   <PodcastCommentItem
+                    comment={item.comment}
+                    podcast={item.podcast}
+                    allComments={podcastComments}
+                    onPlayPodcast={onPlayPodcastComment || ((p, epIdx) => { if (onPlayPodcastFromFeed) onPlayPodcastFromFeed(p, epIdx); })}
+                    onAddComment={onAddComment}
+                    onDeleteComment={onDeleteComment}
+                    onLikeComment={handleLikeComment}
+                    onUpdateComment={onUpdateComment}
+                    currentUserName={currentUser}
+                    userRole={userRole}
+                    likedComments={likedComments}
+                    currentPlayingPodcastId={miniPlayerProps?.track?.podcast?.id}
+                    currentPlayingEpIdx={miniPlayerProps?.track?.episodeIndex}
+                    isGloballyPlaying={miniPlayerProps?.isPlaying}
+                    onGlobalTogglePlay={miniPlayerProps?.onPlayPause}
+                  />
+                </div>
+              );
+            }
+            return null;
+          })}
+          <div ref={messagesEndRef} className="mb-4" />
+          </div>
+        </main>
+
+        {/* Mini player - desktop, above input */}
+        {miniPlayerProps && (
+          <div className="hidden lg:block flex-shrink-0 px-3 pt-2">
+            <MinimizedPlayer {...miniPlayerProps} variant="inline" />
+          </div>
+        )}
+
+        {/* Input bar at bottom */}
+        <div className="border-t px-3 py-2.5 flex-shrink-0 flex justify-center" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
+          <div className="w-full max-w-2xl">
+          {/* Reply banner */}
+          {replyTarget && (
+            <div className="flex items-center gap-2 mb-2 px-3 py-2 rounded-xl shadow-sm" style={{ background: 'color-mix(in srgb, var(--primary) 8%, var(--surface-2))', border: '1px solid color-mix(in srgb, var(--primary) 20%, transparent)' }}>
+              <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
+                <div className="w-0.5 h-7 rounded-full" style={{ background: 'var(--primary)' }}></div>
+                <i className={`fas ${replyTarget.commentId ? 'fa-reply-all' : 'fa-reply'} text-[9px]`} style={{ color: 'var(--primary)' }}></i>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <i className="fas fa-chevron-left text-[7px]" style={{ color: 'var(--text-3)' }}></i>
+                  <span className="text-[10px] font-black" style={{ color: 'var(--primary)' }}>پاسخ به {replyTarget.author}</span>
+                  {replyTarget.commentId && <span className="text-[7px] font-medium opacity-60" style={{ color: 'var(--primary)' }}>· در ریپلای</span>}
+                </div>
+                <div className="text-[9px] font-medium leading-relaxed line-clamp-2 mt-0.5" style={{ color: 'var(--text-3)' }}>
+                  <span className="opacity-70">{replyTarget.text}</span>
+                </div>
+              </div>
+              <button onClick={() => { setReplyTarget(null); setMarkAudioTimestamp(false); }}
+                className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 hover:opacity-60 transition-opacity"
+                style={{ color: 'var(--text-3)' }}>
+                <i className="fas fa-times text-[9px]"></i>
+              </button>
+            </div>
+          )}
+          {inputMedia && (
+            <div className="flex items-center gap-2 mb-2 px-1">
+              <div className="relative rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+                {inputMedia.type === 'image' ? (
+                  <img src={inputMedia.url} className="w-12 h-12 object-cover" alt="" />
+                ) : inputMedia.type === 'audio' ? (
+                  <div className="w-12 h-12 flex items-center justify-center" style={{ background: 'var(--surface-3)' }}>
+                    <i className="fas fa-music" style={{ color: 'var(--primary)' }}></i>
+                  </div>
+                ) : (
+                  <div className="w-12 h-12 flex items-center justify-center" style={{ background: 'var(--surface-3)' }}>
+                    <i className="fas fa-video" style={{ color: 'var(--primary)' }}></i>
+                  </div>
+                )}
+                <button onClick={() => setInputMedia(null)}
+                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center shadow-md text-[8px]"
+                  style={{ background: 'var(--surface)', color: 'var(--text-3)', border: '1px solid var(--border)' }}>
+                  <i className="fas fa-times"></i>
+                </button>
+              </div>
+              <span className="text-[10px] font-bold" style={{ color: 'var(--text-3)' }}>
+                {inputMedia.type === 'image' ? 'تصویر' : inputMedia.type === 'audio' ? 'صوت' : 'ویدیو'}
+              </span>
+            </div>
+          )}
+          <div className="flex items-end gap-2">
+            <button onClick={() => fileInputRef.current?.click()}
+              className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 active:scale-90 transition-all hover:opacity-70"
+              style={{ color: 'var(--text-2)', border: '1.5px solid var(--border)', background: 'var(--surface-2)' }}>
+              <i className="fas fa-plus text-sm"></i>
+            </button>
+            {replyTarget && (() => {
+              const replyPost = posts.find((p: Post) => String(p.id) === String(replyTarget.postId));
+              const hasAudio = replyPost?.media?.some(m => m.type === 'audio');
+              return hasAudio ? (
+                <button onClick={() => setMarkAudioTimestamp(!markAudioTimestamp)}
+                  className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 active:scale-90 transition-all"
+                  style={{ color: markAudioTimestamp ? 'white' : 'var(--text-2)', background: markAudioTimestamp ? 'var(--primary)' : 'var(--surface-2)', border: '1.5px solid var(--border)' }}>
+                  <i className="fas fa-music text-sm"></i>
+                </button>
+              ) : null;
+            })()}
+            <div className="flex-1 min-w-0 rounded-xl overflow-hidden transition-all duration-200"
+              style={{ border: `2px solid ${inputText.trim() || inputMedia ? 'var(--primary)' : 'var(--border)'}`, background: 'var(--surface-2)' }}>
+              <input value={inputText} onChange={(e) => setInputText(e.target.value)} onKeyDown={handleKeyDown} placeholder="پیام..." className="w-full bg-transparent outline-none px-3.5 py-2.5 text-[13px] font-medium" style={{ color: 'var(--text)', direction: 'rtl' }} />
+            </div>
+            <button onClick={handleCreatePost} disabled={(!inputText.trim() && !inputMedia) || sending || !currentUser}
+              className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 active:scale-90 transition-all disabled:opacity-40 shadow-md"
+              style={{ background: (inputText.trim() || inputMedia) && !sending ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)', color: (inputText.trim() || inputMedia) && !sending ? 'white' : 'var(--text-2)', border: `1.5px solid ${(inputText.trim() || inputMedia) && !sending ? 'transparent' : 'var(--border)'}` }}>
+              <i className={`fas ${sending ? 'fa-spinner fa-spin' : 'fa-paper-plane'} text-sm`}></i>
+            </button>
+          </div>
+          </div>
+        </div>
+
+        <InteractionMenu post={menuState.post} rect={menuState.rect} onClose={() => setMenuState({ post: null, rect: null })} isAdmin={userRole === 'admin'} onDelete={onDeletePost} />
+
+        {/* Hidden file input */}
+        <input ref={fileInputRef} type="file" accept="image/*,audio/*,video/*" className="hidden" onChange={handleFileChange} />
+    </div>
+  );
+};
+
+const InteractionMenu: React.FC<{
+  post: Post | null;
+  rect: DOMRect | null;
+  onClose: () => void;
+  isAdmin: boolean;
+  onDelete: (id: number) => void;
+}> = ({ post, rect, onClose, isAdmin, onDelete }) => {
+  if (!post || !rect) return null;
+  return (
+    <div className="fixed inset-0 z-[2000] animate-fadeIn" onClick={onClose}>
+        <div className="absolute rounded-2xl shadow-2xl p-2 w-48 backdrop-blur-xl"
+          style={{ top: Math.min(rect.top, window.innerHeight - 150), left: rect.left, background: 'var(--surface-2)', border: '1px solid var(--border)' }}
+          onClick={e => e.stopPropagation()}>
+            <button onClick={onClose} className="w-full text-right p-2.5 hover:bg-white/5 rounded-xl text-xs font-black flex items-center gap-3 transition-colors"
+              style={{ color: 'var(--text)' }}><i className="fas fa-share-alt" style={{ color: 'var(--text-3)' }}></i> اشتراک‌گذاری</button>
+            {isAdmin && <button onClick={() => { onDelete(post.id); onClose(); }} className="w-full text-right p-2.5 hover:bg-red-500/10 rounded-xl text-xs font-black flex items-center gap-3 transition-colors text-red-400"><i className="fas fa-trash-alt"></i> حذف پیام</button>}
+        </div>
+    </div>
+  );
+};
+
+export default MahfelPage;
