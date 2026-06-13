@@ -696,9 +696,10 @@ interface PostCommentsPageProps {
   onPlayEpisode?: (podcast: Podcast, episodeIndex: number) => void;
   miniPlayerProps?: any;
   onSeekAudio?: (seconds: number) => void;
+  discussionComments?: PostComment[];
 }
 
-const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcast, authors, currentUser, userRole, onBack, onAddComment, onUpdatePost, onDeleteComment: onParentDeleteComment, onLikeComment: onParentLikeComment, onUpdateComment: onParentUpdateComment, publishedBooks, onShowBook, onPlayEpisode, miniPlayerProps, onSeekAudio }) => {
+const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcast, authors, currentUser, userRole, onBack, onAddComment, onUpdatePost, onDeleteComment: onParentDeleteComment, onLikeComment: onParentLikeComment, onUpdateComment: onParentUpdateComment, publishedBooks, onShowBook, onPlayEpisode, miniPlayerProps, onSeekAudio, discussionComments }) => {
     const [commentText, setCommentText] = useState('');
     const [replyingTo, setReplyingTo] = useState<PostComment | null>(null);
     const [quotedText, setQuotedText] = useState<string>('');
@@ -715,14 +716,14 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
     const [markVideoTimestamp, setMarkVideoTimestamp] = useState(false);
     const hasAudio = !!(post.media?.some(m => m.type === 'audio') || podcast);
     const hasVideo = !!(video || post.media?.some(m => m.type === 'video'));
-    const [localComments, setLocalComments] = useState<PostComment[]>(post.comments);
+    const [localComments, setLocalComments] = useState<PostComment[]>(discussionComments || post.comments);
     const commentsEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const mainRef = useRef<HTMLDivElement>(null);
     const tempIdCounter = useRef(0);
 
-    useEffect(() => { setLocalComments(post.comments); }, [post.comments]);
+    useEffect(() => { setLocalComments(discussionComments || post.comments); }, [discussionComments, post.comments]);
     useEffect(() => { commentsEndRef.current?.scrollIntoView({ behavior: 'smooth' }); }, [localComments.length]);
     useEffect(() => { if (replyingTo) inputRef.current?.focus(); }, [replyingTo]);
 
@@ -823,32 +824,12 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
     };
 
     const handleEditComment = async (comment: PostComment, newText: string) => {
-        try {
-          const isVideoDiscussion = post.id === 0;
-          if (isVideoDiscussion) {
-            const { updateComment } = await import('../services/api');
-            const cid = String(comment.id || (comment as any)._id);
-            const updated = await updateComment(cid, newText);
-            if (updated) {
-              onParentUpdateComment?.(cid, newText);
-              setLocalComments(prev => prev.map(c => {
-                if (String(c.id || (c as any)._id) === cid) return { ...c, text: newText, isEdited: true } as PostComment;
-                return c;
-              }));
-            }
-          } else {
-            const { updatePostComment } = await import('../services/api');
-            const cid = String(comment.id || (comment as any)._id);
-            const updated = await updatePostComment(String(post.id), cid, { text: newText });
-            if (updated) {
-              setLocalComments(prev => prev.map(c => {
-                if (String(c.id || (c as any)._id) === cid) return { ...c, text: newText, isEdited: true } as PostComment;
-                return c;
-              }));
-              if (onUpdatePost) onUpdatePost(updated);
-            }
-          }
-        } catch {}
+        const cid = String(comment.id || (comment as any)._id);
+        onParentUpdateComment?.(cid, newText);
+        setLocalComments(prev => prev.map(c => {
+            if (String(c.id || (c as any)._id) === cid) return { ...c, text: newText } as PostComment;
+            return c;
+        }));
     };
 
     const handleVideoTimeUpdate = useCallback((time: number) => {

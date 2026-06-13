@@ -617,14 +617,37 @@ const AppInner: React.FC = () => {
     const renderActivePage = () => {
         if (selectedPostForComments) {
             const freshPost = posts.find(p => String(p.id) === String(selectedPostForComments.id)) || selectedPostForComments;
-            return <PostCommentsPage post={freshPost} video={videos.find(v => String(v.id) === String(freshPost.videoId))} podcast={selectedPostPodcast || podcasts.find(p => String(p.id) === String(freshPost.podcastId))} authors={authors} currentUser={user?.name} userRole={user?.role} onBack={() => { setSelectedPostForComments(null); setSelectedPostPodcast(null); }} onAddComment={async (postId, text, replyTo, media, quotedText, audioTimestamp, videoTimestamp) => {
-                const updatedPost = await addPostComment(String(postId), text, replyTo as any, media, quotedText, audioTimestamp, videoTimestamp);
-                if (updatedPost) {
-                    setPosts(prev => {
-                        const next = prev.map(p => String(p.id) === String(postId) ? { ...p, comments: updatedPost.comments } : p);
-                        return next;
-                    });
-                    setSelectedPostForComments({ ...freshPost, comments: updatedPost.comments });
+            const podcastId = (freshPost as any).podcastId;
+            const episodeIndex = (freshPost as any).episodeIndex;
+            const discussionCommentsList = podcastId ? comments
+                .filter((c: any) => String(c.podcastId) === String(podcastId) && (episodeIndex == null || c.episodeIndex === episodeIndex))
+                .map((c: any): any => ({
+                    id: c._id || c.id,
+                    author: c.author,
+                    authorAvatarUrl: c.authorAvatarUrl || '',
+                    text: c.text,
+                    date: c.date || '',
+                    isoDate: c.isoDate || '',
+                    replyTo: c.parentId,
+                    quotedText: c.quotedText,
+                    audioTimestamp: c.audioTimestamp,
+                    likes: c.likes || 0,
+                    media: c.media || [],
+                    episodeIndex: c.episodeIndex,
+                    isEdited: c.isEdited,
+                })) : freshPost.comments;
+            return <PostCommentsPage post={freshPost} video={videos.find(v => String(v.id) === String(freshPost.videoId))} podcast={selectedPostPodcast || podcasts.find(p => String(p.id) === String(podcastId))} authors={authors} currentUser={user?.name} userRole={user?.role} discussionComments={discussionCommentsList} onBack={() => { setSelectedPostForComments(null); setSelectedPostPodcast(null); }} onAddComment={async (_postId, text, replyTo, media, quotedText, audioTimestamp, _videoTimestamp) => {
+                if (podcastId) {
+                    const newComment = await addComment({ type: 'podcast', podcastId: String(podcastId), author: user?.name || 'کاربر', text, episodeIndex: episodeIndex ?? 0, parentId: replyTo ? String(replyTo) : undefined, audioTimestamp, authorAvatarUrl: user?.avatar } as any);
+                    if (newComment) {
+                        setComments(prev => insertCommentIntoTree(prev, newComment));
+                    }
+                } else {
+                    const updatedPost = await addPostComment(String(_postId), text, replyTo as any, media, quotedText, audioTimestamp);
+                    if (updatedPost) {
+                        setPosts(prev => prev.map(p => String(p.id) === String(_postId) ? { ...p, comments: updatedPost.comments } : p));
+                        setSelectedPostForComments({ ...freshPost, comments: updatedPost.comments });
+                    }
                 }
             }} onUpdatePost={(p) => {
                 setPosts(prev => prev.map(post => String(post.id) === String(p.id) ? p : post));
@@ -666,7 +689,7 @@ const AppInner: React.FC = () => {
                 comments: (vc.replies || []).map((r: any) => ({ id: r._id || r.id, author: r.author, authorAvatarUrl: r.authorAvatarUrl || '', text: r.text, date: r.date || '', isoDate: r.isoDate || '', replyTo: r.parentId, quotedText: r.quotedText, likes: r.likes || 0, media: r.media || [], videoTimestamp: r.videoTimestamp, audioTimestamp: r.audioTimestamp })),
                 likes: 0,
             };
-            return <PostCommentsPage post={virtualPost} video={v} authors={authors} currentUser={user?.name} userRole={user?.role} onBack={() => setSelectedVideoComment(null)} onAddComment={async (_postId, text, replyTo, media, quoteText, _audioTimestamp) => {
+            return <PostCommentsPage post={virtualPost} video={v} authors={authors} currentUser={user?.name} userRole={user?.role} discussionComments={(vc.replies || []).map((r: any) => ({ id: r._id || r.id, author: r.author, authorAvatarUrl: r.authorAvatarUrl || '', text: r.text, date: r.date || '', isoDate: r.isoDate || '', replyTo: r.parentId, quotedText: r.quotedText, likes: r.likes || 0, media: r.media || [], videoTimestamp: r.videoTimestamp, audioTimestamp: r.audioTimestamp }))} onBack={() => setSelectedVideoComment(null)} onAddComment={async (_postId, text, replyTo, media, quoteText, _audioTimestamp) => {
                 const newComment = await addComment({ type: 'video', videoId: String(v._id || v.id), author: user?.name || 'کاربر', text, parentId: replyTo ? String(replyTo) : vc._id || String(vc.id), authorAvatarUrl: user?.avatar, media: media as any, quotedText: quoteText } as any);
                 if (newComment) {
                     setComments(prev => insertCommentIntoTree(prev, newComment));
