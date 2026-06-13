@@ -620,14 +620,13 @@ const AppInner: React.FC = () => {
             const podcastId = (freshPost as any).podcastId;
             const episodeIndex = (freshPost as any).episodeIndex;
             const parentCommentId = (freshPost as any).parentCommentId;
-            const discussionCommentsList = podcastId ? comments
+            const flattenComments = (list: any[]): any[] => list.reduce((acc: any[], c: any) => { acc.push(c); if (c.replies?.length) acc.push(...flattenComments(c.replies)); return acc; }, []);
+            const discussionCommentsList = podcastId ? flattenComments(comments)
                 .filter((c: any) => {
                     if (String(c.podcastId) !== String(podcastId)) return false;
                     if (episodeIndex != null && c.episodeIndex !== episodeIndex) return false;
                     if (parentCommentId) {
-                        const cid = String(c._id || c.id);
-                        const pid = String(c.parentId);
-                        return pid === String(parentCommentId) || cid === String(parentCommentId);
+                        return String(c.parentId) === String(parentCommentId);
                     }
                     return !c.parentId;
                 })
