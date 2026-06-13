@@ -661,7 +661,7 @@ const AppInner: React.FC = () => {
             }} onUpdatePost={(p) => {
                 setPosts(prev => prev.map(post => String(post.id) === String(p.id) ? p : post));
                 setSelectedPostForComments(p);
-            }} publishedBooks={publishedBooks} onShowBook={(book) => {}} onPlayEpisode={(p: Podcast, idx: number) => {
+            }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} publishedBooks={publishedBooks} onShowBook={(book) => {}} onPlayEpisode={(p: Podcast, idx: number) => {
               if (currentTrack && String(currentTrack.podcast.id) === String(p.id) && currentTrack.episodeIndex === idx && audioRef.current) {
                 audioRef.current.play().catch(()=>{});
                 setIsPlaying(true);

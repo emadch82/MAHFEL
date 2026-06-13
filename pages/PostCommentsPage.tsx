@@ -819,18 +819,22 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
     const handleDeleteComment = async (comment: PostComment) => {
         const cid = String(comment.id || (comment as any)._id);
         onParentDeleteComment?.(cid);
-        const updated = { ...post, comments: post.comments.filter(c => String(c.id || (c as any)._id) !== cid) };
-        setLocalComments(updated.comments);
-        if (onUpdatePost) onUpdatePost(updated);
+        const removeFromLocal = (list: PostComment[]): PostComment[] =>
+            list.filter(c => String(c.id || (c as any)._id) !== cid)
+                .map(c => ({ ...c, replies: (c as any).replies ? removeFromLocal((c as any).replies) : [] }) as any);
+        setLocalComments(prev => removeFromLocal(prev));
     };
 
     const handleEditComment = async (comment: PostComment, newText: string) => {
         const cid = String(comment.id || (comment as any)._id);
         onParentUpdateComment?.(cid, newText);
-        setLocalComments(prev => prev.map(c => {
-            if (String(c.id || (c as any)._id) === cid) return { ...c, text: newText } as PostComment;
-            return c;
-        }));
+        const updateInLocal = (list: PostComment[]): PostComment[] =>
+            list.map(c => {
+                if (String(c.id || (c as any)._id) === cid) return { ...c, text: newText } as PostComment;
+                if ((c as any).replies?.length) return { ...c, replies: updateInLocal((c as any).replies) } as any;
+                return c;
+            });
+        setLocalComments(prev => updateInLocal(prev));
     };
 
     const handleVideoTimeUpdate = useCallback((time: number) => {
