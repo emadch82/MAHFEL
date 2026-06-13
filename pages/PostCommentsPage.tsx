@@ -256,9 +256,9 @@ const PostHeader: React.FC<{
                         </div>
                     )}
                     {isEditing && renderText()}
-                </div>
-            </div>
         </div>
+      </div>
+    </div>
     );
 };
 
@@ -337,6 +337,7 @@ const ChatBubble: React.FC<{
     allComments: PostComment[];
     isOwn: boolean;
     showAuthor: boolean;
+    currentUser?: string;
     onReply: (comment: PostComment, quotedText?: string) => void;
     onLike: (comment: PostComment) => void;
     onDelete?: (comment: PostComment) => void;
@@ -345,7 +346,7 @@ const ChatBubble: React.FC<{
     onVideoClick?: (url: string) => void;
     onTimestampClick?: (seconds: number) => void;
     onAudioTimestampClick?: (seconds: number) => void;
-}> = ({ comment, allComments, isOwn, showAuthor, onReply, onLike, onDelete, onEdit, onImageClick, onVideoClick, onTimestampClick, onAudioTimestampClick }) => {
+}> = ({ comment, allComments, isOwn, showAuthor, currentUser, onReply, onLike, onDelete, onEdit, onImageClick, onVideoClick, onTimestampClick, onAudioTimestampClick }) => {
     const [showMenu, setShowMenu] = useState(false);
     const [menuPos, setMenuPos] = useState<{ top: number; right?: number; left?: number } | null>(null);
     const [isEditing, setIsEditing] = useState(false);
@@ -411,7 +412,7 @@ const ChatBubble: React.FC<{
     };
 
     const handleSaveEdit = () => {
-      if (!editText.trim() || editText.trim() === comment.text) { setIsEditing(false); return; }
+      if (!editText.trim()) { setIsEditing(false); return; }
       setDisplayText(editText.trim());
       setIsEditing(false);
       if (onEdit) onEdit(comment, editText.trim());
@@ -434,7 +435,8 @@ const ChatBubble: React.FC<{
     const hasImage = comment.media && comment.media.length > 0 && comment.media.some(m => m.type === 'image');
 
     return (
-      <div id={`bubble-${commentId}`} className={`flex items-end gap-1.5 mb-0.5 px-3 group/bubble animate-fadeIn ${isOwn ? 'flex-row-reverse' : 'flex-row'}`}>
+      <div className="mb-1">
+      <div id={`bubble-${commentId}`} className={`flex items-end gap-1.5 px-3 group/bubble animate-fadeIn ${isOwn ? 'flex-row-reverse' : 'flex-row'}`}>
         {!isOwn && (
         <div className="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden shadow-sm mb-0.5"
              style={{ background: avatarColor }}>
@@ -480,9 +482,7 @@ const ChatBubble: React.FC<{
                 className="flex items-center gap-1.5 mb-1.5 rounded-lg transition-all active:scale-95"
                 style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)', color: 'var(--primary)', padding: '3px 8px', fontSize: '9px', border: '1px solid color-mix(in srgb, var(--primary) 20%, transparent)' }}>
                 <i className="fas fa-video text-[8px]"></i>
-                <span className="font-medium">پاسخ به </span>
                 <span className="font-bold">{toPersianDigits(Math.floor(comment.videoTimestamp / 60))}:{toPersianDigits(String(Math.floor(comment.videoTimestamp % 60)).padStart(2, '0'))}</span>
-                <span className="font-medium"> از ویدیو</span>
               </button>
             )}
 
@@ -569,14 +569,6 @@ const ChatBubble: React.FC<{
               <div className="flex items-end gap-2">
                 {displayText && <p className="text-[13px] leading-[2] font-medium whitespace-pre-wrap break-words flex-1" style={{ color: 'var(--text)' }}>{displayText}</p>}
                 <div className="flex items-center gap-1 flex-shrink-0 translate-y-[2px]">
-                  {comment.videoTimestamp != null && onTimestampClick && (
-                    <button onClick={(e) => { e.stopPropagation(); onTimestampClick!(comment.videoTimestamp); }}
-                      className="flex items-center gap-1 px-1.5 py-0.5 rounded-md transition-colors active:scale-90"
-                      style={{ background: 'color-mix(in srgb, var(--primary) 15%, transparent)', color: 'var(--primary)', fontSize: '8px' }}>
-                      <i className="fas fa-tag text-[7px]"></i>
-                      {toPersianDigits(Math.floor(comment.videoTimestamp / 60))}:{toPersianDigits(String(Math.floor(comment.videoTimestamp % 60)).padStart(2, '0'))}
-                    </button>
-                  )}
                   {isOwn && (comment as any).isEdited && <span style={{ fontSize: '8px', color: 'var(--text-3)' }}>ویرایش شده ·</span>}
                   <span style={{ fontSize: '9px', color: 'var(--text-3)', direction: 'ltr' }}>{time}</span>
                   {isOwn && <i className="fas fa-check-double text-[8px]" style={{ color: 'var(--primary)' }}></i>}
@@ -593,7 +585,7 @@ const ChatBubble: React.FC<{
               </div>
             )}
           </div>
-
+      </div>
           {showQuoteBtn && (
             <div className="absolute z-50 rounded-xl shadow-xl py-1 animate-fadeIn"
                  style={{
@@ -655,6 +647,32 @@ const ChatBubble: React.FC<{
             document.body
           )}
         </div>
+        {(() => {
+          const children = allComments.filter((c: any) => String((c as any).replyTo || (c as any).parentId) === commentId);
+          if (children.length === 0) return null;
+          return (
+            <div className={`${isOwn ? 'mr-5' : 'ml-5'} mt-1 space-y-1`}>
+              {children.map((child: any) => (
+                <ChatBubble
+                  key={child.id || (child as any)._id}
+                  comment={child}
+                  allComments={allComments}
+                  isOwn={currentUser ? child.author === currentUser : false}
+                  showAuthor={true}
+                  currentUser={currentUser}
+                  onReply={onReply}
+                  onLike={onLike}
+                  onDelete={onDelete}
+                  onEdit={onEdit}
+                  onImageClick={onImageClick}
+                  onVideoClick={onVideoClick}
+                  onTimestampClick={onTimestampClick}
+                  onAudioTimestampClick={onAudioTimestampClick}
+                />
+              ))}
+            </div>
+          );
+        })()}
       </div>
     );
 };
@@ -899,8 +917,14 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
                 <PostHeader target={{ type: 'post', post, video, podcast }} authors={authors} onAudioRef={(el) => { audioElementRef.current = el; }} onVideoClick={setVideoLightbox} onImageClick={(data) => setLightboxData(data)} currentUser={currentUser} onUpdatePost={onUpdatePost} publishedBook={publishedBooks?.find((b: any) => String(b.id) === String(post.bookId))} onShowBook={onShowBook} onPlayEpisode={onPlayEpisode} miniPlayerProps={miniPlayerProps} />
                 <div className="py-3 pb-28 sm:pb-40">
                     {localComments.length > 0 ? (
-                        localComments.map((comment, idx) => {
-                            const prevComment = idx > 0 ? localComments[idx - 1] : null;
+                        (() => {
+                            const rootComments = localComments.filter((c: any) => {
+                                if (!(c as any).replyTo && !(c as any).parentId) return true;
+                                const parentId = String((c as any).replyTo || (c as any).parentId);
+                                return !localComments.some((p: any) => String(p.id || (p as any)._id) === parentId);
+                            });
+                            return rootComments.map((comment, idx) => {
+                            const prevComment = idx > 0 ? rootComments[idx - 1] : null;
                             const showAuthor = !prevComment || prevComment.author !== comment.author;
                             const showDate = !prevComment || !isSameDay(comment.isoDate, prevComment.isoDate);
 
@@ -912,6 +936,7 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
                                         allComments={localComments}
                                         isOwn={currentUser ? comment.author === currentUser : false}
                                         showAuthor={showAuthor}
+                                        currentUser={currentUser}
                                         onReply={handleReply}
                                         onLike={handleLikeComment}
                                         onDelete={handleDeleteComment}
@@ -923,7 +948,8 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
                                     />
                                 </React.Fragment>
                             );
-                        })
+                            });
+                            })()
                     ) : (
                         <div className="text-center py-16" style={{ color: 'var(--text-3)' }}>
                             <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>

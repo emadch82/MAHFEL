@@ -63,6 +63,7 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
   const [replyTo, setReplyTo] = useState<{ id: string; author: string; text: string } | null>(null);
   const [editCommentId, setEditCommentId] = useState<string | null>(null);
   const [editCommentText, setEditCommentText] = useState('');
+  const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
   const [markAudioTimestamp, setMarkAudioTimestamp] = useState(false);
   const [uploadedMedia, setUploadedMedia] = useState<{ url: string; type: string } | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -517,13 +518,13 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
               className="text-xs text-gray-500 hover:text-primary transition-all active:scale-110 flex items-center gap-1">
               <i className="far fa-comment"></i><span>پاسخ</span>
             </button>
-            {isOwn && (
+              {isOwn && (
               <>
                 <button onClick={() => { setEditCommentId(cid); setEditCommentText(String(comment.text)); }}
                   className="text-xs text-gray-500 hover:text-yellow-400 transition-all active:scale-110">
                   <i className="fas fa-pen"></i>
                 </button>
-                <button onClick={() => { if (onDeleteComment) onDeleteComment(cid); }}
+                <button onClick={() => setDeleteConfirmId(cid)}
                   className="text-xs text-gray-500 hover:text-red-400 transition-all active:scale-110">
                   <i className="fas fa-trash"></i>
                 </button>
@@ -531,6 +532,17 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
             )}
           </div>
         </div>
+
+        {deleteConfirmId === cid && (
+          <div className={`flex items-center gap-2 p-2 rounded-xl mb-2 text-xs ${isDark ? 'bg-red-950/40 border border-red-800/40' : 'bg-red-50 border border-red-200'}`}>
+            <i className="fas fa-exclamation-triangle text-red-400"></i>
+            <span className="text-red-300 flex-1">از حذف این نظر مطمئنید؟</span>
+            <button onClick={() => { if (onDeleteComment) onDeleteComment(cid); setDeleteConfirmId(null); }}
+              className="bg-red-500 text-white px-3 py-1 rounded-lg text-xs font-bold hover:bg-red-600 active:scale-95 transition-all">بله</button>
+            <button onClick={() => setDeleteConfirmId(null)}
+              className={`${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'} px-3 py-1 rounded-lg text-xs hover:opacity-80 active:scale-95 transition-all`}>خیر</button>
+          </div>
+        )}
 
         {replies.length > 0 && (
           <div className={`${isOverDepth ? '' : 'mt-2 space-y-2'}`}>

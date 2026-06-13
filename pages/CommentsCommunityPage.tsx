@@ -491,49 +491,11 @@ const PostBubble: React.FC<{
                      style={{ background: '#ef4444', color: 'white' }}>
                      حذف
                    </button>
-                   <button onClick={() => setShowDeleteConfirm(false)}
-                     className="px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all active:scale-90 hover:opacity-80"
-                     style={{ background: 'var(--surface-3)', color: 'var(--text-2)' }}>
-                     انصراف
+                    <button onClick={() => setShowDeleteConfirm(false)}
+                      className="px-2.5 py-1 rounded-lg text-[9px] font-bold transition-all active:scale-90 hover:opacity-80"
+                      style={{ background: 'var(--surface-3)', color: 'var(--text-2)' }}>
+                      انصراف
             </button>
-            <div className="flex gap-1.5 mr-2">
-              <button onClick={() => setFeedMode('all')}
-                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
-                  feedMode === 'all' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
-                }`}
-                style={{
-                  background: feedMode === 'all' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
-                  color: feedMode === 'all' ? 'white' : 'var(--text-3)',
-                  border: `1px solid ${feedMode === 'all' ? 'transparent' : 'var(--border)'}`
-                }}>همه</button>
-              <button onClick={() => setFeedMode('posts')}
-                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
-                  feedMode === 'posts' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
-                }`}
-                style={{
-                  background: feedMode === 'posts' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
-                  color: feedMode === 'posts' ? 'white' : 'var(--text-3)',
-                  border: `1px solid ${feedMode === 'posts' ? 'transparent' : 'var(--border)'}`
-                }}>یادداشت‌ها</button>
-              <button onClick={() => setFeedMode('video-comments')}
-                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
-                  feedMode === 'video-comments' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
-                }`}
-                style={{
-                  background: feedMode === 'video-comments' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
-                  color: feedMode === 'video-comments' ? 'white' : 'var(--text-3)',
-                  border: `1px solid ${feedMode === 'video-comments' ? 'transparent' : 'var(--border)'}`
-                }}>نظرات ویدیوها</button>
-              <button onClick={() => setFeedMode('podcast-comments')}
-                className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all duration-200 ${
-                  feedMode === 'podcast-comments' ? 'text-white shadow-lg shadow-primary/20' : 'hover:opacity-80'
-                }`}
-                style={{
-                  background: feedMode === 'podcast-comments' ? 'linear-gradient(135deg, var(--primary), #0d9488)' : 'var(--surface-2)',
-                  color: feedMode === 'podcast-comments' ? 'white' : 'var(--text-3)',
-                  border: `1px solid ${feedMode === 'podcast-comments' ? 'transparent' : 'var(--border)'}`
-                }}>نظرات صوت‌ها</button>
-            </div>
            </div>
                 )}
                 <button onClick={(e) => { e.stopPropagation(); onShowComments(post); }}
@@ -600,6 +562,10 @@ const VideoCommentItem: React.FC<{
   const replyTimerRef = useRef<number | null>(null);
 
   const childReplies = comment.replies || allComments.filter(c => c.parentId === (comment._id || String(comment.id)));
+  const totalReplyCount = (() => {
+    const countAll = (list: any[]): number => list.reduce((acc: number, c: any) => acc + 1 + (c.replies?.length ? countAll(c.replies) : 0), 0);
+    return countAll(childReplies);
+  })();
   const hasTimestamp = typeof comment.videoTimestamp === 'number' && comment.videoTimestamp >= 0;
   const isOwner = comment.author === currentUserName;
   const isAdmin = userRole === 'admin';
@@ -631,16 +597,11 @@ const VideoCommentItem: React.FC<{
     setReplyText('');
   };
 
-  const handleSaveEdit = async () => {
-    if (!editText.trim() || editText.trim() === comment.text) { setIsEditing(false); return; }
-    try {
-      const { updateComment } = await import('../services/api');
-      const newText = await updateComment(cid, editText.trim());
-      if (newText) {
-        onUpdateComment?.(cid, editText.trim());
-        setIsEditing(false);
-      }
-    } catch { setIsEditing(false); }
+  const handleSaveEdit = () => {
+    if (!editText.trim()) { setIsEditing(false); return; }
+    setCommentText(editText.trim());
+    onUpdateComment?.(cid, editText.trim());
+    setIsEditing(false);
   };
 
 
@@ -701,11 +662,12 @@ const VideoCommentItem: React.FC<{
           </div>
 
             <div className="p-4 relative">
-            {(isOwner || isAdmin) && !isEditing && (
-              <button onClick={() => { setIsEditing(true); setEditText(comment.text); }}
-                className="absolute top-3 left-3 w-6 h-6 rounded-md flex items-center justify-center transition-all hover:bg-black/5 active:scale-90 opacity-40 hover:!opacity-70"
-                style={{ color: 'var(--text-3)' }}>
-                <i className="fas fa-pen text-[8px]"></i>
+            {hasTimestamp && (
+              <button onClick={(e) => { e.stopPropagation(); onOpenVideo(video, comment.videoTimestamp!, comment._id || String(comment.id)); }}
+                className="absolute top-3 left-3 flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl transition-all active:scale-95 shadow-lg"
+                style={{ background: 'color-mix(in srgb, var(--primary) 15%, transparent)', color: 'var(--primary)' }}>
+                <i className="fas fa-play text-[7px]"></i>
+                <span className="text-[10px] font-black font-mono">{formatTimestamp(comment.videoTimestamp!)}</span>
               </button>
             )}
             <div className="flex items-start gap-3">
@@ -750,17 +712,12 @@ const VideoCommentItem: React.FC<{
                   )}
 
                 <div className="flex items-center gap-3.5 mt-2.5">
-                  {hasTimestamp && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); onOpenVideo(video, comment.videoTimestamp!, comment._id || String(comment.id)); }}
-                      className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 transition-all active:scale-95"
-                      style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)' }}
-                    >
-                      <i className="fas fa-play text-[7px]"></i>
-                      <span className="text-[10px] font-black">{formatTimestamp(comment.videoTimestamp!)}</span>
+                  {(isOwner || isAdmin) && !isEditing && (
+                    <button onClick={() => { setIsEditing(true); setEditText(comment.text); }} className="text-[10px] font-bold transition-colors" style={{ color: 'var(--text-3)' }}>
+                      <i className="fas fa-pen ml-1 text-[8px]"></i>ویرایش
                     </button>
                   )}
-                  <button onClick={() => { if (!isReplying) handleReply(comment._id || String(comment.id), comment.author?.name || ''); else { setIsReplying(false); setReplyTo(''); } }} className="text-[10px] font-bold transition-colors" style={{ color: 'var(--text-3)' }}>
+                  <button onClick={() => { if (!isReplying) handleReply(comment._id || String(comment.id), comment.author || ''); else { setIsReplying(false); setReplyTo(''); } }} className="text-[10px] font-bold transition-colors" style={{ color: 'var(--text-3)' }}>
                     <i className="fas fa-reply ml-1"></i>پاسخ
                   </button>
                   {onLikeComment && (
@@ -782,7 +739,7 @@ const VideoCommentItem: React.FC<{
               </div>
             </div>
 
-            {isReplying && replyTo && replyTo === (comment._id || String(comment.id)) && (
+            {isReplying && replyTo && replyTo === cid && (
               <div className="mt-3 pt-3 border-t animate-fadeIn" style={{ borderColor: 'var(--border)' }}>
                 {(comment as any).audioTimestamp != null && (
                   <button type="button" onClick={() => setIncludeAudioTs(!includeAudioTs)}
@@ -825,23 +782,26 @@ const VideoCommentItem: React.FC<{
 
             {childReplies.length > 0 && (
               <div className="mt-3 pt-3 border-t" style={{ borderColor: 'var(--border)' }}>
-                {!showReplies ? (
-                  <button onClick={() => setShowReplies(true)} className="text-[11px] font-bold hover:underline transition-colors" style={{ color: 'var(--primary)' }}>
-                    <i className="fas fa-chevron-down ml-1"></i>
-                    {toPersianDigits(childReplies.length)} پاسخ بیشتر
-                  </button>
-                ) : (
-                  <button onClick={() => setShowReplies(false)} className="text-[10px] font-bold mb-2 transition-colors" style={{ color: 'var(--text-3)' }}>
-                    <i className="fas fa-chevron-up ml-1"></i>بستن
-                  </button>
-                )}
-                {showReplies && (
-                  <div className="space-y-2.5 mt-2">
-                    {childReplies.map(reply => (
-                       <ReplyItem
-                        key={reply._id || reply.id}
-                        reply={reply}
-                        allComments={allComments}
+                <div className="space-y-2.5">
+                    {childReplies.map(reply => {
+                       const replyId = String(reply._id || reply.id);
+                       const isNestedTarget = (() => {
+                         if (!replyTo) return false;
+                         const findInReplies = (list: any[]): boolean => {
+                           for (const r of list) {
+                             if (String(r._id || r.id) === replyTo) return true;
+                             if (r.replies?.length && findInReplies(r.replies)) return true;
+                           }
+                           return false;
+                         };
+                         return findInReplies(reply.replies || []);
+                       })();
+                       return (
+                        <ReplyItem
+                         key={replyId}
+                         reply={reply}
+                         video={video}
+                         allComments={allComments}
                         onOpenVideo={onOpenVideo}
                         onDeleteComment={onDeleteComment}
                         onLikeComment={onLikeComment}
@@ -850,15 +810,16 @@ const VideoCommentItem: React.FC<{
                         currentUserName={currentUserName}
                         userRole={userRole}
                         likedComments={likedComments}
-                        isReplyingHere={isReplying && replyTo === (reply._id || String(reply.id))}
-                        replyText={isReplying && replyTo === (reply._id || String(reply.id)) ? replyText : ''}
+                        isReplyingHere={isReplying && (replyTo === replyId || isNestedTarget)}
+                        replyText={isReplying && (replyTo === replyId || isNestedTarget) ? replyText : ''}
+                        replyTo={replyTo}
                         onReplyTextChange={setReplyText}
                         onSendReply={handleSendReply}
                         onCancelReply={() => { setIsReplying(false); setReplyTo(''); setReplyText(''); }}
-                      />
-                    ))}
-                  </div>
-                )}
+                       />
+                       );
+                    })}
+                </div>
               </div>
             )}
           </div>
@@ -872,6 +833,7 @@ const VideoCommentItem: React.FC<{
 
 const ReplyItem: React.FC<{
   reply: Comment;
+  video: Video;
   allComments: Comment[];
   onOpenVideo: (video: Video, timestamp?: number, highlightId?: string) => void;
   onDeleteComment?: (commentId: string) => void;
@@ -886,35 +848,35 @@ const ReplyItem: React.FC<{
   onReplyTextChange?: (text: string) => void;
   onSendReply?: () => void;
   onCancelReply?: () => void;
-}> = ({ reply, allComments, onOpenVideo, onDeleteComment, onLikeComment, onUpdateComment, onReply, currentUserName, userRole, likedComments = new Set(), isReplyingHere, replyText, onReplyTextChange, onSendReply, onCancelReply }) => {
+  replyTo?: string;
+}> = ({ reply, video, allComments, onOpenVideo, onDeleteComment, onLikeComment, onUpdateComment, onReply, currentUserName, userRole, likedComments = new Set(), isReplyingHere, replyText, onReplyTextChange, onSendReply, onCancelReply, replyTo = '' }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(reply.text);
+  const [showNestedReplies, setShowNestedReplies] = useState(false);
   const hasTimestamp = typeof reply.videoTimestamp === 'number' && reply.videoTimestamp >= 0;
   const isOwner = reply.author === currentUserName;
   const isAdmin = userRole === 'admin';
   const rid = reply._id || String(reply.id);
   const isLiked = likedComments.has(rid);
+  const nestedReplies = (() => {
+    if (reply.replies?.length) return reply.replies;
+    return allComments.filter((c: any) => String(c.parentId) === rid);
+  })();
 
-  const handleSaveEdit = async () => {
-    if (!editText.trim() || editText === reply.text) { setIsEditing(false); return; }
-    try {
-      const { updateComment } = await import('../services/api');
-      const newText = await updateComment(rid, editText.trim());
-      if (newText) {
-        onUpdateComment?.(rid, editText.trim());
-        setIsEditing(false);
-      }
-    } catch { setIsEditing(false); }
+  const handleSaveEdit = () => {
+    if (!editText.trim()) { setIsEditing(false); return; }
+    onUpdateComment?.(rid, editText.trim());
+    setIsEditing(false);
   };
 
   return (
     <div>
     <div className="relative">
-    {(isOwner || isAdmin) && !isEditing && (
-      <button onClick={() => { setIsEditing(true); setEditText(reply.text); }}
-        className="absolute top-2.5 left-2.5 w-5 h-5 rounded-md flex items-center justify-center transition-all hover:bg-black/5 active:scale-90 opacity-40 hover:!opacity-70"
-        style={{ color: 'var(--text-3)' }}>
-        <i className="fas fa-pen text-[7px]"></i>
+    {hasTimestamp && (
+      <button onClick={(e) => { e.stopPropagation(); onOpenVideo(video, reply.videoTimestamp!, rid); }}
+        className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] font-bold shadow-sm transition-all active:scale-95"
+        style={{ background: 'color-mix(in srgb, var(--primary) 15%, transparent)', color: 'var(--primary)' }}>
+        <i className="fas fa-play text-[6px]"></i>{formatTimestamp(reply.videoTimestamp!)}
       </button>
     )}
     <div className="flex gap-2.5 p-3 rounded-xl transition-all"
@@ -956,10 +918,10 @@ const ReplyItem: React.FC<{
           </>
         ) : null}
         <div className="flex items-center gap-2.5 mt-1.5">
-          {hasTimestamp && (
-            <span className="flex items-center gap-1 text-[9px] font-bold" style={{ color: 'var(--primary)' }}>
-              <i className="fas fa-clock text-[7px]"></i>{formatTimestamp(reply.videoTimestamp!)}
-            </span>
+          {(isOwner || isAdmin) && !isEditing && (
+            <button onClick={() => { setIsEditing(true); setEditText(reply.text); }} className="text-[9px] font-bold flex items-center gap-1 transition-colors" style={{ color: 'var(--text-3)' }}>
+              <i className="fas fa-pen text-[7px]"></i>ویرایش
+            </button>
           )}
           {onReply && (
             <button onClick={() => onReply(rid, reply.author)} className="text-[9px] font-bold flex items-center gap-1 transition-colors" style={{ color: isReplyingHere ? 'var(--primary)' : 'var(--text-3)' }}>
@@ -979,7 +941,7 @@ const ReplyItem: React.FC<{
         </div>
       </div>
     </div>
-    {isReplyingHere && (
+    {isReplyingHere && !nestedReplies.some((r: any) => String(r._id || r.id) === replyTo) && (
       <div className="mt-2 ml-9 animate-fadeIn">
         <div className="flex gap-2">
           <input
@@ -1012,6 +974,203 @@ const ReplyItem: React.FC<{
       </div>
     )}
     </div>
+    {nestedReplies.length > 0 && (
+      <div className="mt-1.5 mr-6">
+        <div className="space-y-1.5">
+            {nestedReplies.map((sub: any) => {
+              const subId = String(sub._id || sub.id);
+              const isNestedTarget = (() => {
+                if (!replyTo) return false;
+                const findInReplies = (list: any[]): boolean => {
+                  for (const r of list) {
+                    if (String(r._id || r.id) === replyTo) return true;
+                    if (r.replies?.length && findInReplies(r.replies)) return true;
+                  }
+                  return false;
+                };
+                return findInReplies(sub.replies || []);
+              })();
+              return (
+              <ReplyItem
+                key={subId}
+                reply={sub}
+                video={video}
+                allComments={allComments}
+                onOpenVideo={onOpenVideo}
+                onDeleteComment={onDeleteComment}
+                onLikeComment={onLikeComment}
+                onUpdateComment={onUpdateComment}
+                onReply={onReply}
+                currentUserName={currentUserName}
+                userRole={userRole}
+                likedComments={likedComments}
+                isReplyingHere={isReplyingHere && (replyTo === subId || isNestedTarget)}
+                replyText={isReplyingHere && (replyTo === subId || isNestedTarget) ? replyText : ''}
+                replyTo={replyTo}
+                onReplyTextChange={onReplyTextChange}
+                onSendReply={onSendReply}
+                onCancelReply={onCancelReply}
+              />
+              );
+            })}
+        </div>
+      </div>
+    )}
+    </div>
+  );
+};
+
+const PodcastReplyItem: React.FC<{
+  reply: Comment;
+  allComments: Comment[];
+  podcast: Podcast;
+  epIdx: number;
+  onPlayPodcast: (podcast: Podcast, episodeIndex: number, seekTime?: number, expandPlayer?: boolean) => void;
+  onDeleteComment?: (commentId: string) => void;
+  onLikeComment?: (commentId: string) => void;
+  onUpdateComment?: (commentId: string, newText: string) => void;
+  onRequestReply?: (commentId: string, author: string, text: string, podcastId: string, episodeIndex: number, audioTimestamp?: number) => void;
+  onAddComment?: (text: string, video: any, videoTimestamp?: number, parentId?: string, audioTimestamp?: number) => void;
+  currentUserName?: string;
+  userRole?: string;
+  likedComments?: Set<string>;
+}> = ({ reply, allComments, podcast, epIdx, onPlayPodcast, onDeleteComment, onLikeComment, onUpdateComment, onRequestReply, onAddComment, currentUserName, userRole, likedComments = new Set() }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editText, setEditText] = useState(reply.text);
+  const [replyText, setReplyText] = useState('');
+  const [isReplying, setIsReplying] = useState(false);
+  const rid = reply._id || String(reply.id);
+  const isOwner = reply.author === currentUserName;
+  const isAdmin = userRole === 'admin';
+  const isLiked = likedComments.has(rid);
+
+  const nestedReplies = (() => {
+    if (reply.replies?.length) return reply.replies;
+    return allComments.filter((c: any) => String(c.parentId) === rid);
+  })();
+
+  const handleSaveEdit = () => {
+    if (!editText.trim()) { setIsEditing(false); return; }
+    onUpdateComment?.(rid, editText.trim());
+    setIsEditing(false);
+  };
+
+  const handleSendReply = () => {
+    if (!replyText.trim() || !onAddComment) return;
+    const audioTs = (reply.audioTimestamp ?? reply.timestamp) != null ? Number(reply.audioTimestamp ?? reply.timestamp) : undefined;
+    onAddComment(replyText, { id: (podcast as any)._id || podcast.id, title: podcast.title }, undefined, rid, audioTs);
+    setReplyText('');
+    setIsReplying(false);
+  };
+
+  return (
+    <div>
+      <div className="relative flex gap-2 p-2.5 rounded-xl" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
+        {(isOwner || isAdmin) && !isEditing && (
+          <button onClick={() => { setIsEditing(true); setEditText(reply.text); }}
+            className="absolute top-2.5 left-2.5 w-5 h-5 rounded-md flex items-center justify-center transition-all hover:bg-black/5 active:scale-90 opacity-40 hover:!opacity-70"
+            style={{ color: 'var(--text-3)' }}>
+            <i className="fas fa-pen text-[7px]"></i>
+          </button>
+        )}
+        <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-white text-[7px] font-bold overflow-hidden"
+          style={{ background: `linear-gradient(135deg, hsl(${(reply.author.charCodeAt(0) * 37) % 360}, 60%, 50%), hsl(${(reply.author.charCodeAt(0) * 73) % 360}, 60%, 40%))` }}>
+          {reply.authorAvatarUrl ? <img src={reply.authorAvatarUrl} alt="" className="w-full h-full object-cover" /> : reply.author.charAt(0)}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <span className="font-bold text-[10px]" style={{ color: 'var(--primary)' }}>{reply.author}</span>
+            <span className="text-[8px]" style={{ color: 'var(--text-3)' }}>{formatTimeFromISO(reply.isoDate)}</span>
+          </div>
+          {(reply.audioTimestamp ?? reply.timestamp) != null && (
+            <button onClick={() => { if (onPlayPodcast) onPlayPodcast(podcast, epIdx, Number(reply.audioTimestamp ?? reply.timestamp), true); }}
+              className="flex items-center gap-1 mb-1 px-1.5 py-0.5 rounded-lg"
+              style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '7px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
+              <i className="fas fa-music text-[6px]"></i>
+              <span className="font-bold">{formatTime(Number(reply.audioTimestamp ?? reply.timestamp))}</span>
+            </button>
+          )}
+          {isEditing ? (
+            <div>
+              <input value={editText} onChange={(e) => setEditText(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleSaveEdit(); if (e.key === 'Escape') setIsEditing(false); }}
+                className="w-full bg-transparent outline-none text-[10px] leading-relaxed px-1.5 py-0.5 rounded" autoFocus
+                style={{ color: 'var(--text)', border: '1px solid var(--primary)' }} />
+              <div className="flex gap-1 mt-1">
+                <button onClick={handleSaveEdit} className="text-[8px] font-bold px-2 py-0.5 rounded-lg" style={{ background: 'var(--primary)', color: 'white' }}>ذخیره</button>
+                <button onClick={() => { setIsEditing(false); setEditText(reply.text); }} className="text-[8px] font-bold px-2 py-0.5 rounded-lg" style={{ background: 'var(--surface-3)', color: 'var(--text-3)' }}>لغو</button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <p className="text-[10px] leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text-2)' }}>{reply.text}</p>
+              <div className="flex items-center gap-2 mt-1">
+                <button onClick={() => { if (onRequestReply) { const audioTs = (reply.audioTimestamp ?? reply.timestamp) != null ? Number(reply.audioTimestamp ?? reply.timestamp) : undefined; onRequestReply(rid, reply.author, reply.text, String((podcast as any)._id || podcast.id), epIdx, audioTs); } else { setIsReplying(true); } }}
+                  className="text-[8px] font-bold transition-colors" style={{ color: isReplying ? 'var(--primary)' : 'var(--text-3)' }}>
+                  <i className="fas fa-reply text-[6px] ml-1"></i>پاسخ
+                </button>
+                {onLikeComment && (
+                  <button onClick={() => onLikeComment(rid)} className="text-[8px] font-bold flex items-center gap-1 transition-colors"
+                    style={{ color: isLiked ? 'var(--primary)' : 'var(--text-3)' }}>
+                    <i className={`${isLiked ? 'fas' : 'far'} fa-heart text-[7px]`}></i>{toPersianDigits(reply.likes || 0)}
+                  </button>
+                )}
+                {(isOwner || isAdmin) && onDeleteComment && (
+                  <button onClick={() => onDeleteComment(rid)} className="text-[8px] font-bold text-red-400/70 hover:text-red-400">
+                    <i className="fas fa-trash-alt text-[7px]"></i>
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+          {isReplying && (
+            <div className="mt-2 animate-fadeIn">
+              <div className="flex gap-1.5">
+                <input autoFocus value={replyText} onChange={(e) => setReplyText(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendReply(); } }}
+                  placeholder="پاسخ..."
+                  className="flex-1 rounded-lg px-2 py-1.5 text-[9px] font-medium outline-none transition-all focus:ring-1"
+                  style={{ background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', '--tw-ring-color': 'color-mix(in srgb, var(--primary) 25%, transparent)' } as any}
+                />
+                <button onClick={handleSendReply} disabled={!replyText.trim()}
+                  className="w-7 h-7 rounded-lg text-white flex items-center justify-center shadow-md disabled:opacity-30 active:scale-95 transition-all flex-shrink-0"
+                  style={{ background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))' }}>
+                  <i className="fas fa-paper-plane text-[7px]"></i>
+                </button>
+                <button onClick={() => { setIsReplying(false); setReplyText(''); }}
+                  className="w-7 h-7 rounded-lg flex items-center justify-center transition-all active:scale-95 flex-shrink-0"
+                  style={{ background: 'var(--surface-3)', color: 'var(--text-3)', border: '1px solid var(--border)' }}>
+                  <i className="fas fa-times text-[7px]"></i>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+      {nestedReplies.length > 0 && (
+        <div className="mt-1 mr-6">
+          <div className="space-y-1.5">
+            {nestedReplies.map((sub: any) => (
+              <PodcastReplyItem
+                key={sub._id || sub.id}
+                reply={sub}
+                allComments={allComments}
+                podcast={podcast}
+                epIdx={epIdx}
+                onPlayPodcast={onPlayPodcast}
+                onDeleteComment={onDeleteComment}
+                onLikeComment={onLikeComment}
+                onUpdateComment={onUpdateComment}
+                onRequestReply={onRequestReply}
+                onAddComment={onAddComment}
+                currentUserName={currentUserName}
+                userRole={userRole}
+                likedComments={likedComments}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -1034,7 +1193,8 @@ const PodcastCommentItem: React.FC<{
   isGloballyPlaying?: boolean;
   onGlobalTogglePlay?: () => void;
   onShowDiscussion?: () => void;
-}> = ({ comment, podcast, allComments, onPlayPodcast, onAddComment, onDeleteComment, onLikeComment, onUpdateComment, currentUserName, userRole, depth = 0, likedComments = new Set(), currentPlayingPodcastId, currentPlayingEpIdx, isGloballyPlaying, onGlobalTogglePlay, onShowDiscussion }) => {
+  onRequestReply?: (commentId: string, author: string, text: string, podcastId: string, episodeIndex: number, audioTimestamp?: number) => void;
+}> = ({ comment, podcast, allComments, onPlayPodcast, onAddComment, onDeleteComment, onLikeComment, onUpdateComment, currentUserName, userRole, depth = 0, likedComments = new Set(), currentPlayingPodcastId, currentPlayingEpIdx, isGloballyPlaying, onGlobalTogglePlay, onShowDiscussion, onRequestReply }) => {
   const [showReplies, setShowReplies] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [replyText, setReplyText] = useState('');
@@ -1049,7 +1209,15 @@ const PodcastCommentItem: React.FC<{
   const isAdmin = userRole === 'admin';
   const cid = comment._id || String(comment.id);
   const isLiked = likedComments.has(cid);
-  const childReplies = comment.replies || allComments.filter(c => c.parentId === cid);
+  const childReplies = (() => {
+    if (comment.replies?.length) return comment.replies;
+    const flatten = (list: any[]): any[] => list.reduce((acc: any[], c: any) => { acc.push(c); if (c.replies?.length) acc.push(...flatten(c.replies)); return acc; }, []);
+    return flatten(allComments).filter((c: any) => String(c.parentId) === cid);
+  })();
+  const totalReplyCount = (() => {
+    const countAll = (list: any[]): number => list.reduce((acc: number, c: any) => acc + 1 + (c.replies?.length ? countAll(c.replies) : 0), 0);
+    return countAll(childReplies);
+  })();
 
   const handleReply = (commentId: string) => {
     setReplyTo(commentId);
@@ -1057,16 +1225,11 @@ const PodcastCommentItem: React.FC<{
     setReplyText('');
   };
 
-  const handleSaveEdit = async () => {
-    if (!editText.trim() || editText.trim() === comment.text) { setIsEditing(false); return; }
-    try {
-      const { updateComment } = await import('../services/api');
-      const newText = await updateComment(cid, editText.trim());
-      if (newText) {
-        onUpdateComment?.(cid, editText.trim());
-        setIsEditing(false);
-      }
-    } catch { setIsEditing(false); }
+  const handleSaveEdit = () => {
+    if (!editText.trim()) { setIsEditing(false); return; }
+    setCommentText(editText.trim());
+    onUpdateComment?.(cid, editText.trim());
+    setIsEditing(false);
   };
 
   const handleSendReply = () => {
@@ -1182,7 +1345,7 @@ const PodcastCommentItem: React.FC<{
               <p className="text-[11px] leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text-2)' }}>{commentText}</p>
             )}
             <div className="flex items-center gap-3 mt-2">
-              <button onClick={() => { if (!isReplying) handleReply(cid); else { setIsReplying(false); setReplyTo(''); } }} className="text-[9px] font-bold transition-colors flex items-center gap-1" style={{ color: 'var(--text-3)' }}>
+              <button onClick={() => { if (onRequestReply) { const audioTs = hasAudioTs ? Number(comment.audioTimestamp ?? comment.timestamp) : undefined; onRequestReply(cid, comment.author, comment.text, String((podcast as any)._id || podcast.id), epIdx, audioTs); } else { handleReply(cid); } }} className="text-[9px] font-bold transition-colors flex items-center gap-1" style={{ color: 'var(--text-3)' }}>
                 <i className="fas fa-reply text-[7px]"></i>پاسخ
               </button>
               {onLikeComment && (
@@ -1201,88 +1364,30 @@ const PodcastCommentItem: React.FC<{
                 </button>
               )}
             </div>
-
-            {isReplying && replyTo === cid && (
-              <div className="mt-2 animate-fadeIn">
-                <div className="flex gap-2">
-                  <input autoFocus value={replyText} onChange={(e) => setReplyText(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSendReply(); } }}
-                    placeholder="پاسخ..."
-                    className="flex-1 rounded-xl px-3 py-2 text-[10px] font-medium outline-none transition-all duration-200 focus:ring-2"
-                    style={{ background: 'var(--surface)', color: 'var(--text)', border: '1px solid var(--border)', '--tw-ring-color': 'color-mix(in srgb, var(--primary) 25%, transparent)' } as any}
-                  />
-                  <button onClick={handleSendReply} disabled={!replyText.trim()}
-                    className="w-8 h-8 rounded-xl text-white flex items-center justify-center shadow-md disabled:opacity-30 active:scale-95 transition-all flex-shrink-0"
-                    style={{ background: 'linear-gradient(135deg, var(--primary), #0d9488)' }}>
-                    <i className="fas fa-paper-plane text-[8px]"></i>
-                  </button>
-                  <button onClick={() => { setIsReplying(false); setReplyTo(''); setReplyText(''); }}
-                    className="w-8 h-8 rounded-xl flex items-center justify-center transition-all active:scale-95 flex-shrink-0"
-                    style={{ background: 'var(--surface-3)', color: 'var(--text-3)', border: '1px solid var(--border)' }}>
-                    <i className="fas fa-times text-[8px]"></i>
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
           {childReplies.length > 0 && (
             <div className="px-3 pb-3">
-              {!showReplies ? (
-                <button onClick={() => setShowReplies(true)} className="text-[10px] font-bold hover:underline transition-colors flex items-center gap-1" style={{ color: 'var(--primary)' }}>
-                  <i className="fas fa-chevron-down text-[7px]"></i>
-                  {toPersianDigits(childReplies.length)} پاسخ
-                </button>
-              ) : (
-                <button onClick={() => setShowReplies(false)} className="text-[9px] font-bold mb-1 transition-colors flex items-center gap-1" style={{ color: 'var(--text-3)' }}>
-                  <i className="fas fa-chevron-up text-[7px]"></i>بستن
-                </button>
-              )}
-              {showReplies && (
-                <div className="space-y-2 mt-2">
+              <div className="space-y-2">
                   {childReplies.map(reply => (
-                    <div key={reply._id || reply.id}>
-                      <div className="flex gap-2 p-2.5 rounded-xl" style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
-                        <div className="w-6 h-6 rounded-full flex-shrink-0 flex items-center justify-center text-white text-[7px] font-bold overflow-hidden"
-                          style={{ background: `linear-gradient(135deg, hsl(${(reply.author.charCodeAt(0) * 37) % 360}, 60%, 50%), hsl(${(reply.author.charCodeAt(0) * 73) % 360}, 60%, 40%))` }}>
-                          {reply.authorAvatarUrl ? <img src={reply.authorAvatarUrl} alt="" className="w-full h-full object-cover" /> : reply.author.charAt(0)}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1.5 mb-0.5">
-                            <span className="font-bold text-[10px]" style={{ color: 'var(--primary)' }}>{reply.author}</span>
-                            <span className="text-[8px]" style={{ color: 'var(--text-3)' }}>{formatTimeFromISO(reply.isoDate)}</span>
-                          </div>
-                          {(reply.audioTimestamp ?? reply.timestamp) != null && (
-                            <button onClick={() => { if (onPlayPodcast) onPlayPodcast(podcast, epIdx, Number(reply.audioTimestamp ?? reply.timestamp), true); }}
-                              className="flex items-center gap-1 mb-1 px-1.5 py-0.5 rounded-lg"
-                              style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '7px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
-                              <i className="fas fa-music text-[6px]"></i>
-                              <span className="font-bold">{formatTime(Number(reply.audioTimestamp ?? reply.timestamp))}</span>
-                            </button>
-                          )}
-                          <p className="text-[10px] leading-relaxed whitespace-pre-wrap" style={{ color: 'var(--text-2)' }}>{reply.text}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            <button onClick={() => handleReply(reply._id || String(reply.id))} className="text-[8px] font-bold transition-colors" style={{ color: 'var(--text-3)' }}>
-                              <i className="fas fa-reply text-[6px] ml-1"></i>پاسخ
-                            </button>
-                            {onLikeComment && (
-                              <button onClick={() => onLikeComment(reply._id || String(reply.id))} className="text-[8px] font-bold flex items-center gap-1 transition-colors"
-                                style={{ color: likedComments.has(reply._id || String(reply.id)) ? 'var(--primary)' : 'var(--text-3)' }}>
-                                <i className={`${likedComments.has(reply._id || String(reply.id)) ? 'fas' : 'far'} fa-heart text-[7px]`}></i>{toPersianDigits(reply.likes || 0)}
-                              </button>
-                            )}
-                            {(reply.author === currentUserName || isAdmin) && onDeleteComment && (
-                              <button onClick={() => onDeleteComment(reply._id || String(reply.id))} className="text-[8px] font-bold text-red-400/70 hover:text-red-400">
-                                <i className="fas fa-trash-alt text-[7px]"></i>
-                              </button>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                    <PodcastReplyItem
+                      key={reply._id || reply.id}
+                      reply={reply}
+                      allComments={allComments}
+                      podcast={podcast}
+                      epIdx={epIdx}
+                      onPlayPodcast={onPlayPodcast}
+                      onDeleteComment={onDeleteComment}
+                      onLikeComment={onLikeComment}
+                      onUpdateComment={onUpdateComment}
+                      onRequestReply={onRequestReply}
+                      onAddComment={onAddComment}
+                      currentUserName={currentUserName}
+                      userRole={userRole}
+                      likedComments={likedComments}
+                    />
                   ))}
                 </div>
-              )}
             </div>
           )}
         </div>
@@ -1305,6 +1410,7 @@ const MahfelPage: React.FC<any> = ({ tabsHidden, showInput, onToggleInput, posts
   const [searchFocused, setSearchFocused] = useState(false);
   const [showAttachMenu, setShowAttachMenu] = useState(false);
   const [replyTarget, setReplyTarget] = useState<{ postId: number; author: string; text: string; commentId?: string } | null>(null);
+  const [podcastReplyTarget, setPodcastReplyTarget] = useState<{ commentId: string; author: string; text: string; podcastId: string; episodeIndex: number; audioTimestamp?: number } | null>(null);
   const [markAudioTimestamp, setMarkAudioTimestamp] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -1331,7 +1437,16 @@ const MahfelPage: React.FC<any> = ({ tabsHidden, showInput, onToggleInput, posts
   const handleCreatePost = async () => {
     if ((!inputText.trim() && !inputMedia) || sending || !currentUser) return;
     setSending(true);
-    if (replyTarget) {
+    if (podcastReplyTarget) {
+      const text = inputText.trim();
+      if (text) {
+        onAddComment?.(text, { id: podcastReplyTarget.podcastId, episodes: [] }, undefined, podcastReplyTarget.commentId, podcastReplyTarget.audioTimestamp);
+        setInputText('');
+        setInputMedia(null);
+        setPodcastReplyTarget(null);
+        if (inputRef.current) inputRef.current.style.height = 'auto';
+      }
+    } else if (replyTarget) {
       try {
         const { addPostComment } = await import('../services/api');
         const text = inputText.trim() || '[attachment]';
@@ -1652,6 +1767,11 @@ const MahfelPage: React.FC<any> = ({ tabsHidden, showInput, onToggleInput, posts
                       const virtualPost: any = { id: Date.now(), author: c.author, authorAvatarUrl: c.authorAvatarUrl || '', date: c.date || '', isoDate: c.isoDate || '', text: c.text, comments: c.replies || [], likes: 0, podcastId: String(item.podcast?.id || (item.podcast as any)?._id || ''), episodeIndex: c.episodeIndex != null ? c.episodeIndex : 0, parentCommentId: c._id || c.id };
                       (onShowComments as any)?.(virtualPost, item.podcast);
                     }}
+                    onRequestReply={(commentId, author, text, podcastId, episodeIndex, audioTimestamp) => {
+                      setReplyTarget(null);
+                      setPodcastReplyTarget({ commentId, author, text, podcastId, episodeIndex, audioTimestamp });
+                      setTimeout(() => inputRef.current?.focus(), 50);
+                    }}
                   />
                 </div>
               );
@@ -1690,6 +1810,28 @@ const MahfelPage: React.FC<any> = ({ tabsHidden, showInput, onToggleInput, posts
                 </div>
               </div>
               <button onClick={() => { setReplyTarget(null); setMarkAudioTimestamp(false); }}
+                className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 hover:opacity-60 transition-opacity"
+                style={{ color: 'var(--text-3)' }}>
+                <i className="fas fa-times text-[9px]"></i>
+              </button>
+            </div>
+          )}
+          {podcastReplyTarget && (
+            <div className="flex items-center gap-2 mb-2 px-3 py-2 rounded-xl shadow-sm" style={{ background: 'color-mix(in srgb, var(--primary) 8%, var(--surface-2))', border: '1px solid color-mix(in srgb, var(--primary) 20%, transparent)' }}>
+              <div className="flex flex-col items-center gap-0.5 flex-shrink-0">
+                <div className="w-0.5 h-7 rounded-full" style={{ background: 'var(--primary)' }}></div>
+                <i className="fas fa-reply text-[9px]" style={{ color: 'var(--primary)' }}></i>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <i className="fas fa-headphones text-[7px]" style={{ color: 'var(--primary)' }}></i>
+                  <span className="text-[10px] font-black" style={{ color: 'var(--primary)' }}>پاسخ به {podcastReplyTarget.author}</span>
+                </div>
+                <div className="text-[9px] font-medium leading-relaxed line-clamp-2 mt-0.5" style={{ color: 'var(--text-3)' }}>
+                  <span className="opacity-70">{podcastReplyTarget.text}</span>
+                </div>
+              </div>
+              <button onClick={() => setPodcastReplyTarget(null)}
                 className="w-6 h-6 rounded-lg flex items-center justify-center flex-shrink-0 hover:opacity-60 transition-opacity"
                 style={{ color: 'var(--text-3)' }}>
                 <i className="fas fa-times text-[9px]"></i>
@@ -1740,7 +1882,7 @@ const MahfelPage: React.FC<any> = ({ tabsHidden, showInput, onToggleInput, posts
             })()}
             <div className="flex-1 min-w-0 rounded-xl overflow-hidden transition-all duration-200"
               style={{ border: `2px solid ${inputText.trim() || inputMedia ? 'var(--primary)' : 'var(--border)'}`, background: 'var(--surface-2)' }}>
-              <input value={inputText} onChange={(e) => setInputText(e.target.value)} onKeyDown={handleKeyDown} placeholder="پیام..." className="w-full bg-transparent outline-none px-3.5 py-2.5 text-[13px] font-medium" style={{ color: 'var(--text)', direction: 'rtl' }} />
+              <input value={inputText} onChange={(e) => setInputText(e.target.value)} onKeyDown={handleKeyDown} placeholder={podcastReplyTarget ? `پاسخ به ${podcastReplyTarget.author}...` : "پیام..."} className="w-full bg-transparent outline-none px-3.5 py-2.5 text-[13px] font-medium" style={{ color: 'var(--text)', direction: 'rtl' }} />
             </div>
             <button onClick={handleCreatePost} disabled={(!inputText.trim() && !inputMedia) || sending || !currentUser}
               className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 active:scale-90 transition-all disabled:opacity-40 shadow-md"

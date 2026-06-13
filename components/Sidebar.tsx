@@ -64,20 +64,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
 
-          {/* Search */}
-          <div className="px-2.5 pt-2.5">
-            <button
-              onClick={onOpenSearch}
-              className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs font-bold transition-all ${
-                isDark ? 'bg-gray-800 text-gray-400 hover:text-gray-200' : 'bg-gray-50 text-gray-400 hover:text-gray-600'
-              }`}
-            >
-              <i className="fas fa-search text-[10px]" />
-              <span>جستجو...</span>
-              <kbd className={`mr-auto text-[8px] px-1.5 py-0.5 rounded ${isDark ? 'bg-gray-700 text-gray-500' : 'bg-gray-200 text-gray-400'}`}>⌘K</kbd>
-            </button>
-          </div>
-
           {/* Navigation */}
           <nav className="flex-1 px-2 py-2.5 space-y-0.5">
             {NAV_ITEMS.map(item => {

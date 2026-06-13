@@ -67,7 +67,6 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
   const [touchStartY, setTouchStartY] = useState(0);
   const [touchDeltaY, setTouchDeltaY] = useState(0);
   const [commentText, setCommentText] = useState('');
-  const [mahfelSidebarOpen, setMahfelSidebarOpen] = useState(false);
   const [replyTo, setReplyTo] = useState<{ id: string; author: string; text: string } | null>(null);
   const [editCommentId, setEditCommentId] = useState<string | null>(null);
   const [editCommentText, setEditCommentText] = useState('');
@@ -132,7 +131,7 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
       style={{ height: '100dvh', transform: `translateY(${touchDeltaY}px)`, transition: touchDeltaY === 0 ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)' : 'none' }}>
 
       {/* Ambient background */}
-      <div className={`fixed inset-0 ${isDark ? 'bg-gray-950' : 'bg-gray-50'} pointer-events-none z-0`}></div>
+      <div className={`absolute inset-0 ${isDark ? 'bg-gray-950' : 'bg-gray-50'} pointer-events-none z-0`}></div>
 
       {/* ======== MOBILE LAYOUT ======== */}
       <div className="relative z-10 lg:hidden flex flex-col h-full overflow-hidden">
@@ -636,8 +635,6 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
           </div>
         </div>
       )}
-
-      <MahfelSidebar activeTab={activeTab} onTabChange={(tab) => { onTabChange(tab); onClose(); }} open={mahfelSidebarOpen} onOpenChange={setMahfelSidebarOpen} theme={theme} onToggleTheme={onToggleTheme} onOpenProfile={onOpenProfile} />
 
     </div>
   );

@@ -1,4 +1,4 @@
-
+﻿
 import React, { useState, useEffect, useRef, useCallback, Suspense } from 'react';
 import { Podcast, Episode, Comment, Page, Post, Book, Author, PublishedBook, User, Video } from './types';
 import { getPodcasts, getBooks, getAuthors, getVideos, getComments, getPosts, getPublishedBooks, createPost, deletePost as apiDeletePost, addPostComment, updatePost, deleteComment as apiDeleteComment, addComment, likeComment, updateLibrary, prefetchStream, getMe } from './services/api';
@@ -122,6 +122,8 @@ const AppInner: React.FC = () => {
 
     // Author post editing state
     const [editingPost, setEditingPost] = useState<Post | null>(null);
+    const recentlyDeletedIds = useRef(new Set<string>());
+    const recentEdits = useRef(new Map<string, string>());
     const [editPostText, setEditPostText] = useState('');
 
     useEffect(() => {
@@ -184,43 +186,60 @@ const AppInner: React.FC = () => {
         if (isAuthenticated) syncLibrary();
     }, [isAuthenticated]);
 
-    useEffect(() => {
-        let mounted = true;
-        const interval = setInterval(async () => {
-            try {
-                const fresh = await getComments();
-                if (!mounted) return;
-                setComments(prev => {
-                    const prevStr = JSON.stringify(prev.map(c => ({ _id: (c as any)._id || c.id, text: c.text, likes: c.likes })));
-                    const freshStr = JSON.stringify(fresh.map(c => ({ _id: (c as any)._id || c.id, text: c.text, likes: c.likes })));
-                    if (prevStr === freshStr) return prev;
-                    const merged = fresh.map(fc => {
-                        const existing = prev.find(c => String((c as any)._id || c.id) === String(fc._id || fc.id));
-                        return existing && existing.replies && existing.replies.length > 0
-                            ? { ...fc, replies: existing.replies }
-                            : fc;
-                    });
-                    merged.sort((a, b) => new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime());
-                    const replyMap = new Map<string, Comment[]>();
-                    merged.forEach(c => {
-                        if (c.parentId) {
-                            if (!replyMap.has(c.parentId)) replyMap.set(c.parentId, []);
-                            replyMap.get(c.parentId)!.push(c);
-                        }
-                    });
-                    const roots = merged.filter(c => !c.parentId);
-                    const addReplies = (list: Comment[]): Comment[] =>
-                        list.map(c => {
-                            const cid = String((c as any)._id || c.id);
-                            const replies = replyMap.get(cid) || c.replies || [];
-                            return { ...c, replies: addReplies(replies) };
-                        });
-                    return addReplies(roots);
+    const refreshComments = useCallback(async () => {
+        try {
+            const fresh = await getComments();
+            const deleted = recentlyDeletedIds.current;
+            const filteredFresh = fresh.filter(c => !deleted.has(String((c as any)._id || c.id)));
+            const removeDeletedFromTree = (list: any[]): any[] =>
+                list.filter(c => !deleted.has(String((c as any)._id || c.id)))
+                    .map(c => c.replies ? { ...c, replies: removeDeletedFromTree(c.replies) } : c);
+            const cleanFresh = removeDeletedFromTree(filteredFresh);
+            const edits = recentEdits.current;
+            const applyEdits = (list: any[]): any[] =>
+                list.map(c => {
+                    const cid = String((c as any)._id || c.id);
+                    const edited = edits.get(cid);
+                    const updated = edited ? { ...c, text: edited, isEdited: true } : c;
+                    return updated.replies ? { ...updated, replies: applyEdits(updated.replies) } : updated;
                 });
-            } catch {}
-        }, 5000);
-        return () => { mounted = false; clearInterval(interval); };
+            const freshWithEdits = applyEdits(cleanFresh);
+            setComments(prev => {
+                const countReplies = (c: any): number => {
+                    if (!c.replies) return 0;
+                    return c.replies.length + c.replies.reduce((s: number, r: any) => s + countReplies(r), 0);
+                };
+                const prevStr = JSON.stringify(prev.map(c => ({ _id: (c as any)._id || c.id, text: c.text, likes: c.likes, replyCount: countReplies(c), isEdited: (c as any).isEdited })));
+                const freshStr = JSON.stringify(freshWithEdits.map(c => ({ _id: (c as any)._id || c.id, text: c.text, likes: c.likes, replyCount: countReplies(c), isEdited: (c as any).isEdited })));
+                if (prevStr === freshStr) return prev;
+                const merged = freshWithEdits.map(fc => {
+                    const existing = prev.find(c => String((c as any)._id || c.id) === String(fc._id || fc.id));
+                    return { ...fc, replies: fc.replies && fc.replies.length > 0 ? fc.replies : (existing && existing.replies ? existing.replies : []) };
+                });
+                merged.sort((a, b) => new Date(b.isoDate).getTime() - new Date(a.isoDate).getTime());
+                const replyMap = new Map<string, Comment[]>();
+                merged.forEach(c => {
+                    if (c.parentId) {
+                        if (!replyMap.has(c.parentId)) replyMap.set(c.parentId, []);
+                        replyMap.get(c.parentId)!.push(c);
+                    }
+                });
+                const roots = merged.filter(c => !c.parentId);
+                const addReplies = (list: Comment[]): Comment[] =>
+                    list.map(c => {
+                        const cid = String((c as any)._id || c.id);
+                        const replies = replyMap.get(cid) || c.replies || [];
+                        return { ...c, replies: addReplies(replies) };
+                    });
+                return addReplies(roots);
+            });
+        } catch {}
     }, []);
+
+    useEffect(() => {
+        const interval = setInterval(refreshComments, 5000);
+        return () => clearInterval(interval);
+    }, [refreshComments]);
 
     useEffect(() => {
         if (!selectedVideoComment) return;
@@ -496,24 +515,21 @@ const AppInner: React.FC = () => {
 
     // Delete a comment
     const handleDeleteComment = async (commentId: string) => {
+        recentlyDeletedIds.current.add(commentId);
+        const removeFromTree = (list: Comment[]): Comment[] =>
+            list.filter(c => String((c as any)._id || c.id) !== commentId)
+                .map(c => ({ ...c, replies: c.replies ? removeFromTree(c.replies) : [] }));
+        setComments(prev => removeFromTree(prev));
+        setToast({ id: Date.now(), message: 'نظر حذف شد' });
         const ok = await apiDeleteComment(commentId);
-        if (ok) {
-            const removeFromTree = (list: Comment[]): Comment[] =>
-                list.filter(c => {
-                    const cid = String((c as any)._id || c.id);
-                    return cid !== commentId;
-                }).map(c => ({
-                    ...c,
-                    replies: c.replies ? removeFromTree(c.replies) : []
-                }));
-            setComments(prev => removeFromTree(prev));
-            setToast({ id: Date.now(), message: 'نظر حذف شد' });
+        if (!ok) {
+            recentlyDeletedIds.current.delete(commentId);
+            refreshComments();
         }
     };
 
     const handleUpdateComment = async (commentId: string, newText: string) => {
-        const { updateComment } = await import('./services/api');
-        await updateComment(commentId, newText);
+        recentEdits.current.set(commentId, newText);
         const updateInTree = (list: Comment[]): Comment[] =>
             list.map(c => {
                 const cid = String((c as any)._id || c.id);
@@ -522,24 +538,29 @@ const AppInner: React.FC = () => {
                 return c;
             });
         setComments(prev => updateInTree(prev));
+        const { updateComment } = await import('./services/api');
+        const ok = await updateComment(commentId, newText);
+        if (ok !== null) {
+            setToast({ id: Date.now(), message: 'نظر ویرایش شد' });
+            setTimeout(() => recentEdits.current.delete(commentId), 5000);
+        }
     };
 
     const handleLikeComment = async (commentId: string) => {
         const likedComments = new Set<string>(JSON.parse(localStorage.getItem('soha_liked_comments') || '[]'));
         const isLiked = likedComments.has(commentId);
+        const updateInTree = (list: Comment[]): Comment[] =>
+            list.map(c => {
+                const cid = String((c as any)._id || c.id);
+                if (cid === commentId) return { ...c, likes: (c.likes || 0) + (isLiked ? -1 : 1) };
+                if (c.replies && c.replies.length > 0) return { ...c, replies: updateInTree(c.replies) };
+                return c;
+            });
+        setComments(prev => updateInTree(prev));
+        if (isLiked) likedComments.delete(commentId); else likedComments.add(commentId);
+        localStorage.setItem('soha_liked_comments', JSON.stringify([...likedComments]));
         const newLikes = await likeComment(commentId);
-        if (newLikes !== null) {
-            const updateInTree = (list: Comment[]): Comment[] =>
-                list.map(c => {
-                    const cid = String((c as any)._id || c.id);
-                    if (cid === commentId) return { ...c, likes: newLikes };
-                    if (c.replies && c.replies.length > 0) return { ...c, replies: updateInTree(c.replies) };
-                    return c;
-                });
-            setComments(prev => updateInTree(prev));
-            if (isLiked) likedComments.delete(commentId); else likedComments.add(commentId);
-            localStorage.setItem('soha_liked_comments', JSON.stringify([...likedComments]));
-        }
+        if (newLikes !== null) refreshComments();
     };
 
     const insertCommentIntoTree = (prev: Comment[], newComment: Comment): Comment[] => {
@@ -623,14 +644,28 @@ const AppInner: React.FC = () => {
             const episodeIndex = (freshPost as any).episodeIndex;
             const parentCommentId = (freshPost as any).parentCommentId;
             const flattenComments = (list: any[]): any[] => list.reduce((acc: any[], c: any) => { acc.push(c); if (c.replies?.length) acc.push(...flattenComments(c.replies)); return acc; }, []);
-            const discussionCommentsList = podcastId ? flattenComments(comments)
+            const allFlat = flattenComments(comments);
+            const collectDescendantIds = (parentId: string): Set<string> => {
+                const ids = new Set<string>();
+                const children = allFlat.filter((c: any) => String(c.parentId) === parentId);
+                for (const child of children) {
+                    const cid = String((child as any)._id || child.id);
+                    ids.add(cid);
+                    for (const descId of collectDescendantIds(cid)) ids.add(descId);
+                }
+                return ids;
+            };
+            const descendantIds = parentCommentId ? collectDescendantIds(String(parentCommentId)) : new Set<string>();
+            const discussionCommentsList = podcastId ? allFlat
                 .filter((c: any) => {
                     if (String(c.podcastId) !== String(podcastId)) return false;
                     if (episodeIndex != null && c.episodeIndex !== episodeIndex) return false;
                     if (parentCommentId) {
-                        return String(c.parentId) === String(parentCommentId);
+                        const pid = String(c.parentId);
+                        const cid = String((c as any)._id || c.id);
+                        return pid === String(parentCommentId) || cid === String(parentCommentId) || descendantIds.has(cid);
                     }
-                    return !c.parentId;
+                    return true;
                 })
                 .map((c: any): any => ({
                     id: c._id || c.id,
@@ -647,14 +682,15 @@ const AppInner: React.FC = () => {
                     episodeIndex: c.episodeIndex,
                     isEdited: c.isEdited,
                 })) : freshPost.comments;
-            return <PostCommentsPage post={freshPost} video={videos.find(v => String(v.id) === String(freshPost.videoId))} podcast={selectedPostPodcast || podcasts.find(p => String(p.id) === String(podcastId))} authors={authors} currentUser={user?.name} userRole={user?.role} discussionComments={discussionCommentsList} parentCommentId={parentCommentId} onBack={() => { setSelectedPostForComments(null); setSelectedPostPodcast(null); }} onAddComment={async (_postId, text, replyTo, media, quotedText, audioTimestamp, _videoTimestamp) => {
+            return <PostCommentsPage post={freshPost} video={videos.find(v => String(v.id) === String(freshPost.videoId))} podcast={selectedPostPodcast || podcasts.find(p => String(p.id) === String(podcastId))} authors={authors} currentUser={user?.name} userRole={user?.role} discussionComments={discussionCommentsList} parentCommentId={parentCommentId} onBack={() => { setSelectedPostForComments(null); setSelectedPostPodcast(null); }} onAddComment={async (_postId, text, replyTo, media, quotedText, audioTimestamp, videoTimestamp) => {
                 if (podcastId) {
                     const newComment = await addComment({ type: 'podcast', podcastId: String(podcastId), author: user?.name || 'کاربر', text, episodeIndex: episodeIndex ?? 0, parentId: replyTo ? String(replyTo) : (parentCommentId ? String(parentCommentId) : undefined), audioTimestamp, authorAvatarUrl: user?.avatar, quotedText, media } as any);
                     if (newComment) {
                         setComments(prev => insertCommentIntoTree(prev, newComment));
+                        refreshComments();
                     }
                 } else {
-                    const updatedPost = await addPostComment(String(_postId), text, replyTo as any, media, quotedText, audioTimestamp);
+                    const updatedPost = await addPostComment(String(_postId), text, replyTo as any, media, quotedText, audioTimestamp, videoTimestamp);
                     if (updatedPost) {
                         setPosts(prev => prev.map(p => String(p.id) === String(_postId) ? { ...p, comments: updatedPost.comments } : p));
                         setSelectedPostForComments({ ...freshPost, comments: updatedPost.comments });
@@ -697,22 +733,38 @@ const AppInner: React.FC = () => {
                 text: vc.text,
                 media: (vc as any).media || [],
                 videoId: String(v._id || v.id),
-                comments: (vc.replies || []).map((r: any) => ({ id: r._id || r.id, author: r.author, authorAvatarUrl: r.authorAvatarUrl || '', text: r.text, date: r.date || '', isoDate: r.isoDate || '', replyTo: r.parentId, quotedText: r.quotedText, likes: r.likes || 0, media: r.media || [], videoTimestamp: r.videoTimestamp, audioTimestamp: r.audioTimestamp })),
+                comments: (() => {
+                    const flattenAll = (list: any[]): any[] => list.reduce((acc: any[], r: any) => {
+                        const mapped = { id: r._id || r.id, author: r.author, authorAvatarUrl: r.authorAvatarUrl || '', text: r.text, date: r.date || '', isoDate: r.isoDate || '', replyTo: r.parentId, quotedText: r.quotedText, likes: r.likes || 0, media: r.media || [], videoTimestamp: r.videoTimestamp, audioTimestamp: r.audioTimestamp };
+                        acc.push(mapped);
+                        if (r.replies?.length) acc.push(...flattenAll(r.replies));
+                        return acc;
+                    }, []);
+                    return flattenAll(vc.replies || []);
+                })(),
                 likes: 0,
             };
-            return <PostCommentsPage post={virtualPost} video={v} authors={authors} currentUser={user?.name} userRole={user?.role} discussionComments={(vc.replies || []).map((r: any) => ({ id: r._id || r.id, author: r.author, authorAvatarUrl: r.authorAvatarUrl || '', text: r.text, date: r.date || '', isoDate: r.isoDate || '', replyTo: r.parentId, quotedText: r.quotedText, likes: r.likes || 0, media: r.media || [], videoTimestamp: r.videoTimestamp, audioTimestamp: r.audioTimestamp }))} onBack={() => setSelectedVideoComment(null)} onAddComment={async (_postId, text, replyTo, media, quoteText, _audioTimestamp) => {
-                const newComment = await addComment({ type: 'video', videoId: String(v._id || v.id), author: user?.name || 'کاربر', text, parentId: replyTo ? String(replyTo) : vc._id || String(vc.id), authorAvatarUrl: user?.avatar, media: media as any, quotedText: quoteText } as any);
+            return <PostCommentsPage post={virtualPost} video={v} authors={authors} currentUser={user?.name} userRole={user?.role} discussionComments={virtualPost.comments} onBack={() => setSelectedVideoComment(null)} onAddComment={async (_postId, text, replyTo, media, quoteText, audioTimestamp, videoTimestamp) => {
+                const newComment = await addComment({ type: 'video', videoId: String(v._id || v.id), author: user?.name || 'کاربر', text, parentId: replyTo ? String(replyTo) : vc._id || String(vc.id), authorAvatarUrl: user?.avatar, media: media as any, quotedText: quoteText, videoTimestamp } as any);
                 if (newComment) {
                     setComments(prev => insertCommentIntoTree(prev, newComment));
+                    refreshComments();
                     setSelectedVideoComment(prev => {
-                      if (!prev) return null;
-                      const updatedReplies = [...(prev.comment.replies || []), newComment];
-                      return { ...prev, comment: { ...prev.comment, replies: updatedReplies } };
+                        if (!prev) return null;
+                        const addReply = (list: any[]): any[] => list.map((r: any) => {
+                            if (String(r._id || r.id) === String(newComment.parentId || '')) {
+                                return { ...r, replies: [...(r.replies || []), newComment] };
+                            }
+                            if (r.replies?.length) return { ...r, replies: addReply(r.replies) };
+                            return r;
+                        });
+                        const newReplies = newComment.parentId ? addReply(prev.comment.replies || []) : [...(prev.comment.replies || []), newComment];
+                        return { ...prev, comment: { ...prev.comment, replies: newReplies } };
                     });
                 }
             }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} publishedBooks={publishedBooks} onShowBook={(book) => {}} onPlayEpisode={playEpisode} miniPlayerProps={currentTrack ? { track: currentTrack, isPlaying: isPlaying, progress: audioProgress, duration: audioDuration, onPlayPause: togglePlay, onNext: playNext, onPrev: playPrev, onExpand: () => setIsPlayerExpanded(true), onClose: handleClosePlayer, onSelectPodcast: setSelectedPodcast, isVisible: !isPlayerExpanded, theme } : undefined} />;
         }
-        if (selectedPodcast) return <PlaylistPage podcast={selectedPodcast} author={authors.find(a => String(a.id) === String(selectedPodcast.speakerId))} comments={comments} onBack={() => { setSelectedPodcast(null); setSelectedAuthor(null); }} onPlayEpisode={playEpisode} onAuthorSelect={setSelectedAuthor} onAddComment={async (text, p, episodeIndex, parentId, audioTimestamp) => { const newComment = await addComment({ type: 'podcast', podcastId: p.id || (p as any)._id, author: user?.name || 'کاربر', text, episodeIndex, parentId, audioTimestamp, authorAvatarUrl: user?.avatar }); if (newComment) { setComments(prev => insertCommentIntoTree(prev, newComment)); } }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} currentUserName={user?.name} currentUserAvatar={user?.avatar} currentAudioTime={audioProgress * audioDuration} onSeekToTime={(s) => { if(audioRef.current) { audioRef.current.currentTime = s; audioRef.current.play().catch(()=>{}); } }} onPlayEpisodeAtTime={(p, epIdx, seekTime) => {
+        if (selectedPodcast) return <PlaylistPage podcast={selectedPodcast} author={authors.find(a => String(a.id) === String(selectedPodcast.speakerId))} comments={comments} onBack={() => { setSelectedPodcast(null); setSelectedAuthor(null); }} onPlayEpisode={playEpisode} onAuthorSelect={setSelectedAuthor} onAddComment={async (text, p, episodeIndex, parentId, audioTimestamp) => { const newComment = await addComment({ type: 'podcast', podcastId: p.id || (p as any)._id, author: user?.name || 'کاربر', text, episodeIndex, parentId, audioTimestamp, authorAvatarUrl: user?.avatar }); if (newComment) { setComments(prev => insertCommentIntoTree(prev, newComment)); refreshComments(); } }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} currentUserName={user?.name} currentUserAvatar={user?.avatar} currentAudioTime={audioProgress * audioDuration} onSeekToTime={(s) => { if(audioRef.current) { audioRef.current.currentTime = s; audioRef.current.play().catch(()=>{}); } }} onPlayEpisodeAtTime={(p, epIdx, seekTime) => {
   const episode = p.episodes[epIdx];
   if (!episode || !episode.audioUrl) return;
   setCurrentTrack({ podcast: p, episode, episodeIndex: epIdx });
@@ -745,6 +797,7 @@ const AppInner: React.FC = () => {
                 const newComment = await addComment({ type: 'video', videoId: v.id || (v as any)._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar });
                 if (newComment) {
                     setComments(prev => insertCommentIntoTree(prev, newComment));
+                    refreshComments();
                 }
             }} onAuthorSelect={setSelectedAuthor} onPlayVideo={(v) => { handlePlayVideo(v); window.scrollTo({ top: 0, behavior: 'smooth' }); }} userLibrary={user?.library?.videos || localVideoLibrary} onToggleLibrary={handleToggleLibrary} onShare={(t, s) => {}} onShowInstantView={(t, c) => setInstantView({ title: t, content: c })} userRole={user?.role} currentUserName={user?.name} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} onVideoTimeUpdate={handleVideoTimeUpdate} onVideoPlay={handleVideoPlay} onVideoPause={handleVideoPause} onVideoLike={handleVideoLike} />;
         }
@@ -775,11 +828,17 @@ const AppInner: React.FC = () => {
               }
               if (expandPlayer) setIsPlayerExpanded(true);
             }} onShowComments={(p: Post, podcast?: Podcast) => { setSelectedPostForComments(p); setSelectedPostPodcast(podcast || null); }} onShowVideoDiscussion={(c: Comment, v: Video) => setSelectedVideoComment({ comment: c, video: v })} onDeletePost={handleDeletePost} onShowBook={(b: PublishedBook) => { setSelectedPublishedBook(b); }} onShowInstantView={(title: string, content: string) => setInstantView({ title, content })} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} onAddComment={async (text: string, v: any, videoTimestamp?: number, parentId?: string, audioTimestamp?: number) => {
-                const newComment = await addComment({ type: 'video', videoId: v.id || v._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar, audioTimestamp });
-                if (newComment) {
-                    setComments(prev => insertCommentIntoTree(prev, newComment));
-                }
-            }} onNewPost={(p: Post) => setPosts([p, ...posts])} onUpdatePost={(p: Post) => setPosts(posts.map(post => post.id === p.id ? p : post))} user={user} onOpenSearch={() => setIsSearchOpen(true)} onOpenProfile={() => setIsProfileOpen(true)}             onToggleSidebar={() => {
+                const findComment = (list: any[], id: string): any => { for (const c of list) { if (String((c as any)._id || c.id) === id) return c; if (c.replies?.length) { const found = findComment(c.replies, id); if (found) return found; } } return null; };
+                const parentComment = parentId ? findComment(comments, String(parentId)) : null;
+                const isPodcast = parentComment?.type === 'podcast' || v?.episodes;
+                if (isPodcast) {
+                    const pid = parentComment?.podcastId || v?.id || v?._id;
+                    const nc = await addComment({ type: 'podcast', podcastId: String(pid), author: user?.name || 'کاربر', text, episodeIndex: parentComment?.episodeIndex ?? 0, parentId, authorAvatarUrl: user?.avatar, audioTimestamp } as any);
+                    if (nc) { setComments(prev => insertCommentIntoTree(prev, nc)); refreshComments(); }
+                } else {
+                    const nc = await addComment({ type: 'video', videoId: v.id || v._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar, audioTimestamp });
+                    if (nc) { setComments(prev => insertCommentIntoTree(prev, nc)); refreshComments(); }
+                }}} onNewPost={(p: Post) => setPosts([p, ...posts])} onUpdatePost={(p: Post) => setPosts(posts.map(post => post.id === p.id ? p : post))} user={user} onOpenSearch={() => setIsSearchOpen(true)} onOpenProfile={() => setIsProfileOpen(true)}             onToggleSidebar={() => {
               if (window.innerWidth >= 1024) {
                 setDesktopSidebarCollapsed(v => !v);
               } else {
@@ -802,6 +861,7 @@ const AppInner: React.FC = () => {
                 const newComment = await addComment({ type: 'video', videoId: v.id || (v as any)._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar });
                 if (newComment) {
                     setComments(prev => insertCommentIntoTree(prev, newComment));
+                    refreshComments();
                 }
             }} onEnterStandalone={() => {}} onShowInstantView={(t, c) => setInstantView({ title: t, content: c })} userLibrary={user?.library?.videos || localVideoLibrary} onToggleLibrary={handleToggleLibrary} onShare={(t: string, s: string) => {}} onOpenSearch={() => setIsSearchOpen(true)} onOpenSidebar={() => setDesktopSidebarCollapsed(v => !v)} onProfileClick={() => setIsProfileOpen(true)} user={user} theme={theme} onToggleTheme={toggleTheme} />;
             case 'nashr': return <NashrPage publishedBooks={publishedBooks} allPodcasts={podcasts} comments={comments} onAddComment={(text, book) => openWriteModalWithAttachment('book', book)} user={user} onUpdateUser={(u) => { setUser(u); localStorage.setItem('user_data', JSON.stringify(u)); }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} onToggleSidebar={() => setDesktopSidebarCollapsed(v => !v)} />;
@@ -824,14 +884,40 @@ const AppInner: React.FC = () => {
              <div className="app-container bg-background flex-1 flex min-h-0">
              
              {/* Desktop Sidebar */}
-              <Sidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setIsPlayerExpanded(false); }} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} theme={theme} onToggleTheme={toggleTheme} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setIsAdminOpen(true)} onOpenProfile={() => setIsProfileOpen(true)} user={user} isAuthenticated={isAuthenticated} collapsed={desktopSidebarCollapsed} onToggleCollapsed={setDesktopSidebarCollapsed} />
+              <Sidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setSelectedPostForComments(null); setSelectedPostPodcast(null); setSelectedVideoComment(null); setIsPlayerExpanded(false); }} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} theme={theme} onToggleTheme={toggleTheme} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setIsAdminOpen(true)} onOpenProfile={() => setIsProfileOpen(true)} user={user} isAuthenticated={isAuthenticated} collapsed={desktopSidebarCollapsed} onToggleCollapsed={setDesktopSidebarCollapsed} />
 
               {/* Main Content */}
                <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
 
               
                <div className={`flex-1 ${activeTab === 'mahfel' ? 'pb-0' : 'pb-16 lg:pb-0'}`}>
-                 <Suspense fallback={<LoadingPage />}>{renderActivePage()}</Suspense>
+                 {isPlayerExpanded ? (
+                   <FullScreenPlayer 
+                     track={currentTrack} isPlaying={isPlaying} progress={audioProgress} duration={audioDuration || 1} authors={authors} onPlayPause={togglePlay} 
+                     onSeek={(p) => { if(audioRef.current) audioRef.current.currentTime = p * audioDuration; }} 
+                     onMinimize={() => setIsPlayerExpanded(false)} onClose={handleClosePlayer} onNext={playNext} onPrev={playPrev} 
+                     comments={comments.filter(c => c.type === 'podcast' && c.podcastId === (currentTrack.podcast.id || (currentTrack.podcast as any)._id))}
+                     onAddComment={async (text, track, ts, parentId) => {
+                       const newComment = await addComment({ type: 'podcast', podcastId: track.podcast.id || (track.podcast as any)._id, episodeIndex: track.episodeIndex, author: user?.name || 'کاربر', text, timestamp: ts, parentId, authorAvatarUrl: user?.avatar });
+                       if (newComment) { setComments(prev => insertCommentIntoTree(prev, newComment)); refreshComments(); }
+                     }}
+                     playbackRate={playbackRate} onPlaybackRateChange={setPlaybackRate} onOpenFile={()=>{}} 
+                     onShowInstantView={(t,c)=>setInstantView({title:t,content:c})} onToggleLibrary={handleTogglePodcastLibrary}
+                     isInLibrary={(user?.library?.podcasts || []).includes(String(currentTrack.podcast.id || (currentTrack.podcast as any)._id))}
+                     onDeleteComment={handleDeleteComment} onUpdateComment={handleUpdateComment} onLikeComment={handleLikeComment} currentUserName={user?.name}
+                     volume={volume} onVolumeChange={handleVolumeChange}
+                     repeatMode={repeatMode} onRepeatModeChange={setRepeatMode}
+                     isShuffle={isShuffle} onShuffleToggle={() => setIsShuffle(v => !v)}
+                     sleepTimer={sleepTimer} onSleepTimer={setSleepTimer}
+                     onPlayEpisode={(podcast, idx) => { setIsPlayerExpanded(true); playEpisode(podcast, idx); }}
+activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setSelectedPostForComments(null); setSelectedPostPodcast(null); setSelectedVideoComment(null); setShowChatInput(false); }} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)}
+                     podcasts={podcasts}
+                     onToggleEpisode={(podcastId: string, episodeIndex: number) => toggleEpisodeLibrary(podcastId, episodeIndex)}
+                     isEpisodeInLibrary={(podcastId: string, episodeIndex: number) => (user?.library?.episodes || []).some(e => String(e.podcastId) === String(podcastId) && e.episodeIndex === episodeIndex)}
+                   />
+                 ) : (
+                   <Suspense fallback={<LoadingPage />}>{renderActivePage()}</Suspense>
+                 )}
              </div>
              
               {isWriting && (
@@ -943,32 +1029,7 @@ const AppInner: React.FC = () => {
 
              {currentTrack && (
                 <>
-                    {(!selectedPodcast || playlistTab !== 'comments') && !(activeTab === 'mahfel' && window.innerWidth >= 1024) && <MinimizedPlayer track={currentTrack} isPlaying={isPlaying} progress={audioProgress} onPlayPause={togglePlay} onNext={playNext} onPrev={playPrev} onExpand={() => setIsPlayerExpanded(true)} onClose={handleClosePlayer} onSelectPodcast={setSelectedPodcast} isVisible={!isPlayerExpanded} onToggleLibrary={() => togglePodcastLibrary(currentTrack.podcast)} isInLibrary={(user?.library?.podcasts || []).includes(String(currentTrack.podcast.id || (currentTrack.podcast as any)._id))} bottomOffset={selectedPodcast ? 24 : 70} theme={theme} />}
-                    {isPlayerExpanded && (
-                      <FullScreenPlayer 
-                        track={currentTrack} isPlaying={isPlaying} progress={audioProgress} duration={audioDuration || 1} authors={authors} onPlayPause={togglePlay} 
-                        onSeek={(p) => { if(audioRef.current) audioRef.current.currentTime = p * audioDuration; }} 
-                        onMinimize={() => setIsPlayerExpanded(false)} onClose={handleClosePlayer} onNext={playNext} onPrev={playPrev} 
-                        comments={comments.filter(c => c.type === 'podcast' && c.podcastId === (currentTrack.podcast.id || (currentTrack.podcast as any)._id))}
-                        onAddComment={async (text, track, ts, parentId) => {
-                          const newComment = await addComment({ type: 'podcast', podcastId: track.podcast.id || (track.podcast as any)._id, episodeIndex: track.episodeIndex, author: user?.name || 'کاربر', text, timestamp: ts, parentId, authorAvatarUrl: user?.avatar });
-                          if (newComment) { setComments(prev => insertCommentIntoTree(prev, newComment)); }
-                        }}
-                        playbackRate={playbackRate} onPlaybackRateChange={setPlaybackRate} onOpenFile={()=>{}} 
-                        onShowInstantView={(t,c)=>setInstantView({title:t,content:c})} onToggleLibrary={handleTogglePodcastLibrary}
-                        isInLibrary={(user?.library?.podcasts || []).includes(String(currentTrack.podcast.id || (currentTrack.podcast as any)._id))}
-                        onDeleteComment={handleDeleteComment} onUpdateComment={handleUpdateComment} onLikeComment={handleLikeComment} currentUserName={user?.name}
-                        volume={volume} onVolumeChange={handleVolumeChange}
-                        repeatMode={repeatMode} onRepeatModeChange={setRepeatMode}
-                        isShuffle={isShuffle} onShuffleToggle={() => setIsShuffle(v => !v)}
-                        sleepTimer={sleepTimer} onSleepTimer={setSleepTimer}
-                        onPlayEpisode={(podcast, idx) => { setIsPlayerExpanded(true); playEpisode(podcast, idx); }}
-                        activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); }} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)}
-                        podcasts={podcasts}
-                        onToggleEpisode={(podcastId: string, episodeIndex: number) => toggleEpisodeLibrary(podcastId, episodeIndex)}
-                        isEpisodeInLibrary={(podcastId: string, episodeIndex: number) => (user?.library?.episodes || []).some(e => String(e.podcastId) === String(podcastId) && e.episodeIndex === episodeIndex)}
-                      />
-                    )}
+                    {(!selectedPodcast || playlistTab !== 'comments') && !(activeTab === 'mahfel' && window.innerWidth >= 1024) && <MinimizedPlayer track={currentTrack} isPlaying={isPlaying} progress={audioProgress} onPlayPause={togglePlay} onNext={playNext} onPrev={playPrev} onExpand={() => setIsPlayerExpanded(true)} onClose={handleClosePlayer} onSelectPodcast={setSelectedPodcast} isVisible={!isPlayerExpanded} onToggleLibrary={() => togglePodcastLibrary(currentTrack.podcast)} isInLibrary={(user?.library?.podcasts || []).includes(String(currentTrack.podcast.id || (currentTrack.podcast as any)._id))} bottomOffset={selectedPodcast ? 24 : (activeTab === 'mahfel' ? 70 : 0)} theme={theme} />}
                 </>
              )}
 
@@ -987,6 +1048,7 @@ const AppInner: React.FC = () => {
                     const newComment = await addComment({ type: 'video', videoId: v.id || (v as any)._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar });
                     if (newComment) {
                       setComments(prev => insertCommentIntoTree(prev, newComment));
+                      refreshComments();
                     }
                   }}
                   onAuthorSelect={setSelectedAuthor}
@@ -1033,8 +1095,8 @@ onPlayVideo={(v) => { setIsVideoMini(false); handlePlayVideo(v); }}
                        }
                    }} onLongPressCentral={() => setIsWriting(true)} newMahfelMessages={0} userRole={user?.role} hidden={tabsHidden || !!selectedPodcast || isPlayerExpanded} onToggle={setTabsHidden} chatInput={showChatInput && activeTab === 'mahfel'} chatInputText={chatInputText} onChatInputChange={setChatInputText} onChatSend={handleChatSend} onChatClose={() => setShowChatInput(false)} chatSending={chatSending} theme={theme} />
               )}
-              {appState === 'ready' && activeTab === 'mahfel' && (
-                 <MahfelSidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); }} open={mahfelSidebarOpen} onOpenChange={setMahfelSidebarOpen} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} />
+              {appState === 'ready' && activeTab === 'mahfel' && !isPlayerExpanded && (
+                 <div className="lg:hidden"><MahfelSidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); }} open={mahfelSidebarOpen} onOpenChange={setMahfelSidebarOpen} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} /></div>
               )}
              
               {toast && <Toast key={toast.id} message={toast.message} image={toast.image} name={toast.name} onClose={() => setToast(null)} />}
