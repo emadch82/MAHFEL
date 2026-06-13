@@ -48,8 +48,8 @@ const Sidebar: React.FC<SidebarProps> = ({
 
       {/* Sidebar - desktop only */}
       <aside className={`
-        hidden lg:block lg:fixed lg:top-0 lg:h-screen lg:right-0 lg:z-[100]
-        transition-all duration-300 ease-in-out
+        hidden lg:block lg:h-screen
+        transition-all duration-300 ease-in-out flex-shrink-0
         ${collapsed ? 'w-0 lg:w-0 overflow-hidden' : 'w-52'}
         ${isDark ? 'bg-gray-900 border-l border-gray-800' : 'bg-white border-l border-gray-100'}
         shadow-lg

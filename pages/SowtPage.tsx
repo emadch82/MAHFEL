@@ -87,7 +87,7 @@ const SowtPage: React.FC<SowtPageProps> = ({
     return allAudio
       .filter(p => p.year === currentYear)
       .flatMap(p => p.episodes.map((ep, i) => ({ podcast: p, episode: ep, episodeIndex: i })))
-      .slice(-5)
+      .slice(-12)
       .reverse();
   }, [allAudio, years]);
 
@@ -103,7 +103,7 @@ const SowtPage: React.FC<SowtPageProps> = ({
         <div className="px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2 shrink-0">
-              <button className="lg:flex hidden items-center justify-center w-9 h-9 rounded-xl transition-all active:scale-90" style={{ color: 'var(--text-3)' }}>
+              <button onClick={onToggleSidebar} className="lg:flex hidden items-center justify-center w-9 h-9 rounded-xl transition-all active:scale-90" style={{ color: 'var(--text-3)' }}>
                 <i className="fas fa-bars text-sm"></i>
               </button>
               <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-md flex-shrink-0" style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
@@ -138,7 +138,7 @@ const SowtPage: React.FC<SowtPageProps> = ({
         {/* New episodes */}
         {newEpisodes.length > 0 && (
           <section className="mb-6">
-            <h2 className="text-xs font-black mb-3 text-gray-600 pr-2 border-r-4 border-primary">
+            <h2 className="text-xs font-black mb-3 mt-4 text-gray-600 pr-2 border-r-4 border-primary">
               تازه‌های صوتی
             </h2>
             <div className="flex gap-3 overflow-x-auto pb-2 no-scrollbar">

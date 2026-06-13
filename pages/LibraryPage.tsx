@@ -21,9 +21,10 @@ interface LibraryPageProps {
   user?: User | null;
   onOpenProfile?: () => void;
   onOpenSearch?: () => void;
+  onToggleSidebar?: () => void;
 }
 
-const LibraryPage: React.FC<LibraryPageProps> = ({ savedVideoIds, allVideos, onPlayVideo, onRemoveVideo, savedPodcastIds = [], savedEpisodes = [], allPodcasts = [], authors = [], onPlayPodcast, onSelectPodcast, onRemovePodcast, onRemoveEpisode, theme, onToggleTheme, user, onOpenProfile, onOpenSearch }) => {
+const LibraryPage: React.FC<LibraryPageProps> = ({ savedVideoIds, allVideos, onPlayVideo, onRemoveVideo, savedPodcastIds = [], savedEpisodes = [], allPodcasts = [], authors = [], onPlayPodcast, onSelectPodcast, onRemovePodcast, onRemoveEpisode, theme, onToggleTheme, user, onOpenProfile, onOpenSearch, onToggleSidebar }) => {
   const savedVideos = useMemo(() =>
     allVideos.filter(v => savedVideoIds.some(id => String(id) === String(v.id) || String(id) === String((v as any)._id))),
     [allVideos, savedVideoIds]
@@ -63,8 +64,11 @@ const LibraryPage: React.FC<LibraryPageProps> = ({ savedVideoIds, allVideos, onP
   return (
     <div className="min-h-screen pb-24" style={{ background: 'var(--surface)' }}>
       {/* Header */}
-      <div className="flex items-center gap-3 px-4 sm:px-6 pt-5 pb-3" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
+      <div className="sticky top-0 z-10 flex items-center gap-3 px-4 sm:px-6 pt-5 pb-3" style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)' }}>
         <div className="flex items-center gap-2 flex-shrink-0">
+          <button onClick={onToggleSidebar} className="lg:flex hidden items-center justify-center w-9 h-9 rounded-xl transition-all active:scale-90" style={{ color: 'var(--text-3)' }}>
+            <i className="fas fa-bars text-sm"></i>
+          </button>
           <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)' }}>
             <i className="fas fa-bookmark text-sm" style={{ color: 'var(--primary)' }} />
           </div>

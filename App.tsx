@@ -86,6 +86,7 @@ const AppInner: React.FC = () => {
     const [selectedAuthor, setSelectedAuthor] = useState<Author | null>(null);
     const [selectedBook, setSelectedBook] = useState<Book | null>(null);
     const [selectedPostForComments, setSelectedPostForComments] = useState<Post | null>(null);
+    const [selectedPostPodcast, setSelectedPostPodcast] = useState<Podcast | null>(null);
     const [selectedVideoComment, setSelectedVideoComment] = useState<{ comment: Comment; video: Video } | null>(null);
     const [activeVideo, setActiveVideo] = useState<Video | null>(null);
     const [isVideoMini, setIsVideoMini] = useState(false);
@@ -296,6 +297,8 @@ const AppInner: React.FC = () => {
     const playEpisode = useCallback((podcast: Podcast, index: number) => {
         const episode = podcast.episodes[index];
         if (!episode || !episode.audioUrl) return;
+        setActiveVideo(null);
+        setIsVideoMini(false);
         setCurrentTrack({ podcast, episode, episodeIndex: index });
         setIsPlayerExpanded(true);
         if (!audioRef.current) {
@@ -405,6 +408,16 @@ const AppInner: React.FC = () => {
         setAudioDuration(0);
         setCurrentTrack(null);
         setIsPlayerExpanded(false);
+    }, []);
+
+    const handlePlayVideo = useCallback((v: Video | null) => {
+        if (audioRef.current) { audioRef.current.pause(); }
+        setIsPlaying(false);
+        setAudioProgress(0);
+        setAudioDuration(0);
+        setCurrentTrack(null);
+        setIsPlayerExpanded(false);
+        setActiveVideo(v);
     }, []);
 
     const openWriteModalWithAttachment = (type: 'audio' | 'video' | 'book', data: any, timestamp?: number) => {
@@ -604,7 +617,7 @@ const AppInner: React.FC = () => {
     const renderActivePage = () => {
         if (selectedPostForComments) {
             const freshPost = posts.find(p => String(p.id) === String(selectedPostForComments.id)) || selectedPostForComments;
-            return <PostCommentsPage post={freshPost} video={videos.find(v => String(v.id) === String(freshPost.videoId))} podcast={podcasts.find(p => String(p.id) === String(freshPost.podcastId))} authors={authors} currentUser={user?.name} userRole={user?.role} onBack={() => setSelectedPostForComments(null)} onAddComment={async (postId, text, replyTo, media, quotedText, audioTimestamp, videoTimestamp) => {
+            return <PostCommentsPage post={freshPost} video={videos.find(v => String(v.id) === String(freshPost.videoId))} podcast={selectedPostPodcast || podcasts.find(p => String(p.id) === String(freshPost.podcastId))} authors={authors} currentUser={user?.name} userRole={user?.role} onBack={() => { setSelectedPostForComments(null); setSelectedPostPodcast(null); }} onAddComment={async (postId, text, replyTo, media, quotedText, audioTimestamp, videoTimestamp) => {
                 const updatedPost = await addPostComment(String(postId), text, replyTo as any, media, quotedText, audioTimestamp, videoTimestamp);
                 if (updatedPost) {
                     setPosts(prev => {
@@ -616,7 +629,27 @@ const AppInner: React.FC = () => {
             }} onUpdatePost={(p) => {
                 setPosts(prev => prev.map(post => String(post.id) === String(p.id) ? p : post));
                 setSelectedPostForComments(p);
-            }} />;
+            }} publishedBooks={publishedBooks} onShowBook={(book) => {}} onPlayEpisode={(p: Podcast, idx: number) => {
+              if (currentTrack && String(currentTrack.podcast.id) === String(p.id) && currentTrack.episodeIndex === idx && audioRef.current) {
+                audioRef.current.play().catch(()=>{});
+                setIsPlaying(true);
+              } else {
+                const episode = p.episodes[idx];
+                if (!episode || !episode.audioUrl) return;
+                setCurrentTrack({ podcast: p, episode, episodeIndex: idx });
+                if (!audioRef.current) {
+                  audioRef.current = new Audio();
+                  audioRef.current.ontimeupdate = () => { if(!audioRef.current) return; setAudioProgress(audioRef.current.currentTime / (audioRef.current.duration || 1)); };
+                  audioRef.current.onloadedmetadata = () => { if(!audioRef.current) return; setAudioDuration(audioRef.current.duration); };
+                  audioRef.current.onended = () => setIsPlaying(false);
+                }
+                const proxyUrl = `/api/proxy/audio?url=${encodeURIComponent(episode.audioUrl)}`;
+                audioRef.current.src = proxyUrl;
+                audioRef.current.load();
+                audioRef.current.play().then(() => { setIsPlaying(true); }).catch(()=>{});
+              }
+              setIsPlayerExpanded(true);
+            }} onSeekAudio={(seconds: number) => { if (audioRef.current) { audioRef.current.currentTime = seconds; audioRef.current.play().catch(()=>{}); setIsPlaying(true); } }} miniPlayerProps={currentTrack ? { track: currentTrack, isPlaying: isPlaying, progress: audioProgress, duration: audioDuration, onPlayPause: togglePlay, onNext: playNext, onPrev: playPrev, onExpand: () => setIsPlayerExpanded(true), onClose: handleClosePlayer, onSelectPodcast: setSelectedPodcast, isVisible: !isPlayerExpanded, theme } : undefined} />;
         }
         if (selectedVideoComment) {
             const vc = selectedVideoComment.comment;
@@ -643,7 +676,7 @@ const AppInner: React.FC = () => {
                       return { ...prev, comment: { ...prev.comment, replies: updatedReplies } };
                     });
                 }
-            }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} />;
+            }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} publishedBooks={publishedBooks} onShowBook={(book) => {}} onPlayEpisode={playEpisode} miniPlayerProps={currentTrack ? { track: currentTrack, isPlaying: isPlaying, progress: audioProgress, duration: audioDuration, onPlayPause: togglePlay, onNext: playNext, onPrev: playPrev, onExpand: () => setIsPlayerExpanded(true), onClose: handleClosePlayer, onSelectPodcast: setSelectedPodcast, isVisible: !isPlayerExpanded, theme } : undefined} />;
         }
         if (selectedPodcast) return <PlaylistPage podcast={selectedPodcast} author={authors.find(a => String(a.id) === String(selectedPodcast.speakerId))} comments={comments} onBack={() => { setSelectedPodcast(null); setSelectedAuthor(null); }} onPlayEpisode={playEpisode} onAuthorSelect={setSelectedAuthor} onAddComment={async (text, p, episodeIndex, parentId, audioTimestamp) => { const newComment = await addComment({ type: 'podcast', podcastId: p.id || (p as any)._id, author: user?.name || 'کاربر', text, episodeIndex, parentId, audioTimestamp, authorAvatarUrl: user?.avatar }); if (newComment) { setComments(prev => insertCommentIntoTree(prev, newComment)); } }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} currentUserName={user?.name} currentUserAvatar={user?.avatar} currentAudioTime={audioProgress * audioDuration} onSeekToTime={(s) => { if(audioRef.current) { audioRef.current.currentTime = s; audioRef.current.play().catch(()=>{}); } }} onPlayEpisodeAtTime={(p, epIdx, seekTime) => {
   const episode = p.episodes[epIdx];
@@ -663,7 +696,7 @@ const AppInner: React.FC = () => {
     setIsPlaying(true);
     audioRef.current!.currentTime = seekTime;
   }).catch(()=>{});
-}} hasPlayer={currentTrack !== null} isPlaying={isPlaying} onTogglePlay={togglePlay} onOpenPlayer={() => setIsPlayerExpanded(true)} onPlaylistTabChange={setPlaylistTab} activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); if (activeVideo) { setActiveVideo(null); setIsVideoMini(false); } }} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} onToggleLibrary={(podcast: Podcast) => togglePodcastLibrary(podcast)} isInLibrary={selectedPodcast ? (user?.library?.podcasts || []).includes(String(selectedPodcast.id || (selectedPodcast as any)._id)) : false} onPrev={playPrev} onNext={playNext} audioProgress={audioProgress} audioDuration={audioDuration} isSidebarOpen={isSidebarOpen} onCloseSidebar={() => setIsSidebarOpen(false)} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setIsAdminOpen(true)} user={user} isAuthenticated={isAuthenticated} isSidebarCollapsed={desktopSidebarCollapsed} onToggleSidebarCollapsed={setDesktopSidebarCollapsed} />;
+}} hasPlayer={currentTrack !== null} isPlaying={isPlaying} onTogglePlay={togglePlay} onOpenPlayer={() => setIsPlayerExpanded(true)} onPlaylistTabChange={setPlaylistTab} activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); }} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} onToggleLibrary={(podcast: Podcast) => togglePodcastLibrary(podcast)} isInLibrary={selectedPodcast ? (user?.library?.podcasts || []).includes(String(selectedPodcast.id || (selectedPodcast as any)._id)) : false} onPrev={playPrev} onNext={playNext} audioProgress={audioProgress} audioDuration={audioDuration} isSidebarOpen={isSidebarOpen} onCloseSidebar={() => setIsSidebarOpen(false)} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setIsAdminOpen(true)} user={user} isAuthenticated={isAuthenticated} isSidebarCollapsed={desktopSidebarCollapsed} onToggleSidebarCollapsed={setDesktopSidebarCollapsed} />;
         if (selectedAuthor) return <AuthorPage author={selectedAuthor} allBooks={books} allPodcasts={podcasts} allVideos={videos} onBack={() => setSelectedAuthor(null)} onBookSelect={setSelectedBook} onPlayEpisode={playEpisode} />;
         if (selectedBook) return <BookPage book={selectedBook} allPodcasts={podcasts} authors={authors} onBack={() => setSelectedBook(null)} onPlayEpisode={playEpisode} onAuthorSelect={setSelectedAuthor} />;
         if (selectedPublishedBook) {
@@ -674,16 +707,16 @@ const AppInner: React.FC = () => {
         const renderVideoInitialTime = currentVideoId === activeVideoId ? videoCurrentTimeRef.current : 0;
 
         if (activeVideo && !isVideoMini) {
-            return <VideoPlayerPage video={activeVideo} allVideos={videos} comments={comments} authors={authors} isMini={false} initialTime={renderVideoInitialTime} onBack={() => { setIsVideoMini(true); }} onVideoSelect={setActiveVideo} onAddComment={async (text, v, videoTimestamp, parentId, _audioTimestamp) => {
+            return <VideoPlayerPage video={activeVideo} allVideos={videos} comments={comments} authors={authors} isMini={false} initialTime={renderVideoInitialTime} onBack={() => { setIsVideoMini(true); }} onVideoSelect={handlePlayVideo} onAddComment={async (text, v, videoTimestamp, parentId, _audioTimestamp) => {
                 const newComment = await addComment({ type: 'video', videoId: v.id || (v as any)._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar });
                 if (newComment) {
                     setComments(prev => insertCommentIntoTree(prev, newComment));
                 }
-            }} onAuthorSelect={setSelectedAuthor} onPlayVideo={(v) => { setActiveVideo(v); window.scrollTo({ top: 0, behavior: 'smooth' }); }} userLibrary={user?.library?.videos || localVideoLibrary} onToggleLibrary={handleToggleLibrary} onShare={(t, s) => {}} onShowInstantView={(t, c) => setInstantView({ title: t, content: c })} userRole={user?.role} currentUserName={user?.name} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} onVideoTimeUpdate={handleVideoTimeUpdate} onVideoPlay={handleVideoPlay} onVideoPause={handleVideoPause} onVideoLike={handleVideoLike} />;
+            }} onAuthorSelect={setSelectedAuthor} onPlayVideo={(v) => { handlePlayVideo(v); window.scrollTo({ top: 0, behavior: 'smooth' }); }} userLibrary={user?.library?.videos || localVideoLibrary} onToggleLibrary={handleToggleLibrary} onShare={(t, s) => {}} onShowInstantView={(t, c) => setInstantView({ title: t, content: c })} userRole={user?.role} currentUserName={user?.name} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} onVideoTimeUpdate={handleVideoTimeUpdate} onVideoPlay={handleVideoPlay} onVideoPause={handleVideoPause} onVideoLike={handleVideoLike} />;
         }
 
         switch (activeTab) {
-            case 'mahfel': return <MahfelPage tabsHidden={tabsHidden} showInput={showChatInput} onToggleInput={setShowChatInput} posts={posts} videos={videos} podcasts={podcasts} authors={authors} publishedBooks={publishedBooks} comments={comments} currentUser={user?.name} userRole={user?.role} onPlayVideoFromFeed={(v: Video) => { setIsVideoMini(false); setActiveVideo(v);             }} onPlayPodcastFromFeed={playEpisode} onPlayPodcastComment={(p: Podcast, epIdx: number, seekTime?: number, expandPlayer: boolean = true) => {
+            case 'mahfel': return <MahfelPage tabsHidden={tabsHidden} showInput={showChatInput} onToggleInput={setShowChatInput} posts={posts} videos={videos} podcasts={podcasts} authors={authors} publishedBooks={publishedBooks} comments={comments} currentUser={user?.name} userRole={user?.role} onPlayVideoFromFeed={(v: Video) => { setIsVideoMini(false); handlePlayVideo(v);             }} onPlayPodcastFromFeed={playEpisode} onPlayPodcastComment={(p: Podcast, epIdx: number, seekTime?: number, expandPlayer: boolean = true) => {
               if (currentTrack && String(currentTrack.podcast.id) === String(p.id) && currentTrack.episodeIndex === epIdx && audioRef.current) {
                 if (seekTime != null) audioRef.current.currentTime = seekTime;
                 audioRef.current.play().catch(()=>{});
@@ -707,7 +740,7 @@ const AppInner: React.FC = () => {
                 }).catch(()=>{});
               }
               if (expandPlayer) setIsPlayerExpanded(true);
-            }} onShowComments={(p: Post) => setSelectedPostForComments(p)} onShowVideoDiscussion={(c: Comment, v: Video) => setSelectedVideoComment({ comment: c, video: v })} onDeletePost={handleDeletePost} onShowBook={(b: PublishedBook) => { setSelectedPublishedBook(b); }} onShowInstantView={(title: string, content: string) => setInstantView({ title, content })} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} onAddComment={async (text: string, v: any, videoTimestamp?: number, parentId?: string, audioTimestamp?: number) => {
+            }} onShowComments={(p: Post, podcast?: Podcast) => { setSelectedPostForComments(p); setSelectedPostPodcast(podcast || null); }} onShowVideoDiscussion={(c: Comment, v: Video) => setSelectedVideoComment({ comment: c, video: v })} onDeletePost={handleDeletePost} onShowBook={(b: PublishedBook) => { setSelectedPublishedBook(b); }} onShowInstantView={(title: string, content: string) => setInstantView({ title, content })} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} onAddComment={async (text: string, v: any, videoTimestamp?: number, parentId?: string, audioTimestamp?: number) => {
                 const newComment = await addComment({ type: 'video', videoId: v.id || v._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar, audioTimestamp });
                 if (newComment) {
                     setComments(prev => insertCommentIntoTree(prev, newComment));
@@ -731,14 +764,14 @@ const AppInner: React.FC = () => {
             />;
             case 'sowt': return <SowtPage podcasts={podcasts} authors={authors} liveStream={{ isLive: false, title: '', url: '' }} onPodcastSelect={setSelectedPodcast} onPlay={playEpisode} userInterests={user?.interests || []} isHeaderVisible={true} onAuthorSelect={setSelectedAuthor} userLibrary={user?.library?.podcasts || []} onToggleLibrary={(id: number) => {}} onShare={(t: string, s: string) => {}} onToggleSidebar={() => setDesktopSidebarCollapsed(v => !v)} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} user={user} />;
             case 'matn': return <MatnPage authors={authors} books={books} onBookSelect={setSelectedBook} onAuthorSelect={setSelectedAuthor} />;
-            case 'videos': return <VideoListPage videos={videos} initialVideoToPlay={null} onVideoPlayed={() => {}} isHeaderVisible={true} onVideoSelect={(v) => { setIsVideoMini(false); setActiveVideo(v); }} activeVideo={null} isPlayerInline={false} allVideos={videos} comments={comments} onAddComment={async (text: string, v: any, videoTimestamp?: number, parentId?: string, _audioTimestamp?: number) => {
+            case 'videos': return <VideoListPage videos={videos} initialVideoToPlay={null} onVideoPlayed={() => {}} isHeaderVisible={true} onVideoSelect={(v) => { setIsVideoMini(false); handlePlayVideo(v); }} activeVideo={null} isPlayerInline={false} allVideos={videos} comments={comments} onAddComment={async (text: string, v: any, videoTimestamp?: number, parentId?: string, _audioTimestamp?: number) => {
                 const newComment = await addComment({ type: 'video', videoId: v.id || (v as any)._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar });
                 if (newComment) {
                     setComments(prev => insertCommentIntoTree(prev, newComment));
                 }
-            }} onEnterStandalone={() => {}} onShowInstantView={(t, c) => setInstantView({ title: t, content: c })} userLibrary={user?.library?.videos || localVideoLibrary} onToggleLibrary={handleToggleLibrary} onShare={(t: string, s: string) => {}} onOpenSearch={() => setIsSearchOpen(true)} onOpenSidebar={() => setIsSidebarOpen(true)} onProfileClick={() => setIsProfileOpen(true)} user={user} />;
-            case 'nashr': return <NashrPage publishedBooks={publishedBooks} allPodcasts={podcasts} comments={comments} onAddComment={(text, book) => openWriteModalWithAttachment('book', book)} user={user} onUpdateUser={(u) => { setUser(u); localStorage.setItem('user_data', JSON.stringify(u)); }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} />;
-            case 'library': return <LibraryPage savedVideoIds={user?.library?.videos || localVideoLibrary} allVideos={videos} onPlayVideo={(v) => { setIsVideoMini(false); setActiveVideo(v); }} onRemoveVideo={(id) => handleToggleLibrary(id)} savedPodcastIds={user?.library?.podcasts || []} savedEpisodes={user?.library?.episodes || []} allPodcasts={podcasts} authors={authors} onSelectPodcast={setSelectedPodcast} onRemovePodcast={(p) => togglePodcastLibrary(p)} onRemoveEpisode={(podcastId, episodeIndex) => toggleEpisodeLibrary(podcastId, episodeIndex)} onPlayPodcast={(podcast, idx) => playEpisode(podcast, idx)} theme={theme} onToggleTheme={toggleTheme} user={user} onOpenProfile={() => setIsProfileOpen(true)} onOpenSearch={() => setIsSearchOpen(true)} />;
+            }} onEnterStandalone={() => {}} onShowInstantView={(t, c) => setInstantView({ title: t, content: c })} userLibrary={user?.library?.videos || localVideoLibrary} onToggleLibrary={handleToggleLibrary} onShare={(t: string, s: string) => {}} onOpenSearch={() => setIsSearchOpen(true)} onOpenSidebar={() => setDesktopSidebarCollapsed(v => !v)} onProfileClick={() => setIsProfileOpen(true)} user={user} theme={theme} onToggleTheme={toggleTheme} />;
+            case 'nashr': return <NashrPage publishedBooks={publishedBooks} allPodcasts={podcasts} comments={comments} onAddComment={(text, book) => openWriteModalWithAttachment('book', book)} user={user} onUpdateUser={(u) => { setUser(u); localStorage.setItem('user_data', JSON.stringify(u)); }} onDeleteComment={handleDeleteComment} onLikeComment={handleLikeComment} onUpdateComment={handleUpdateComment} onToggleSidebar={() => setDesktopSidebarCollapsed(v => !v)} />;
+            case 'library': return <LibraryPage savedVideoIds={user?.library?.videos || localVideoLibrary} allVideos={videos} onPlayVideo={(v) => { setIsVideoMini(false); handlePlayVideo(v); }} onRemoveVideo={(id) => handleToggleLibrary(id)} savedPodcastIds={user?.library?.podcasts || []} savedEpisodes={user?.library?.episodes || []} allPodcasts={podcasts} authors={authors} onSelectPodcast={setSelectedPodcast} onRemovePodcast={(p) => togglePodcastLibrary(p)} onRemoveEpisode={(podcastId, episodeIndex) => toggleEpisodeLibrary(podcastId, episodeIndex)} onPlayPodcast={(podcast, idx) => playEpisode(podcast, idx)} theme={theme} onToggleTheme={toggleTheme} user={user} onOpenProfile={() => setIsProfileOpen(true)} onOpenSearch={() => setIsSearchOpen(true)} onToggleSidebar={() => setDesktopSidebarCollapsed(v => !v)} />;
             default: return null;
         }
     };
@@ -752,18 +785,18 @@ const AppInner: React.FC = () => {
     const miniPlayerInitialTime = miniPlayerVideoId === activeVideoId ? videoCurrentTimeRef.current : 0;
 
     return (
-        <div className={`bg-background min-h-screen relative font-sans text-text-primary ${theme === 'dark' ? 'dark' : ''}`} dir="rtl">
+        <div className={`bg-background flex flex-col relative font-sans text-text-primary ${theme === 'dark' ? 'dark' : ''}`} dir="rtl" style={{ height: '100vh', overflow: 'hidden' }}>
              <IranAccessWarning />
-             <div className="app-container bg-background flex-1 flex overflow-hidden min-h-0">
+             <div className="app-container bg-background flex-1 flex min-h-0">
              
              {/* Desktop Sidebar */}
-              <Sidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setIsPlayerExpanded(false); if (activeVideo) { setActiveVideo(null); setIsVideoMini(false); } }} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} theme={theme} onToggleTheme={toggleTheme} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setIsAdminOpen(true)} onOpenProfile={() => setIsProfileOpen(true)} user={user} isAuthenticated={isAuthenticated} collapsed={desktopSidebarCollapsed} onToggleCollapsed={setDesktopSidebarCollapsed} />
+              <Sidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setIsPlayerExpanded(false); }} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} theme={theme} onToggleTheme={toggleTheme} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setIsAdminOpen(true)} onOpenProfile={() => setIsProfileOpen(true)} user={user} isAuthenticated={isAuthenticated} collapsed={desktopSidebarCollapsed} onToggleCollapsed={setDesktopSidebarCollapsed} />
 
               {/* Main Content */}
                <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
 
               
-               <div className={`flex-1 ${activeTab === 'mahfel' ? 'pb-0' : 'pb-16 lg:pb-0'} lg:pr-[14rem]`}>
+               <div className={`flex-1 ${activeTab === 'mahfel' ? 'pb-0' : 'pb-16 lg:pb-0'}`}>
                  <Suspense fallback={<LoadingPage />}>{renderActivePage()}</Suspense>
              </div>
              
@@ -896,7 +929,7 @@ const AppInner: React.FC = () => {
                         isShuffle={isShuffle} onShuffleToggle={() => setIsShuffle(v => !v)}
                         sleepTimer={sleepTimer} onSleepTimer={setSleepTimer}
                         onPlayEpisode={(podcast, idx) => { setIsPlayerExpanded(true); playEpisode(podcast, idx); }}
-                        activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); if (activeVideo) { setActiveVideo(null); setIsVideoMini(false); } }} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)}
+                        activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); }} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)}
                         podcasts={podcasts}
                         onToggleEpisode={(podcastId: string, episodeIndex: number) => toggleEpisodeLibrary(podcastId, episodeIndex)}
                         isEpisodeInLibrary={(podcastId: string, episodeIndex: number) => (user?.library?.episodes || []).some(e => String(e.podcastId) === String(podcastId) && e.episodeIndex === episodeIndex)}
@@ -915,7 +948,7 @@ const AppInner: React.FC = () => {
                   initialTime={miniPlayerInitialTime}
                   onBack={() => setIsVideoMini(false)}
                   onCloseMini={() => { setActiveVideo(null); setIsVideoMini(false); }}
-                  onVideoSelect={(v) => { setIsVideoMini(false); setActiveVideo(v); }}
+                  onVideoSelect={(v) => { setIsVideoMini(false); handlePlayVideo(v); }}
                   onAddComment={async (text, v, videoTimestamp, parentId, _audioTimestamp) => {
                     const newComment = await addComment({ type: 'video', videoId: v.id || (v as any)._id, author: user?.name || 'کاربر', text, videoTimestamp, parentId, authorAvatarUrl: user?.avatar });
                     if (newComment) {
@@ -923,7 +956,7 @@ const AppInner: React.FC = () => {
                     }
                   }}
                   onAuthorSelect={setSelectedAuthor}
-                  onPlayVideo={(v) => { setIsVideoMini(false); setActiveVideo(v); }}
+onPlayVideo={(v) => { setIsVideoMini(false); handlePlayVideo(v); }}
                   userLibrary={user?.library?.videos || localVideoLibrary}
                   onToggleLibrary={handleToggleLibrary}
                   onShare={() => {}}
@@ -940,7 +973,7 @@ const AppInner: React.FC = () => {
               )}
              {instantView && <InstantView title={instantView.title} content={instantView.content} onClose={() => setInstantView(null)} />}
              {isAdminOpen && <AdminPage onClose={() => setIsAdminOpen(false)} currentPodcasts={podcasts} currentVideos={videos} currentPublishedBooks={publishedBooks} currentAuthors={authors} currentBooks={books} currentComments={comments} currentPosts={posts} onSave={(data: any) => { setPodcasts(data.podcasts); setVideos(data.videos); setPublishedBooks(data.publishedBooks); setAuthors(data.authors); setBooks(data.books); setPosts(data.posts); setComments(data.comments); }} />}
-             {isProfileOpen && user && <UserProfilePage onClose={() => setIsProfileOpen(false)} onLogout={handleLogout} user={user} allPodcasts={podcasts} allVideos={videos} onPlayPodcast={playEpisode} onPlayVideo={(v) => { setActiveVideo(v); setIsProfileOpen(false); }} onEditPost={(post: Post) => { setEditingPost(post); setEditPostText(post.text || ''); setIsProfileOpen(false); }} onDeletePost={handleDeletePost} onUpdateUser={(u) => { setUser(u); localStorage.setItem('user_data', JSON.stringify(u)); }} />}
+             {isProfileOpen && user && <UserProfilePage onClose={() => setIsProfileOpen(false)} onLogout={handleLogout} user={user} allPodcasts={podcasts} allVideos={videos} onPlayPodcast={playEpisode} onPlayVideo={(v) => { handlePlayVideo(v); setIsProfileOpen(false); }} onEditPost={(post: Post) => { setEditingPost(post); setEditPostText(post.text || ''); setIsProfileOpen(false); }} onDeletePost={handleDeletePost} onUpdateUser={(u) => { setUser(u); localStorage.setItem('user_data', JSON.stringify(u)); }} />}
              
              <SearchModal 
                 isOpen={isSearchOpen} 
@@ -951,7 +984,7 @@ const AppInner: React.FC = () => {
                 authors={authors}
                 publishedBooks={publishedBooks}
                 onPodcastSelect={setSelectedPodcast}
-                onVideoSelect={(v) => { setActiveVideo(v); setIsSearchOpen(false); }}
+                onVideoSelect={(v) => { handlePlayVideo(v); setIsSearchOpen(false); }}
                 onBookSelect={setSelectedBook}
                 onAuthorSelect={setSelectedAuthor}
              />
@@ -964,11 +997,10 @@ const AppInner: React.FC = () => {
                            setActiveTab(tab);
                            setShowChatInput(false);
                        }
-                       if (activeVideo) { setActiveVideo(null); setIsVideoMini(false); }
                    }} onLongPressCentral={() => setIsWriting(true)} newMahfelMessages={0} userRole={user?.role} hidden={tabsHidden || !!selectedPodcast || isPlayerExpanded} onToggle={setTabsHidden} chatInput={showChatInput && activeTab === 'mahfel'} chatInputText={chatInputText} onChatInputChange={setChatInputText} onChatSend={handleChatSend} onChatClose={() => setShowChatInput(false)} chatSending={chatSending} theme={theme} />
               )}
               {appState === 'ready' && activeTab === 'mahfel' && (
-                 <MahfelSidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); if (activeVideo) { setActiveVideo(null); setIsVideoMini(false); } }} open={mahfelSidebarOpen} onOpenChange={setMahfelSidebarOpen} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} />
+                 <MahfelSidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); }} open={mahfelSidebarOpen} onOpenChange={setMahfelSidebarOpen} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} />
               )}
              
               {toast && <Toast key={toast.id} message={toast.message} image={toast.image} name={toast.name} onClose={() => setToast(null)} />}

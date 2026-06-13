@@ -5,7 +5,7 @@ export const SohaLogo: React.FC<{ size?: number; className?: string }> = ({ size
     className={`flex items-center justify-center rounded-full bg-white ${className}`}
     style={{ width: size, height: size }}
   >
-    <img src="/logo.png" width={size * 0.7} height={size * 0.7} className="object-contain" alt="سها" />
+    <img src="/logo.png" width={size * 0.85} height={size * 0.85} className="object-contain" alt="سها" />
   </div>
 );
 
@@ -20,7 +20,7 @@ export const SohaIcon: React.FC<{ size?: number; className?: string }> = ({ size
     className={`flex items-center justify-center rounded-full bg-white ${className}`}
     style={{ width: size, height: size }}
   >
-    <img src="/logo.png" width={size * 0.7} height={size * 0.7} className="object-contain" alt="سها" />
+    <img src="/logo.png" width={size * 0.85} height={size * 0.85} className="object-contain" alt="سها" />
   </div>
 );
 

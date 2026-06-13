@@ -160,7 +160,7 @@ const MinimizedPlayer: React.FC<MinimizedPlayerProps> = ({
       style={{
         paddingBottom: `${bottomOffset}px`, paddingLeft: '12px', paddingRight: '12px',
       } as React.CSSProperties}>
-      <div className="lg:mr-auto lg:ml-96 mx-auto max-w-2xl lg:max-w-2xl pointer-events-auto"
+      <div className="lg:mr-auto lg:ml-[26rem] mx-auto max-w-2xl lg:max-w-2xl pointer-events-auto"
         ref={containerRef}
         style={{
           transform: `translate(${pos.x}px, ${pos.y}px)`,

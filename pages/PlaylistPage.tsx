@@ -175,7 +175,7 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
         onToggleCollapsed={onToggleSidebarCollapsed}
       />
 
-      <div className="lg:flex-1 lg:overflow-y-auto lg:pr-52">
+      <div className="lg:flex-1 lg:overflow-y-auto">
         {/* Hero */}
         <header className="relative text-white overflow-hidden">
           <div className="absolute inset-0 bg-cover bg-center scale-110" style={{ backgroundImage: 'url(' + String(podcast.cover || DEFAULT_COVER) + ')', filter: isDark ? 'blur(40px) brightness(0.15) saturate(1.3)' : 'blur(40px) brightness(0.3) saturate(1.3)' }}></div>

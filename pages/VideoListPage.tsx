@@ -25,6 +25,8 @@ interface VideoListPageProps {
   onOpenSidebar?: () => void;
   onProfileClick?: () => void;
   user?: { name?: string; avatar?: string } | null;
+  theme?: 'light' | 'dark';
+  onToggleTheme?: () => void;
 }
 
 const VideoListPage: React.FC<VideoListPageProps> = ({ 
@@ -47,6 +49,8 @@ const VideoListPage: React.FC<VideoListPageProps> = ({
   onOpenSidebar,
   onProfileClick,
   user,
+  theme,
+  onToggleTheme,
 }) => {
   const [activePlayerTab, setActivePlayerTab] = useState<'details' | 'comments' | 'upNext'>('details');
   const [isScrolled, setIsScrolled] = useState(false);
@@ -174,6 +178,9 @@ const VideoListPage: React.FC<VideoListPageProps> = ({
           <div className="flex items-center justify-between gap-3">
             {/* Right: Brand + Title */}
             <div className="flex items-center gap-3 shrink-0">
+              <button onClick={onOpenSidebar} className="lg:flex hidden items-center justify-center w-9 h-9 rounded-xl transition-all active:scale-90" style={{ color: 'var(--text-3)' }}>
+                <i className="fas fa-bars text-sm"></i>
+              </button>
               <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-md" style={{ background: 'linear-gradient(135deg, #ef4444, #f97316)' }}>
                 <i className="fas fa-play text-white text-xs" />
               </div>
@@ -194,6 +201,11 @@ const VideoListPage: React.FC<VideoListPageProps> = ({
 
             {/* Left: Profile */}
             <div className="flex items-center gap-2 shrink-0">
+              {onToggleTheme && (
+                <button onClick={onToggleTheme} className="w-9 h-9 rounded-xl flex items-center justify-center transition-all active:scale-90" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
+                  <i className={`fas ${theme === 'dark' ? 'fa-sun' : 'fa-moon'} text-[11px]`} style={{ color: 'var(--text-2)' }}></i>
+                </button>
+              )}
               {onProfileClick && (
                 <button onClick={onProfileClick} className="w-9 h-9 rounded-xl flex items-center justify-center transition-all active:scale-90" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
                   {user?.avatar ? (

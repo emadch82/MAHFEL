@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import type { Post, Video, Podcast, PostComment, Author, Comment } from '../types';
+import type { Post, Video, Podcast, PostComment, Author, Comment, PublishedBook } from '../types';
 import { toPersianDigits, formatTimeFromISO, DEFAULT_COVER } from '../utils/helpers';
 import { ImageLightbox, VideoLightbox } from '../components/MediaLightbox';
 import CustomVideoPlayer from '../components/CustomVideoPlayer';
 import type { CustomVideoPlayerHandle } from '../components/CustomVideoPlayer';
 import AudioPlayer from '../components/AudioPlayer';
+import MinimizedPlayer from '../components/MinimizedPlayer';
 
 interface DiscussionTarget {
     type: 'post' | 'video-comment';
@@ -23,7 +24,11 @@ const PostHeader: React.FC<{
     onImageClick?: (data: { src: string; text?: string; author?: string; authorAvatar?: string; time?: string }) => void;
     currentUser?: string;
     onUpdatePost?: (post: Post) => void;
-}> = ({ target, authors, onAudioRef, onVideoClick, onImageClick, currentUser, onUpdatePost }) => {
+    publishedBook?: PublishedBook;
+    onShowBook?: (book: PublishedBook) => void;
+    onPlayEpisode?: (podcast: Podcast, episodeIndex: number) => void;
+    miniPlayerProps?: any;
+}> = ({ target, authors, onAudioRef, onVideoClick, onImageClick, currentUser, onUpdatePost, publishedBook, onShowBook, onPlayEpisode, miniPlayerProps }) => {
     const { post, video, podcast, comment, type } = target;
     const isAdminPost = post?.author === 'سرای هنر و اندیشه';
     const authorName = type === 'video-comment' ? comment?.author : post?.author;
@@ -115,12 +120,68 @@ const PostHeader: React.FC<{
                           </button>
                         )}
                     </div>
-                    {podcast && post?.episodeIndex !== undefined && podcast.episodes[post.episodeIndex] && (
-                        <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
-                          <img src={podcast.episodes[post.episodeIndex].cover || podcast.cover || DEFAULT_COVER} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0" />
-                          <div className="flex-1 min-w-0">
-                            <p className="font-semibold truncate text-sm leading-tight" style={{ color: 'var(--text-1)' }}>{podcast.episodes[post.episodeIndex].title}</p>
-                          </div>
+                    {podcast && (() => {
+                        const epIdx = post?.episodeIndex != null ? post.episodeIndex : 0;
+                        if (!podcast.episodes?.[epIdx]) return null;
+                        const ep = podcast.episodes[epIdx];
+                        return (
+                        <div className="rounded-xl overflow-hidden my-2" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
+                            <div className="flex items-center gap-3 p-3 cursor-pointer active:scale-[0.98] transition-all" onClick={(e) => { e.stopPropagation(); onPlayEpisode?.(podcast, epIdx); }}>
+                                <div className="relative w-14 h-14 lg:w-16 lg:h-16 rounded-xl overflow-hidden flex-shrink-0 shadow-lg ring-2 ring-white/10">
+                                    <img src={ep.cover || podcast.cover || DEFAULT_COVER} alt="" className="w-full h-full object-cover" />
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                        <div className="w-8 h-8 lg:w-9 lg:h-9 rounded-full flex items-center justify-center shadow-lg backdrop-blur-md" style={{ background: 'rgba(255,255,255,0.25)', border: '1px solid rgba(255,255,255,0.4)' }}>
+                                            <i className="fas fa-play text-xs text-white" style={{ marginRight: '-1px' }}></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-black truncate" style={{ color: 'var(--text)' }}>{ep.title}</p>
+                                    <p className="text-[10px] font-bold mt-0.5 flex items-center gap-1.5" style={{ color: 'var(--primary)' }}>
+                                        <i className="fas fa-podcast text-[8px]"></i>{podcast.title}
+                                    </p>
+                                </div>
+                                <div className="flex items-center flex-shrink-0">
+                                    <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg cursor-pointer active:scale-95 transition-all" style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '8px' }} onClick={(e) => { e.stopPropagation(); onPlayEpisode?.(podcast, epIdx); }}>
+                                        <i className="fas fa-headphones text-[9px]"></i>
+                                        {miniPlayerProps?.track && String(miniPlayerProps.track.podcast.id || (miniPlayerProps.track.podcast as any)._id) === String(podcast.id || (podcast as any)._id) && miniPlayerProps.track.episodeIndex === epIdx ? (
+                                            <span className="font-bold">{toPersianDigits(Math.floor((miniPlayerProps.progress * miniPlayerProps.duration) / 60))}:{toPersianDigits(String(Math.floor((miniPlayerProps.progress * miniPlayerProps.duration) % 60)).padStart(2, '0'))}</span>
+                                        ) : (
+                                            <span className="font-bold">{ep.duration || '00:00'}</span>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        );
+                    })()}
+                    {publishedBook && (
+                        <div className="flex justify-center">
+                        <div onClick={() => onShowBook?.(publishedBook)} className="group cursor-pointer w-40 md:w-48 animate-fadeInUp">
+                            <div className="relative aspect-[2/3] rounded-2xl overflow-hidden mb-3 transition-all duration-500 group-hover:-translate-y-3 group-hover:shadow-xl" style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.08)', border: '1px solid var(--border)' }}>
+                                {publishedBook.cover ? (
+                                    <img src={publishedBook.cover} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt={publishedBook.title} loading="lazy" />
+                                ) : (
+                                    <div className="w-full h-full flex flex-col items-center justify-center p-3 text-center" style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
+                                        <i className="fas fa-book text-white/30 text-2xl mb-2" />
+                                        <span className="text-[11px] text-white font-black">{publishedBook.title.slice(0, 12)}</span>
+                                    </div>
+                                )}
+                                <div className="absolute top-0 right-0 bottom-0 w-1 bg-gradient-to-b from-white/10 via-black/20 to-white/10" />
+                                {publishedBook.isNew && (
+                                    <div className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-full text-[9px] font-black text-white shadow-lg flex items-center gap-1" style={{ background: 'linear-gradient(135deg, #f59e0b, #f97316)' }}>
+                                        <i className="fas fa-bolt text-[7px]" /> تازه
+                                    </div>
+                                )}
+                            </div>
+                            <h3 className="text-[13px] font-black line-clamp-2 text-right leading-snug mb-1" style={{ color: 'var(--text)' }}>{publishedBook.title}</h3>
+                            <div className="flex items-center justify-between mt-auto mb-2">
+                                <span className="text-[10px] font-bold truncate" style={{ color: 'var(--text-3)' }}>{publishedBook.authorName}</span>
+                                {publishedBook.price && publishedBook.price !== '۰' && (
+                                    <span className="text-[11px] font-black tabular-nums" style={{ color: 'var(--primary)' }}>{toPersianDigits(publishedBook.price)}</span>
+                                )}
+                            </div>
+                        </div>
                         </div>
                     )}
                     {authorMedia && authorMedia.length > 0 && (
@@ -165,19 +226,36 @@ const PostHeader: React.FC<{
                       </div>
                     )}
                     {!hasImages && authorText && !isEditing && (
-                        <div className="text-sm leading-relaxed whitespace-pre-wrap break-words" style={{ color: 'var(--text)' }}>
-                            {authorText}
+                        <div className="rounded-xl px-3 py-2 transition-all duration-200" style={{ background: 'color-mix(in srgb, var(--surface-2) 80%, transparent)', border: '1px solid var(--border)' }}>
+                            <div className="text-[13px] leading-[1.7] font-medium whitespace-pre-wrap break-words" style={{ color: 'var(--text)' }}>
+                                {authorText}
+                            </div>
+                            <div className="flex items-center gap-1.5 pt-1.5 mt-1.5" style={{ borderTop: '1px solid color-mix(in srgb, var(--border) 30%, transparent)' }}>
+                              {isOwn && (
+                                <button onClick={() => { setEditText(authorText || ''); setIsEditing(true); }}
+                                  className="flex items-center gap-1.5 rounded-lg py-1 px-2 transition-all active:scale-90"
+                                  style={{ color: '#475569' }}>
+                                  <i className="fas fa-pen text-[11px]"></i>
+                                  <span className="text-[10px] font-bold">ویرایش</span>
+                                </button>
+                              )}
+                              {isOwn && (
+                                <button onClick={() => onUpdatePost?.({ ...post, text: '' } as any)}
+                                  className="rounded-lg py-1 px-2 transition-all active:scale-90"
+                                  style={{ color: '#475569' }}>
+                                  <i className="fas fa-trash text-[11px]"></i>
+                                </button>
+                              )}
+                              <button onClick={handleLike} className="flex items-center gap-1 transition-all active:scale-90" style={{ color: liked ? '#ef4444' : '#475569' }}>
+                                <svg className="w-3.5 h-3.5" fill={liked ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={liked ? 0 : 2}>
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                </svg>
+                                <span className="text-[10px] font-bold">{toPersianDigits(likesCount)}</span>
+                              </button>
+                            </div>
                         </div>
                     )}
                     {isEditing && renderText()}
-                    <div className="flex items-center gap-1.5 pt-0.5">
-                      <button onClick={handleLike} className="flex items-center gap-1 text-xs transition-all active:scale-90" style={{ color: liked ? '#ef4444' : 'var(--text-3)' }}>
-                        <svg className="w-3.5 h-3.5" fill={liked ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={liked ? 0 : 2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                        </svg>
-                        <span>{toPersianDigits(likesCount)}</span>
-                      </button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -357,6 +435,7 @@ const ChatBubble: React.FC<{
 
     return (
       <div id={`bubble-${commentId}`} className={`flex items-end gap-1.5 mb-0.5 px-3 group/bubble animate-fadeIn ${isOwn ? 'flex-row-reverse' : 'flex-row'}`}>
+        {!isOwn && (
         <div className="w-8 h-8 rounded-full flex-shrink-0 overflow-hidden shadow-sm mb-0.5"
              style={{ background: avatarColor }}>
           {(comment as any).authorAvatarUrl ? (
@@ -365,6 +444,7 @@ const ChatBubble: React.FC<{
             <div className="w-full h-full flex items-center justify-center text-white text-[10px] font-black">{comment.author?.charAt(0)}</div>
           )}
         </div>
+        )}
         <div ref={bubbleRef} className={`relative ${hasImage ? 'max-w-[75%]' : 'max-w-[80%]'}`}
              onClick={() => { if (isEditing) return; if (clickTimer.current) { clearTimeout(clickTimer.current); clickTimer.current = null; return; } clickTimer.current = setTimeout(() => { clickTimer.current = null; setShowMenu(true); if (bubbleRef.current) { const r = bubbleRef.current.getBoundingClientRect(); setMenuPos({ top: Math.round(r.bottom), right: Math.round(document.documentElement.clientWidth - r.right) }); } }, 200); }}
              onDoubleClick={handleLike}
@@ -611,9 +691,14 @@ interface PostCommentsPageProps {
   onDeleteComment?: (commentId: string) => void;
   onLikeComment?: (commentId: string) => void;
   onUpdateComment?: (commentId: string, newText: string) => void;
+  publishedBooks?: PublishedBook[];
+  onShowBook?: (book: PublishedBook) => void;
+  onPlayEpisode?: (podcast: Podcast, episodeIndex: number) => void;
+  miniPlayerProps?: any;
+  onSeekAudio?: (seconds: number) => void;
 }
 
-const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcast, authors, currentUser, userRole, onBack, onAddComment, onUpdatePost, onDeleteComment: onParentDeleteComment, onLikeComment: onParentLikeComment, onUpdateComment: onParentUpdateComment }) => {
+const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcast, authors, currentUser, userRole, onBack, onAddComment, onUpdatePost, onDeleteComment: onParentDeleteComment, onLikeComment: onParentLikeComment, onUpdateComment: onParentUpdateComment, publishedBooks, onShowBook, onPlayEpisode, miniPlayerProps, onSeekAudio }) => {
     const [commentText, setCommentText] = useState('');
     const [replyingTo, setReplyingTo] = useState<PostComment | null>(null);
     const [quotedText, setQuotedText] = useState<string>('');
@@ -628,7 +713,7 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
     const [audioCurrentTime, setAudioCurrentTime] = useState(0);
     const [markAudioTimestamp, setMarkAudioTimestamp] = useState(false);
     const [markVideoTimestamp, setMarkVideoTimestamp] = useState(false);
-    const hasAudio = post.media?.some(m => m.type === 'audio');
+    const hasAudio = !!(post.media?.some(m => m.type === 'audio') || podcast);
     const hasVideo = !!(video || post.media?.some(m => m.type === 'video'));
     const [localComments, setLocalComments] = useState<PostComment[]>(post.comments);
     const commentsEndRef = useRef<HTMLDivElement>(null);
@@ -648,6 +733,12 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
         el.addEventListener('timeupdate', handler);
         return () => el.removeEventListener('timeupdate', handler);
     }, []);
+
+    useEffect(() => {
+        if (podcast && miniPlayerProps?.progress != null && miniPlayerProps?.duration != null) {
+            setAudioCurrentTime(Math.floor(miniPlayerProps.progress * miniPlayerProps.duration));
+        }
+    }, [podcast, miniPlayerProps?.progress, miniPlayerProps?.duration]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -724,18 +815,11 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
     };
 
     const handleDeleteComment = async (comment: PostComment) => {
-        try {
-          const { deletePostComment, deleteComment } = await import('../services/api');
-          const cid = String(comment.id || (comment as any)._id);
-          const isVideoDiscussion = post.id === 0;
-          const ok = isVideoDiscussion ? await deleteComment(cid) : await deletePostComment(String(post.id), cid);
-          if (ok) {
-            onParentDeleteComment?.(cid);
-            const updated = { ...post, comments: post.comments.filter(c => String(c.id || (c as any)._id) !== cid) };
-            setLocalComments(updated.comments);
-            if (onUpdatePost) onUpdatePost(updated);
-          }
-        } catch {}
+        const cid = String(comment.id || (comment as any)._id);
+        onParentDeleteComment?.(cid);
+        const updated = { ...post, comments: post.comments.filter(c => String(c.id || (c as any)._id) !== cid) };
+        setLocalComments(updated.comments);
+        if (onUpdatePost) onUpdatePost(updated);
     };
 
     const handleEditComment = async (comment: PostComment, newText: string) => {
@@ -783,7 +867,9 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
     };
 
     const handleAudioTimestampClick = (seconds: number) => {
-        if (audioElementRef.current) {
+        if (onSeekAudio) {
+            onSeekAudio(seconds);
+        } else if (audioElementRef.current) {
             audioElementRef.current.currentTime = seconds;
             audioElementRef.current.play();
         }
@@ -824,7 +910,7 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
                     </div>
                   </div>
                 )}
-                <PostHeader target={{ type: 'post', post, video, podcast }} authors={authors} onAudioRef={(el) => { audioElementRef.current = el; }} onVideoClick={setVideoLightbox} onImageClick={(data) => setLightboxData(data)} currentUser={currentUser} onUpdatePost={onUpdatePost} />
+                <PostHeader target={{ type: 'post', post, video, podcast }} authors={authors} onAudioRef={(el) => { audioElementRef.current = el; }} onVideoClick={setVideoLightbox} onImageClick={(data) => setLightboxData(data)} currentUser={currentUser} onUpdatePost={onUpdatePost} publishedBook={publishedBooks?.find((b: any) => String(b.id) === String(post.bookId))} onShowBook={onShowBook} onPlayEpisode={onPlayEpisode} miniPlayerProps={miniPlayerProps} />
                 <div className="py-3 pb-28 sm:pb-40">
                     {localComments.length > 0 ? (
                         localComments.map((comment, idx) => {
@@ -869,6 +955,38 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
             {/* Input area */}
             <footer className="flex-shrink-0 border-t flex justify-center" style={{ background: 'var(--surface)', borderColor: 'var(--border)' }}>
               <div className="w-full max-w-2xl">
+                {inputMedia && (
+                  <div className="flex items-center gap-2 px-3 pt-2">
+                    <div className="relative rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
+                      {inputMedia.type === 'image' ? (
+                        <img src={inputMedia.url} className="w-14 h-14 object-cover" alt="" />
+                      ) : inputMedia.type === 'audio' ? (
+                        <div className="w-14 h-14 flex items-center justify-center" style={{ background: 'var(--surface-3)' }}>
+                          <i className="fas fa-music" style={{ color: 'var(--primary)' }}></i>
+                        </div>
+                      ) : (
+                        <div className="w-14 h-14 flex items-center justify-center" style={{ background: 'var(--surface-3)' }}>
+                          <i className="fas fa-video" style={{ color: 'var(--primary)' }}></i>
+                        </div>
+                      )}
+                      <button onClick={() => setInputMedia(null)}
+                        className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center shadow-md"
+                        style={{ background: 'var(--surface)', color: 'var(--text-3)', border: '1px solid var(--border)', fontSize: '8px' }}>
+                        <i className="fas fa-times"></i>
+                      </button>
+                    </div>
+                    <span className="text-[10px] font-bold" style={{ color: 'var(--text-3)' }}>
+                      {inputMedia.type === 'image' ? 'تصویر' : inputMedia.type === 'audio' ? 'صوت' : 'ویدیو'}
+                    </span>
+                  </div>
+                )}
+
+                {miniPlayerProps && (
+                  <div className="px-2 pt-1">
+                    <MinimizedPlayer {...miniPlayerProps} variant="inline" />
+                  </div>
+                )}
+
                 {replyingTo && (
                     <div className="flex items-center gap-2 px-3 py-2 border-b animate-fadeIn" style={{ borderColor: 'var(--border)', background: 'color-mix(in srgb, var(--primary) 5%, var(--surface))' }}>
                         <div className="flex-1 min-w-0 border-r-[3px] pr-2 mr-1" style={{ borderColor: 'var(--primary)' }}>
@@ -898,32 +1016,6 @@ const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcas
                             <i className="fas fa-times text-[10px]"></i>
                         </button>
                     </div>
-                )}
-
-                {inputMedia && (
-                  <div className="flex items-center gap-2 px-3 pt-2">
-                    <div className="relative rounded-xl overflow-hidden" style={{ border: '1px solid var(--border)' }}>
-                      {inputMedia.type === 'image' ? (
-                        <img src={inputMedia.url} className="w-14 h-14 object-cover" alt="" />
-                      ) : inputMedia.type === 'audio' ? (
-                        <div className="w-14 h-14 flex items-center justify-center" style={{ background: 'var(--surface-3)' }}>
-                          <i className="fas fa-music" style={{ color: 'var(--primary)' }}></i>
-                        </div>
-                      ) : (
-                        <div className="w-14 h-14 flex items-center justify-center" style={{ background: 'var(--surface-3)' }}>
-                          <i className="fas fa-video" style={{ color: 'var(--primary)' }}></i>
-                        </div>
-                      )}
-                      <button onClick={() => setInputMedia(null)}
-                        className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center shadow-md"
-                        style={{ background: 'var(--surface)', color: 'var(--text-3)', border: '1px solid var(--border)', fontSize: '8px' }}>
-                        <i className="fas fa-times"></i>
-                      </button>
-                    </div>
-                    <span className="text-[10px] font-bold" style={{ color: 'var(--text-3)' }}>
-                      {inputMedia.type === 'image' ? 'تصویر' : inputMedia.type === 'audio' ? 'صوت' : 'ویدیو'}
-                    </span>
-                  </div>
                 )}
 
                 <div className="flex items-end gap-2 p-2.5 lg:p-3">

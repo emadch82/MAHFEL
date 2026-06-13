@@ -787,9 +787,10 @@ interface NashrPageProps {
   onDeleteComment?: (commentId: string) => void;
   onLikeComment?: (commentId: string) => void;
   onUpdateComment?: (commentId: string, newText: string) => void;
+  onToggleSidebar?: () => void;
 }
 
-const NashrPage: React.FC<NashrPageProps> = ({ publishedBooks, allPodcasts, comments, onAddComment, user, onUpdateUser, onDeleteComment, onLikeComment, onUpdateComment }) => {
+const NashrPage: React.FC<NashrPageProps> = ({ publishedBooks, allPodcasts, comments, onAddComment, user, onUpdateUser, onDeleteComment, onLikeComment, onUpdateComment, onToggleSidebar }) => {
   const [selectedItem, setSelectedItem] = useState<PublishedBook | null>(null);
   const [sortBy, setSortBy] = useState<'newest' | 'price-low' | 'price-high'>('newest');
   const [searchQuery, setSearchQuery] = useState('');
@@ -1020,6 +1021,9 @@ const NashrPage: React.FC<NashrPageProps> = ({ publishedBooks, allPodcasts, comm
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 flex-1">
               <div className="flex items-center gap-2.5 shrink-0">
+                <button onClick={onToggleSidebar} className="lg:flex hidden items-center justify-center w-9 h-9 rounded-xl transition-all active:scale-90" style={{ color: 'var(--text-3)' }}>
+                  <i className="fas fa-bars text-sm"></i>
+                </button>
                 <div className="w-9 h-9 rounded-xl flex items-center justify-center shadow-md" style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
                   <i className="fas fa-feather-alt text-white text-xs"></i>
                 </div>
@@ -1323,7 +1327,7 @@ const NashrPage: React.FC<NashrPageProps> = ({ publishedBooks, allPodcasts, comm
       )}
 
       {/* ═══════════════ NEWSLETTER CTA ═══════════════ */}
-      <section className="-mx-4 sm:-mx-6 md:-mx-8">
+      <section>
         <div className="relative overflow-hidden p-6 md:p-8 text-center rounded-t-3xl" style={{ background: 'linear-gradient(135deg, #0f172a, #1e293b)' }}>
           <div className="relative z-10">
             <i className="fas fa-envelope-open-text text-2xl mb-3" style={{ color: 'var(--primary)' }} />
@@ -1357,8 +1361,8 @@ const NashrPage: React.FC<NashrPageProps> = ({ publishedBooks, allPodcasts, comm
     
     {/* ═══ PROFILE MODAL ═══ */}
     {isProfileOpen && (
-      <div className="fixed inset-0 z-[7000] animate-fadeIn flex items-end sm:items-center justify-center" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} dir="rtl">
-        <div className="w-full max-w-[340px] rounded-t-3xl sm:rounded-3xl overflow-hidden animate-scaleIn max-h-[85vh] flex flex-col" style={{ background: 'var(--surface)', boxShadow: '0 25px 60px rgba(0,0,0,0.2)' }}>
+      <div className="fixed inset-0 z-[7000] animate-fadeIn flex items-end sm:items-center justify-center mb-20 sm:mb-0" style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(4px)' }} dir="rtl">
+        <div className="w-full max-w-[340px] rounded-3xl overflow-hidden animate-scaleIn max-h-[85vh] flex flex-col" style={{ background: 'var(--surface)', boxShadow: '0 25px 60px rgba(0,0,0,0.2)' }}>
 
           {/* ═══ HEADER ═══ */}
           <div className="relative px-5 pt-6 pb-5 text-center shrink-0">
@@ -1491,7 +1495,7 @@ const NashrPage: React.FC<NashrPageProps> = ({ publishedBooks, allPodcasts, comm
                   ))}
                 </div>
 
-                <div className="flex gap-2 mt-2">
+                <div className="flex gap-2 mt-2 mb-2">
                   <input type="text" value={walletPayAmount} onChange={e => setWalletPayAmount(e.target.value)} placeholder="مبلغ دلخواه" className="flex-1 px-3 py-2 rounded-xl text-[11px] font-medium outline-none" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)', color: 'var(--text)' } as any} />
                   <button onClick={() => { if ((parseInt(walletPayAmount.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()).replace(/[^0-9]/g, '')) || 0) >= 10000) setWalletPayStep('amount'); }} disabled={(parseInt(walletPayAmount.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString()).replace(/[^0-9]/g, '')) || 0) < 10000} className="px-4 py-2 rounded-xl text-[10px] font-bold text-white transition-all active:scale-95 disabled:opacity-30" style={{ background: '#f59e0b' }}>شارژ</button>
                 </div>

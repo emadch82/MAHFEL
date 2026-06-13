@@ -326,8 +326,8 @@ const CustomVideoPlayer = forwardRef<CustomVideoPlayerHandle, CustomVideoPlayerP
       {!isPlaying && (
         <div className="absolute inset-0 flex items-center justify-center z-10"
           onClick={isMini ? undefined : (e => { e.stopPropagation(); handleVideoClick(); })}>
-          <div className={`${isMini ? 'w-9 h-9' : 'w-[72px] h-[72px]'} rounded-full bg-black/40 backdrop-blur-xl flex items-center justify-center border border-white/10 shadow-2xl pointer-events-none`}>
-            <i className={`fas fa-play text-white ${isMini ? 'text-xs' : 'text-2xl'} mr-[-2px]`} />
+          <div className={`${isMini ? 'w-7 h-7' : 'w-[72px] h-[72px]'} rounded-full bg-black/40 backdrop-blur-xl flex items-center justify-center border border-white/10 shadow-2xl pointer-events-none`}>
+            <i className={`fas fa-play text-white ${isMini ? 'text-[10px]' : 'text-2xl'} mr-[-2px]`} />
           </div>
         </div>
       )}

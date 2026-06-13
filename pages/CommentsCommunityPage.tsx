@@ -32,7 +32,8 @@ const MediaCard: React.FC<{
     onPlayVideo: (video: Video) => void;
     onPlayPodcast: (podcast: Podcast, episodeIndex: number) => void;
     onShowBook: (book: PublishedBook) => void;
-}> = React.memo(({ video, podcast, episode, book, onPlayVideo, onPlayPodcast, onShowBook }) => {
+    onShowDiscussion?: () => void;
+}> = React.memo(({ video, podcast, episode, book, onPlayVideo, onPlayPodcast, onShowBook, onShowDiscussion }) => {
     if (video) return (
         <div className="my-2 rounded-xl overflow-hidden group cursor-pointer transition-all duration-300 hover:shadow-lg" onClick={(e) => { e.stopPropagation(); onPlayVideo(video); }}
           style={{ background: 'var(--surface-3)', border: '1px solid var(--border)' }}>
@@ -47,31 +48,55 @@ const MediaCard: React.FC<{
         </div>
     );
     if (book) return (
-        <div onClick={(e) => { e.stopPropagation(); onShowBook(book); }} className="flex items-center gap-3 p-2.5 my-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md active:scale-[0.98]"
-          style={{ background: 'color-mix(in srgb, var(--primary) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--primary) 10%, transparent)' }}>
-            <div className="w-10 h-14 rounded-lg overflow-hidden flex-shrink-0 shadow-sm"
-              style={{ background: 'var(--primary)' }}>
-                {book.cover && <img src={book.cover} className="w-full h-full object-cover" alt={book.title} />}
+        <div onClick={(e) => { e.stopPropagation(); onShowBook(book); }} className="flex gap-3 p-2.5 my-2 rounded-2xl cursor-pointer transition-all duration-300 hover:shadow-lg active:scale-[0.98]"
+          style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
+            <div className="w-20 h-28 rounded-xl overflow-hidden flex-shrink-0 shadow-md relative"
+              style={{ background: 'linear-gradient(135deg, var(--primary), var(--secondary))' }}>
+                {book.cover ? (
+                    <img src={book.cover} className="w-full h-full object-cover" alt={book.title} loading="lazy" />
+                ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center p-2 text-center">
+                        <i className="fas fa-book text-white/30 text-xl mb-1" />
+                        <span className="text-[9px] text-white font-black">{book.title.slice(0, 10)}</span>
+                    </div>
+                )}
+                <div className="absolute top-0 right-0 bottom-0 w-0.5 bg-gradient-to-b from-white/10 via-black/20 to-white/10" />
+                {book.isNew && (
+                    <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded-full text-[7px] font-black text-white shadow-lg" style={{ background: 'linear-gradient(135deg, #f59e0b, #f97316)' }}>
+                        <i className="fas fa-bolt text-[6px]" /> تازه
+                    </div>
+                )}
             </div>
-            <div className="flex-1 min-w-0 text-right">
-                <p className="font-black text-[11px] leading-tight mb-1" style={{ color: 'var(--text)' }}>{book.title}</p>
-                <span className="text-[8px] font-bold" style={{ color: 'var(--text-3)' }}>{book.type === 'note' ? 'یادداشت' : 'نشر سرای هنر و اندیشه'}</span>
+            <div className="flex-1 min-w-0 text-right flex flex-col justify-center py-0.5">
+                <p className="font-black text-[12px] leading-snug line-clamp-2 mb-1" style={{ color: 'var(--text)' }}>{book.title}</p>
+                {book.authorName && <p className="text-[9px] font-bold truncate" style={{ color: 'var(--text-3)' }}>{book.authorName}</p>}
             </div>
-            <i className="fas fa-chevron-left text-[8px]" style={{ color: 'var(--text-3)' }}></i>
+            <i className="fas fa-chevron-left text-[8px] self-center" style={{ color: 'var(--text-3)' }}></i>
         </div>
     );
     const ep = episode || (podcast?.episodes ? podcast.episodes[0] : null);
     if (podcast && ep) return (
-        <div onClick={(e) => { e.stopPropagation(); onPlayPodcast(podcast, podcast.episodes.findIndex(e => e.title === ep.title)); }}
-          className="flex items-center gap-3 p-2.5 my-2 rounded-xl cursor-pointer transition-all duration-300 hover:shadow-md active:scale-[0.98]"
-          style={{ background: 'color-mix(in srgb, var(--primary) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--primary) 10%, transparent)' }}>
-            <div className="w-8 h-8 rounded-full flex items-center justify-center text-[9px] shadow-sm"
-              style={{ background: 'var(--primary)', color: 'white' }}><i className="fas fa-play ml-0.5"></i></div>
-            <div className="flex-1 min-w-0 text-right">
-                <p className="font-black text-[10px] truncate" style={{ color: 'var(--text)' }}>{ep.title}</p>
-                <p className="text-[8px] font-bold mt-0.5 opacity-80" style={{ color: 'var(--primary)' }}>{podcast.title}</p>
+        <div className="my-2 rounded-xl overflow-hidden" style={{ background: 'var(--surface-2)', border: '1px solid var(--border)' }}>
+            <div onClick={(e) => { e.stopPropagation(); onPlayPodcast(podcast, podcast.episodes.findIndex(e => e.title === ep.title)); }}
+              className="flex items-center gap-3 p-2.5 cursor-pointer transition-all duration-300 hover:shadow-md active:scale-[0.98]">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center text-[9px] shadow-sm"
+                  style={{ background: 'var(--primary)', color: 'white' }}><i className="fas fa-play ml-0.5"></i></div>
+                <div className="flex-1 min-w-0 text-right">
+                    <p className="font-black text-[10px] truncate" style={{ color: 'var(--text)' }}>{ep.title}</p>
+                    <p className="text-[8px] font-bold mt-0.5 opacity-80" style={{ color: 'var(--primary)' }}>{podcast.title}</p>
+                </div>
+                <img src={ep.cover || podcast.cover || DEFAULT_COVER} className="w-9 h-9 rounded-lg object-cover" alt={ep.title} />
             </div>
-            <img src={ep.cover || podcast.cover || DEFAULT_COVER} className="w-9 h-9 rounded-lg object-cover" alt={ep.title} />
+            {onShowDiscussion && (
+                <div className="flex items-center gap-2 px-3 pb-2 pt-1" style={{ borderTop: '1px solid color-mix(in srgb, var(--border) 30%, transparent)' }}>
+                    <button onClick={(e) => { e.stopPropagation(); onShowDiscussion(); }}
+                      className="flex items-center gap-1.5 rounded-lg py-1 px-2 transition-all active:scale-90"
+                      style={{ color: 'var(--primary)' }}>
+                        <i className="fas fa-comments text-[11px]"></i>
+                        <span className="text-[10px] font-bold">گفتگو</span>
+                    </button>
+                </div>
+            )}
         </div>
     );
     return null;
@@ -244,7 +269,7 @@ const PostBubble: React.FC<{
   video?: Video;
   podcast?: Podcast;
   publishedBook?: PublishedBook;
-  onShowComments: (post: Post) => void;
+  onShowComments: (post: Post, podcast?: Podcast) => void;
   onPlayVideo: (video: Video) => void;
   onPlayPodcast: (podcast: Podcast, episodeIndex: number) => void;
   onShowBook: (book: PublishedBook) => void;
@@ -435,7 +460,7 @@ const PostBubble: React.FC<{
                    })}
                  </div>
                )}
-               <MediaCard video={video} podcast={podcast} book={publishedBook} onPlayVideo={onPlayVideo} onPlayPodcast={onPlayPodcast} onShowBook={onShowBook} />
+               <MediaCard video={video} podcast={podcast} book={publishedBook} onPlayVideo={onPlayVideo} onPlayPodcast={onPlayPodcast} onShowBook={onShowBook} onShowDiscussion={podcast ? () => onShowComments(post) : undefined} />
            </div>
 
              {/* Action buttons */}
@@ -1008,7 +1033,8 @@ const PodcastCommentItem: React.FC<{
   currentPlayingEpIdx?: number;
   isGloballyPlaying?: boolean;
   onGlobalTogglePlay?: () => void;
-}> = ({ comment, podcast, allComments, onPlayPodcast, onAddComment, onDeleteComment, onLikeComment, onUpdateComment, currentUserName, userRole, depth = 0, likedComments = new Set(), currentPlayingPodcastId, currentPlayingEpIdx, isGloballyPlaying, onGlobalTogglePlay }) => {
+  onShowDiscussion?: () => void;
+}> = ({ comment, podcast, allComments, onPlayPodcast, onAddComment, onDeleteComment, onLikeComment, onUpdateComment, currentUserName, userRole, depth = 0, likedComments = new Set(), currentPlayingPodcastId, currentPlayingEpIdx, isGloballyPlaying, onGlobalTogglePlay, onShowDiscussion }) => {
   const [showReplies, setShowReplies] = useState(false);
   const [isReplying, setIsReplying] = useState(false);
   const [replyText, setReplyText] = useState('');
@@ -1167,6 +1193,11 @@ const PodcastCommentItem: React.FC<{
               {(isOwner || isAdmin) && onDeleteComment && (
                 <button onClick={() => onDeleteComment(cid)} className="text-[9px] font-bold transition-colors text-red-400/70 hover:text-red-400">
                   <i className="fas fa-trash-alt text-[8px]"></i>
+                </button>
+              )}
+              {onShowDiscussion && (
+                <button onClick={onShowDiscussion} className="text-[9px] font-bold transition-colors flex items-center gap-1 mr-auto" style={{ color: 'var(--primary)' }}>
+                  <i className="fas fa-comments text-[8px]"></i>گفتگو
                 </button>
               )}
             </div>
@@ -1616,6 +1647,11 @@ const MahfelPage: React.FC<any> = ({ tabsHidden, showInput, onToggleInput, posts
                     currentPlayingEpIdx={miniPlayerProps?.track?.episodeIndex}
                     isGloballyPlaying={miniPlayerProps?.isPlaying}
                     onGlobalTogglePlay={miniPlayerProps?.onPlayPause}
+                    onShowDiscussion={() => {
+                      const c = item.comment;
+                      const virtualPost: any = { id: Date.now(), author: c.author, authorAvatarUrl: c.authorAvatarUrl || '', date: c.date || '', isoDate: c.isoDate || '', text: c.text, comments: c.replies || [], likes: 0, podcastId: String(item.podcast?.id || (item.podcast as any)?._id || ''), episodeIndex: c.episodeIndex != null ? c.episodeIndex : 0 };
+                      (onShowComments as any)?.(virtualPost, item.podcast);
+                    }}
                   />
                 </div>
               );
