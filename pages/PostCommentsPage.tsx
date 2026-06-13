@@ -697,9 +697,10 @@ interface PostCommentsPageProps {
   miniPlayerProps?: any;
   onSeekAudio?: (seconds: number) => void;
   discussionComments?: PostComment[];
+  parentCommentId?: string | number;
 }
 
-const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcast, authors, currentUser, userRole, onBack, onAddComment, onUpdatePost, onDeleteComment: onParentDeleteComment, onLikeComment: onParentLikeComment, onUpdateComment: onParentUpdateComment, publishedBooks, onShowBook, onPlayEpisode, miniPlayerProps, onSeekAudio, discussionComments }) => {
+const PostCommentsPage: React.FC<PostCommentsPageProps> = ({ post, video, podcast, authors, currentUser, userRole, onBack, onAddComment, onUpdatePost, onDeleteComment: onParentDeleteComment, onLikeComment: onParentLikeComment, onUpdateComment: onParentUpdateComment, publishedBooks, onShowBook, onPlayEpisode, miniPlayerProps, onSeekAudio, discussionComments, parentCommentId }) => {
     const [commentText, setCommentText] = useState('');
     const [replyingTo, setReplyingTo] = useState<PostComment | null>(null);
     const [quotedText, setQuotedText] = useState<string>('');

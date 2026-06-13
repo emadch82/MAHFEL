@@ -619,8 +619,18 @@ const AppInner: React.FC = () => {
             const freshPost = posts.find(p => String(p.id) === String(selectedPostForComments.id)) || selectedPostForComments;
             const podcastId = (freshPost as any).podcastId;
             const episodeIndex = (freshPost as any).episodeIndex;
+            const parentCommentId = (freshPost as any).parentCommentId;
             const discussionCommentsList = podcastId ? comments
-                .filter((c: any) => String(c.podcastId) === String(podcastId) && (episodeIndex == null || c.episodeIndex === episodeIndex))
+                .filter((c: any) => {
+                    if (String(c.podcastId) !== String(podcastId)) return false;
+                    if (episodeIndex != null && c.episodeIndex !== episodeIndex) return false;
+                    if (parentCommentId) {
+                        const cid = String(c._id || c.id);
+                        const pid = String(c.parentId);
+                        return pid === String(parentCommentId) || cid === String(parentCommentId);
+                    }
+                    return !c.parentId;
+                })
                 .map((c: any): any => ({
                     id: c._id || c.id,
                     author: c.author,
@@ -636,9 +646,9 @@ const AppInner: React.FC = () => {
                     episodeIndex: c.episodeIndex,
                     isEdited: c.isEdited,
                 })) : freshPost.comments;
-            return <PostCommentsPage post={freshPost} video={videos.find(v => String(v.id) === String(freshPost.videoId))} podcast={selectedPostPodcast || podcasts.find(p => String(p.id) === String(podcastId))} authors={authors} currentUser={user?.name} userRole={user?.role} discussionComments={discussionCommentsList} onBack={() => { setSelectedPostForComments(null); setSelectedPostPodcast(null); }} onAddComment={async (_postId, text, replyTo, media, quotedText, audioTimestamp, _videoTimestamp) => {
+            return <PostCommentsPage post={freshPost} video={videos.find(v => String(v.id) === String(freshPost.videoId))} podcast={selectedPostPodcast || podcasts.find(p => String(p.id) === String(podcastId))} authors={authors} currentUser={user?.name} userRole={user?.role} discussionComments={discussionCommentsList} parentCommentId={parentCommentId} onBack={() => { setSelectedPostForComments(null); setSelectedPostPodcast(null); }} onAddComment={async (_postId, text, replyTo, media, quotedText, audioTimestamp, _videoTimestamp) => {
                 if (podcastId) {
-                    const newComment = await addComment({ type: 'podcast', podcastId: String(podcastId), author: user?.name || 'کاربر', text, episodeIndex: episodeIndex ?? 0, parentId: replyTo ? String(replyTo) : undefined, audioTimestamp, authorAvatarUrl: user?.avatar } as any);
+                    const newComment = await addComment({ type: 'podcast', podcastId: String(podcastId), author: user?.name || 'کاربر', text, episodeIndex: episodeIndex ?? 0, parentId: replyTo ? String(replyTo) : (parentCommentId ? String(parentCommentId) : undefined), audioTimestamp, authorAvatarUrl: user?.avatar } as any);
                     if (newComment) {
                         setComments(prev => insertCommentIntoTree(prev, newComment));
                     }

@@ -1649,7 +1649,7 @@ const MahfelPage: React.FC<any> = ({ tabsHidden, showInput, onToggleInput, posts
                     onGlobalTogglePlay={miniPlayerProps?.onPlayPause}
                     onShowDiscussion={() => {
                       const c = item.comment;
-                      const virtualPost: any = { id: Date.now(), author: c.author, authorAvatarUrl: c.authorAvatarUrl || '', date: c.date || '', isoDate: c.isoDate || '', text: c.text, comments: c.replies || [], likes: 0, podcastId: String(item.podcast?.id || (item.podcast as any)?._id || ''), episodeIndex: c.episodeIndex != null ? c.episodeIndex : 0 };
+                      const virtualPost: any = { id: Date.now(), author: c.author, authorAvatarUrl: c.authorAvatarUrl || '', date: c.date || '', isoDate: c.isoDate || '', text: c.text, comments: c.replies || [], likes: 0, podcastId: String(item.podcast?.id || (item.podcast as any)?._id || ''), episodeIndex: c.episodeIndex != null ? c.episodeIndex : 0, parentCommentId: c._id || c.id };
                       (onShowComments as any)?.(virtualPost, item.podcast);
                     }}
                   />
