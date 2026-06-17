@@ -227,9 +227,9 @@
 
 ### پیش‌نیازها
 
-<table align="center">
+<table align="center" width="80%">
 <tr>
-<td>
+<td align="center" style="padding: 20px; font-size: 16px;">
 
 ```bash
 # بررسی نسخه Node.js
