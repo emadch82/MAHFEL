@@ -495,22 +495,6 @@ graph TD
 
 ---
 
-## 🤝 مشارکت
-
-1. Fork کنید
-2. Branch جدید بسازید (`git checkout -b feature/amazing-feature`)
-3. تغییرات را اعمال کنید (`git commit -m 'Add amazing feature'`)
-4. Push کنید (`git push origin feature/amazing-feature`)
-5. Pull Request ایجاد کنید
-
----
-
-## 📄 مجوز
-
-این پروژه تحت مجوز MIT است. فایل [LICENSE](LICENSE) را ببینید.
-
----
-
 <p align="center">
   ساخته شده با ❤️ توسط <a href="https://github.com/emadch82">Emad</a>
 </p>
