@@ -364,6 +364,10 @@ graph TD
     J --> O["📤 خروجی داده"]
     
     style A fill:#dbeafe,stroke:#3b82f6,stroke-width:3px
+    style B fill:#000,stroke:#333,color:#fff,stroke-width:2px
+    style C fill:#000,stroke:#333,color:#fff,stroke-width:2px
+    style D fill:#000,stroke:#333,color:#fff,stroke-width:2px
+    style E fill:#000,stroke:#333,color:#fff,stroke-width:2px
     style F fill:#fce7f3,stroke:#ec4899,stroke-width:3px
     style J fill:#dcfce7,stroke:#22c55e,stroke-width:3px
 ```
