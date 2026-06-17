@@ -405,70 +405,57 @@ graph TD
 
 <table>
 <tr>
-<td align="center" width="12%">
+<td width="50%">
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#61DAFB', 'primaryTextColor': '#000', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
-graph TD
-    A[React 19] --> B[Next.js 16]
-    B --> C[App Router]
-    C --> D[Turbopack]
-```
-
-</td>
-<td align="center" width="12%">
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#3178C6', 'primaryTextColor': '#fff', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
-graph TD
-    A[TypeScript] --> B[Type Safety]
-    B --> C[Autocomplete]
-    C --> D[Error Detection]
-```
+### 🖥️ فرانت‌اند
+| فناوری | نسخه | توضیح |
+|--------|------|-------|
+| Next.js | 16 | فریم‌ورک React با App Router |
+| React | 19 | کتابخانه UI تعاملی |
+| TypeScript | 5.3 | زبان TypeScript برای Type Safety |
+| Tailwind CSS | 3 | فریم‌ورک CSS Utility First |
+| Font Awesome | 6 | آیکون‌های گرافیکی |
+| PDF.js | 4 | خواننده PDF داخلی |
+| Mammoth.js | 1 | خواننده فایل‌های Word |
 
 </td>
-<td align="center" width="12%">
+<td width="50%">
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#339933', 'primaryTextColor': '#fff', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
-graph TD
-    A[Node.js] --> B[Express.js]
-    B --> C[REST API]
-    C --> D[MongoDB]
-```
-
-</td>
-<td align="center" width="12%">
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#47A248', 'primaryTextColor': '#fff', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
-graph TD
-    A[MongoDB] --> B[Mongoose ODM]
-    B --> C[Schemas]
-    C --> D[Models]
-```
+### 🔧 بک‌اند
+| فناوری | نسخه | توضیح |
+|--------|------|-------|
+| Node.js | 20 | محیط اجرای JavaScript |
+| Express.js | 4 | فریم‌ورک وب برای Node.js |
+| MongoDB | 7 | پایگاه داده NoSQL |
+| Mongoose | 8 | ODM برای MongoDB |
+| JWT | - | توکن احراز هویت |
+| Helmet.js | 7 | هدرهای امنیتی |
+| Multer | 1 | آپلود فایل |
 
 </td>
-<td align="center" width="12%">
+</tr>
+<tr>
+<td width="50%">
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#06B6D4', 'primaryTextColor': '#fff', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
-graph TD
-    A[Tailwind CSS] --> B[Utility First]
-    B --> C[Responsive]
-    C --> D[Dark Mode]
-```
+### 🛠️ ابزارها
+| ابزار | توضیح |
+|-------|-------|
+| Turbopack | بیلد سریع Next.js |
+| ESLint | کنترل کیفیت کد |
+| Prettier | فرمت‌بندی کد |
+| Git | کنترل نسخه |
+| GitHub | میزبانی پروژه |
 
 </td>
-<td align="center" width="12%">
+<td width="50%">
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FFCA28', 'primaryTextColor': '#000', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
-graph TD
-    A[Firebase] --> B[Authentication]
-    B --> C[OTP Login]
-    C --> D[JWT Token]
-```
+### ☁️ سرویس‌ها
+| سرویس | توضیح |
+|-------|-------|
+| Firebase Auth | احراز هویت OTP |
+| MongoDB Atlas | پایگاه داده ابری |
+| Vercel | استقرار فرانت‌اند |
+| Railway | استقرار بک‌اند |
 
 </td>
 </tr>
