@@ -2,7 +2,7 @@
 
 <img src="public/logo.jpg" alt="MAHFEL Logo" width="600" />
 
-# MAHFEL
+<h1 align="center"><span style="color:#06b6d4">MAHFEL</span></h1>
 
 <br>
 
