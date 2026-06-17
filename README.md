@@ -5,10 +5,6 @@
 <h1 align="center">محفل — MAHFEL</h1>
 
 <p align="center">
-  <strong>پلتفرم جامع پادکست، ویدیو و کتاب صوتی با رابط کاربری RTL فارسی</strong>
-</p>
-
-<p align="center">
   <a href="#-قابلیت‌ها">قابلیت‌ها</a> •
   <a href="#-معماری">معماری</a> •
   <a href="#-ساختار-پروژه">ساختار پروژه</a> •
@@ -514,5 +510,5 @@ graph TD
 ---
 
 <p align="center">
-  ساخته شده با ❤️ توسط <a href="https://github.com/emadch82">Emad</a>
+  ساخته شده توسط <a href="https://github.com/emadch82">EMAD CH</a>
 </p>
