@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="public/logo.jpg" alt="MAHFEL Logo" width="200" style="border-radius: 20px;" />
+  <img src="public/logo.jpg" alt="MAHFEL Logo" width="350" />
 </p>
 
 <h1 align="center">محفل — MAHFEL</h1>
 
 <p align="center">
-  پلتفرم جامع پادکست، ویدیو و کتاب صوتی با رابط کاربری RTL فارسی
+  <strong>پلتفرم جامع پادکست، ویدیو و کتاب صوتی با رابط کاربری RTL فارسی</strong>
 </p>
 
 <p align="center">
@@ -375,16 +375,34 @@ ADMIN_SECURITY_KEY=admin123
 
 ## 📊 نمودار فناوری‌ها
 
-```mermaid
-pie title توزیع فناوری‌ها
-    "React / Next.js" : 35
-    "TypeScript" : 20
-    "Node.js / Express" : 15
-    "MongoDB" : 10
-    "Tailwind CSS" : 10
-    "Font Awesome" : 5
-    "سایر" : 5
-```
+<table>
+<tr>
+<td align="center" width="14%">
+  <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" /><br>
+  <strong>35%</strong>
+</td>
+<td align="center" width="14%">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react" /><br>
+  <strong>20%</strong>
+</td>
+<td align="center" width="14%">
+  <img src="https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript" /><br>
+  <strong>15%</strong>
+</td>
+<td align="center" width="14%">
+  <img src="https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=node.js" /><br>
+  <strong>10%</strong>
+</td>
+<td align="center" width="14%">
+  <img src="https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb" /><br>
+  <strong>10%</strong>
+</td>
+<td align="center" width="14%">
+  <img src="https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss" /><br>
+  <strong>10%</strong>
+</td>
+</tr>
+</table>
 
 ---
 
