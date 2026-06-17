@@ -2,7 +2,7 @@
 
 <img src="public/logo.jpg" alt="MAHFEL Logo" width="600" />
 
-# محفل — MAHFEL
+# MAHFEL
 
 <br>
 
