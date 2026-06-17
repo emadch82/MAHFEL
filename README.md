@@ -291,13 +291,38 @@ ADMIN_SECURITY_KEY=admin123
 
 ### دستورات مفید
 
-| دستور | توضیح | پلتفرم |
-|-------|-------|--------|
-| `npm run dev` | اجرای فرانت‌اند با Turbopack | همه |
-| `npm run build` | بیلد پروژه برای تولید | همه |
-| `npm start` | اجرای پروژه بیلد شده | همه |
-| `node server/server.js` | اجرای سرور بک‌اند | همه |
-| `cd server && npm install` | نصب وابستگی‌های بک‌اند | همه |
+<table align="center">
+<tr>
+<th>دستور</th>
+<th>توضیح</th>
+<th>پلتفرم</th>
+</tr>
+<tr>
+<td><code>npm run dev</code></td>
+<td>اجرای فرانت‌اند با Turbopack</td>
+<td>همه</td>
+</tr>
+<tr>
+<td><code>npm run build</code></td>
+<td>بیلد پروژه برای تولید</td>
+<td>همه</td>
+</tr>
+<tr>
+<td><code>npm start</code></td>
+<td>اجرای پروژه بیلد شده</td>
+<td>همه</td>
+</tr>
+<tr>
+<td><code>node server/server.js</code></td>
+<td>اجرای سرور بک‌اند</td>
+<td>همه</td>
+</tr>
+<tr>
+<td><code>cd server && npm install</code></td>
+<td>نصب وابستگی‌های بک‌اند</td>
+<td>همه</td>
+</tr>
+</table>
 
 ---
 
