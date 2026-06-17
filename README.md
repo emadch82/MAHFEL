@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/logo.jpg" alt="MAHFEL Logo" width="800" />
+<img src="public/logo.jpg" alt="MAHFEL Logo" width="900" />
 
 <h1 align="center"><span style="color:#06b6d4; font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif; font-size:48px; font-weight:bold;">MAHFEL</span></h1>
 
