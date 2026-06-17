@@ -1,52 +1,66 @@
-<p align="center">
-  <img src="public/logo.jpg" alt="MAHFEL Logo" width="350" />
-</p>
+<div align="center">
 
-<h1 align="center">محفل — MAHFEL</h1>
+<img src="public/logo.jpg" alt="MAHFEL Logo" width="400" />
 
-<p align="center">
-  <a href="#-قابلیت‌ها">قابلیت‌ها</a> •
-  <a href="#-معماری">معماری</a> •
-  <a href="#-ساختار-پروژه">ساختار پروژه</a> •
-  <a href="#-نصب-و-راه‌اندازی">نصب و راه‌اندازی</a> •
-  <a href="#-فناوری‌ها">فناوری‌ها</a> •
-  <a href="#-اسکرین‌شات‌ها">اسکرین‌شات‌ها</a>
-</p>
+# محفل — MAHFEL
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" />
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react" />
-  <img src="https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript" />
-  <img src="https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=node.js" />
-  <img src="https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb" />
-  <img src="https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss" />
-</p>
+### پلتفرم جامع محتوای دیجیتال
+
+<br>
+
+<a href="https://github.com/emadch82/MAHFEL">
+  <img src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+  <img src="https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express.js-4-000000?style=for-the-badge&logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
+</a>
+
+<br>
+
+<a href="#-ویژگی‌های-کلیدی">ویژگی‌ها</a> •
+<a href="#-معماری-سیستم">معماری</a> •
+<a href="#-ساختار-پروژه">ساختار پروژه</a> •
+<a href="#-نصب-و-راه‌اندازی">نصب و راه‌اندازی</a> •
+<a href="#-رابط-کاربری">رابط کاربری</a> •
+<a href="#-امنیت">امنیت</a>
+
+<br><br>
+
+</div>
 
 ---
 
-## 🎯 قابلیت‌ها
+## ویژگی‌های کلیدی
 
 <table>
 <tr>
 <td width="50%">
 
 ### 🎧 پادکست و صدا
-- پخش‌کننده صوتی پیشرفته با زمان‌بندی
-- پخش‌کننده صوتی کوچک (Mini Player)
-- پخش‌کننده تمام‌صفحه
-- لیست پخش (Playlist)
-- جامعه نظرات پادکست
-- آپلود فایل‌های صوتی
+> پخش‌کننده صوتی پیشرفته با قابلیت زمان‌بندی، پخش در پس‌زمینه و لیست پخش سفارشی
+
+- پخش‌کننده صوتی کامل با کنترل‌های پیشرفته
+- پخش‌کننده کوچک (Mini Player) در پایین صفحه
+- پخش تمام‌صفحه برای تجربه بهتر
+- لیست پخش (Playlist) با مدیریت آسان
+- جامعه نظرات و تعامل کاربران
+- آپلود و مدیریت فایل‌های صوتی
 
 </td>
 <td width="50%">
 
 ### 🎬 ویدیو
-- پخش‌کننده ویدیویی سفارشی
+> پخش‌کننده ویدیویی سفارشی با پشتیبانی از YouTube و پخش آنلاین
+
+- پخش‌کننده ویدیویی با کیفیت بالا
 - پخش آنلاین YouTube با Embed
-- پخش‌کننده ویدیویی کوچک
-- لیست ویدیوها با فیلتر
-- پخش تمام‌صفحه
+- پخش‌کننده کوچک ویدیویی
+- لیست ویدیوها با فیلتر هوشمند
+- پخش تمام‌صفحه و تمام‌صفحه واقعی
 - جامعه نظرات ویدیو
 
 </td>
@@ -54,24 +68,28 @@
 <tr>
 <td width="50%">
 
-### 📚 کتاب
-- خواننده PDF داخلی (PDF.js)
-- خواننده فایل‌های متنی (Mammoth.js)
-- کتاب‌های منتشر شده
+### 📚 کتاب و مطالعه
+> خواننده PDF داخلی و پشتیبانی از فایل‌های متنی با Mammoth.js
+
+- خواننده PDF داخلی با PDF.js
+- خواننده فایل‌های متنی (Word) با Mammoth.js
+- کتاب‌های منتشر شده و فروشگاه
 - علاقه‌مندی‌ها و بوکمارک
-- جستجوی پیشرفته
-- سبد خرید و پرداخت
+- جستجوی پیشرفته در محتوا
+- سبد خرید و پرداخت آنلاین
 
 </td>
 <td width="50%">
 
 ### 👤 پروفایل و مدیریت
+> سیستم احراز هویت OTP و پنل مدیریت جامع
+
 - ورود با OTP (رمز یکبار مصرف)
-- پروفایل کاربری با آواتار
-- مدیریت علاقه‌مندی‌ها
-- سفارشات و تاریخچه
-- پنل مدیریت (Admin Panel)
-- جستجوی جهانی
+- پروفایل کاربری با آواتار و اطلاعات
+- مدیریت علاقه‌مندی‌ها و بوکمارک‌ها
+- تاریخچه سفارشات و خریدها
+- پنل مدیریت (Admin Panel) پیشرفته
+- جستجوی جهانی در تمام محتوا
 
 </td>
 </tr>
@@ -79,269 +97,301 @@
 
 ---
 
-## 🏗️ معماری
+## معماری سیستم
 
-### نمودار کلی سیستم
+### نمودار کلی معماری
 
 ```mermaid
 graph TB
-    subgraph "🖥️ کلاینت"
-        A[Browser] --> B[Next.js 16]
-        B --> C[React 19]
-        C --> D[App Router]
-        D --> E[Client Components]
-        D --> F[Server Components]
+    subgraph "🖥️ لایه کلاینت"
+        A[مرورگر کاربر] --> B[Next.js 16 App Router]
+        B --> C[React 19 Components]
+        C --> D[Client Components]
+        C --> E[Server Components]
+        C --> F[Server Actions]
     end
 
-    subgraph "🔧 بک‌اند"
-        G[Express.js] --> H[MongoDB]
-        G --> I[File Upload]
-        G --> J[OTP Auth]
+    subgraph "🔧 لایه سرور"
+        G[Express.js REST API] --> H[MongoDB Database]
+        G --> I[File Upload System]
+        G --> J[OTP Authentication]
+        G --> K[JWT Authorization]
     end
 
-    subgraph "🗄️ پایگاه داده"
-        H --> K[Users]
-        H --> L[Podcasts]
-        H --> M[Videos]
-        H --> N[Books]
-        H --> O[Comments]
-        H --> P[Posts]
-        H --> Q[Authors]
+    subgraph "🗄️ لایه داده"
+        H --> L[Users Collection]
+        H --> M[Podcasts Collection]
+        H --> N[Videos Collection]
+        H --> O[Books Collection]
+        H --> P[Comments Collection]
+        H --> Q[Posts Collection]
+        H --> R[Authors Collection]
     end
 
-    E -->|API Calls| G
-    F -->|Server Actions| G
-    A -->|Static Assets| B
+    D -->|HTTP/HTTPS| G
+    E -->|Server Actions| G
+    F -->|Direct Call| G
 
-    style A fill:#e0f2fe,stroke:#0ea5e9
-    style G fill:#dcfce7,stroke:#22c55e
-    style H fill:#fef3c7,stroke:#f59e0b
+    style A fill:#e0f2fe,stroke:#0ea5e9,stroke-width:2px
+    style G fill:#dcfce7,stroke:#22c55e,stroke-width:2px
+    style H fill:#fef3c7,stroke:#f59e0b,stroke-width:2px
+    style B fill:#ede9fe,stroke:#8b5cf6,stroke-width:2px
 ```
 
 ---
 
-### نمودار جریان داده‌ها
+### نمودار جریان احراز هویت
 
 ```mermaid
 sequenceDiagram
-    participant U as 👤 کاربر
+    actor U as 👤 کاربر
     participant F as 🖥️ فرانت‌اند
-    participant S as 🔧 سرور
+    participant S as 🔧 سرور بک‌اند
     participant DB as 🗄️ MongoDB
 
-    U->>F: باز کردن صفحه
-    F->>F: نمایش Loading Screen
-    F->>S: درخواست داده
-    S->>DB: query()
-    DB-->>S: نتیجه
-    S-->>F: JSON Response
-    F->>F: رندر صفحه
-    F->>U: نمایش محتوا
-
-    Note over U,DB: جریان احراز هویت
+    rect rgb(240, 245, 255)
+    Note over U,DB: فرآیند ورود با OTP
     U->>F: وارد کردن شماره تلفن
     F->>S: POST /api/auth/send-otp
-    S->>S: تولید OTP
-    S-->>F: کد OTP
-    F->>U: نمایش کد OTP
-    U->>F: وارد کردن OTP
+    S->>S: تولید کد ۶ رقمی
+    S->>DB: ذخیره OTP با انقضا
+    S-->>F: کد OTP ارسال شد
+    F->>U: نمایش فرم ورود OTP
+    U->>F: وارد کردن کد OTP
     F->>S: POST /api/auth/verify-otp
+    S->>DB: تأیید صحت کد
     S-->>F: JWT Token
-    F->>F: ذخیره توکن
+    F->>F: ذخیره توکن در localStorage
+    F->>U: ورود موفق به داشبورد
+    end
 ```
 
 ---
 
-### نمودار کامپوننت‌ها
+### نمودار ارتباط کامپوننت‌ها
 
 ```mermaid
 graph LR
-    subgraph "🎮 کنترل‌ها"
+    subgraph "🎮 لایه کنترل"
         A[AppHeader] --> B[SearchModal]
-        A --> C[ThemeProvider]
-        A --> D[BottomTabs]
+        A --> C[Theme Toggle]
+        A --> D[Profile Menu]
+        E[BottomTabs] --> F[Mobile Navigation]
+        E --> G[Desktop Navigation]
     end
 
     subgraph "🎵 پخش‌کننده‌ها"
-        E[AudioPlayer] --> F[AudioTimestampBar]
-        G[MinimizedPlayer] --> E
-        H[VideoMiniPlayer] --> I[CustomVideoPlayer]
-        J[FullScreenPlayer] --> E
-        J --> I
+        H[AudioPlayer] --> I[AudioTimestampBar]
+        J[MinimizedPlayer] --> H
+        K[VideoMiniPlayer] --> L[CustomVideoPlayer]
+        M[FullScreenPlayer] --> H
+        M --> L
+        N[InlineVideoPlayer] --> L
     end
 
-    subgraph "📄 صفحات"
-        K[HomePage] --> L[PodcastCard]
-        K --> M[VideoCard]
-        K --> N[BookCard]
-        O[LibraryPage] --> P[BookReader]
-        Q[AdminPage] --> R[Analytics]
-        Q --> S[UserManagement]
+    subgraph "📄 صفحات اصلی"
+        O[HomePage] --> P[PodcastCard]
+        O --> Q[VideoCard]
+        O --> R[BookCard]
+        S[LibraryPage] --> T[BookReader]
+        U[AdminPage] --> V[Analytics Dashboard]
+        U --> W[User Management]
+        U --> X[Content Management]
     end
 
-    subgraph "🔧 ابزارها"
-        T[CheckoutFlow]
-        U[ShareCard]
-        V[Skeleton]
-        W[Toast]
+    subgraph "🔧 ابزارهای کمکی"
+        Y[CheckoutFlow]
+        Z[ShareCard]
+        AA[Skeleton Loading]
+        AB[Toast Notifications]
+        AC[ErrorBoundary]
     end
 
-    style K fill:#dbeafe,stroke:#3b82f6
-    style E fill:#fce7f3,stroke:#ec4899
-    style Q fill:#dcfce7,stroke:#22c55e
+    style O fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
+    style H fill:#fce7f3,stroke:#ec4899,stroke-width:2px
+    style U fill:#dcfce7,stroke:#22c55e,stroke-width:2px
 ```
 
 ---
 
-## 📁 ساختار پروژه
+## ساختار پروژه
 
 ```
-MAHFEL/
-├── app/                          # Next.js App Router
-│   ├── (auth)/                   # گروه مسیر احراز هویت
-│   │   └── layout.tsx
-│   ├── api/                      # API Routes
-│   │   ├── health/route.ts       # Health Check
-│   │   └── search/route.ts       # جستجوی پروکسی
-│   ├── actions.ts                # Server Actions
-│   ├── globals.css               # استایل‌های سراسری
-│   ├── layout.tsx                # لایوت ریشه (فونت‌ها، متادیتا)
-│   ├── loading.tsx               # صفحه لودینگ سفارشی
-│   ├── not-found.tsx             # صفحه 404
-│   ├── page.tsx                  # ورودی اصلی (SPA)
-│   ├── robots.txt                # فایل robots
-│   └── sitemap.ts                # نقشه سایت
+📁 MAHFEL/
 │
-├── components/                   # کامپوننت‌های React
-│   ├── AudioPlayer.tsx           # پخش‌کننده صوتی
-│   ├── AudioTimestampBar.tsx     # نوار زمان‌بندی صدا
-│   ├── BookCard.tsx              # کارت نمایش کتاب
-│   ├── BookReader.tsx            # خواننده کتاب
-│   ├── CartModal.tsx             # مodal سبد خرید
-│   ├── CheckoutFlow.tsx          # فرآیند پرداخت
-│   ├── CustomVideoPlayer.tsx     # پخش‌کننده ویدیویی
-│   ├── ExternalScripts.tsx       # اسکریپت‌های خارجی
-│   ├── FullScreenPlayer.tsx      # پخش تمام‌صفحه
-│   ├── InlineVideoPlayer.tsx     # پخش ویدیویی Inline
-│   ├── LiveBanner.tsx            # بنر زنده
-│   ├── MahfelSidebar.tsx        # سایدبار محفل
-│   ├── MinimizedPlayer.tsx       # پخش‌کننده کوچک
-│   ├── OptimizedImage.tsx        # تصویر بهینه‌شده
-│   ├── PdfViewer.tsx             # نمایشگر PDF
-│   ├── PodcastCard.tsx           # کارت پادکست
-│   ├── SearchModal.tsx           # مodal جستجو
-│   ├── Sidebar.tsx               # سایدبار
-│   ├── SohaLogo.tsx              # لوگوی سها
-│   ├── StructuredData.tsx        # داده‌های ساختاریافته
-│   ├── VideoCard.tsx             # کارت ویدیو
-│   └── VideoMiniPlayer.tsx       # پخش‌کننده ویدیویی کوچک
+├── 📁 app/                          # Next.js App Router
+│   ├── 📁 (auth)/                   # گروه مسیر احراز هویت
+│   │   └── layout.tsx               # لایوت احراز هویت
+│   ├── 📁 api/                      # API Routes
+│   │   ├── 📁 health/route.ts       # Health Check Endpoint
+│   │   └── 📁 search/route.ts       # جستجوی پروکسی
+│   ├── actions.ts                   # Server Actions
+│   ├── globals.css                  # استایل‌های سراسری
+│   ├── layout.tsx                   # لایوت ریشه (فونت‌ها، متادیتا)
+│   ├── loading.tsx                  # صفحه لودینگ سفارشی ⭐
+│   ├── not-found.tsx                # صفحه 404
+│   ├── page.tsx                     # ورودی اصلی (SPA Mode)
+│   ├── robots.txt                   # فایل robots.txt
+│   └── sitemap.ts                   # نقشه سایت
 │
-├── views/                        # صفحات (جایگزین pages/)
-│   ├── AdminPage.tsx             # پنل مدیریت
-│   ├── AuthorPage.tsx            # صفحه نویسنده
-│   ├── BookPage.tsx              # صفحه کتاب
-│   ├── CommentsCommunityPage.tsx # جامعه نظرات
-│   ├── FavoritesPage.tsx         # علاقه‌مندی‌ها
-│   ├── HomePage.tsx              # صفحه اصلی
-│   ├── InterestsPage.tsx         # علاقه‌مندی‌ها
-│   ├── LibraryPage.tsx           # کتابخانه
-│   ├── LoginPage.tsx             # صفحه ورود
-│   ├── MatnPage.tsx              # صفحه متن
-│   ├── NashrPage.tsx             # صفحه نشر
-│   ├── OrdersPage.tsx            # سفارشات
-│   ├── PlaylistPage.tsx          # لیست پخش
-│   ├── PostCommentsPage.tsx      # نظرات پست
-│   ├── PublishedBooksPage.tsx    # کتاب‌های منتشر شده
-│   ├── SecretaryPage.tsx         # صفحه دبیرخانه
-│   ├── SowtPage.tsx              # صفحه صوت
-│   ├── UserProfilePage.tsx       # پروفایل کاربر
-│   ├── VideoListPage.tsx         # لیست ویدیوها
-│   └── VideoPlayerPage.tsx       # پخش ویدیو
+├── 📁 components/                   # کامپوننت‌های React
+│   ├── 📁 Players/                  # پخش‌کننده‌ها
+│   │   ├── AudioPlayer.tsx          # پخش‌کننده صوتی
+│   │   ├── AudioTimestampBar.tsx    # نوار زمان‌بندی صدا
+│   │   ├── CustomVideoPlayer.tsx    # پخش‌کننده ویدیویی
+│   │   ├── FullScreenPlayer.tsx     # پخش تمام‌صفحه
+│   │   ├── MinimizedPlayer.tsx      # پخش‌کننده کوچک
+│   │   └── VideoMiniPlayer.tsx      # پخش‌کننده ویدیویی کوچک
+│   │
+│   ├── 📁 Cards/                    # کارت‌های نمایشی
+│   │   ├── BookCard.tsx             # کارت کتاب
+│   │   ├── NewEpisodeCard.tsx       # کارت اپیزود جدید
+│   │   ├── PodcastCard.tsx          # کارت پادکست
+│   │   └── VideoCard.tsx            # کارت ویدیو
+│   │
+│   ├── 📁 Layout/                   # کامپوننت‌های لایوت
+│   │   ├── AppHeader.tsx            # هدر اصلی
+│   │   ├── MahfelSidebar.tsx       # سایدبار محفل
+│   │   ├── Sidebar.tsx              # سایدبار اصلی
+│   │   └── BottomTabs.tsx           # تب‌های پایین
+│   │
+│   ├── 📁 UI/                       # کامپوننت‌های UI
+│   │   ├── ErrorBoundary.tsx        # مدیریت خطا
+│   │   ├── OptimizedImage.tsx       # تصویر بهینه‌شده
+│   │   ├── SearchModal.tsx          # مodal جستجو
+│   │   ├── Skeleton.tsx             # اسکلت لودینگ
+│   │   └── Toast.tsx                # اعلان‌ها
+│   │
+│   └── 📁 Features/                 # کامپوننت‌های ویژه
+│       ├── BookReader.tsx           # خواننده کتاب
+│       ├── CartModal.tsx            # مodal سبد خرید
+│       ├── CheckoutFlow.tsx         # فرآیند پرداخت
+│       ├── LiveBanner.tsx           # بنر زنده
+│       ├── PdfViewer.tsx            # نمایشگر PDF
+│       ├── PostInteractionMenu.tsx  # منوی تعامل پست
+│       ├── ShareCard.tsx            # کارت اشتراک‌گذاری
+│       └── StructuredData.tsx       # داده‌های ساختاریافته
 │
-├── server/                       # بک‌اند Express.js
-│   ├── config/
-│   │   └── db.js                 # اتصال MongoDB
-│   ├── middleware/
-│   │   └── auth.js               # مiddleware احراز هویت
-│   ├── models/                   # مدل‌های Mongoose
-│   │   ├── Author.js             # نویسنده
-│   │   ├── Book.js               # کتاب
-│   │   ├── Comment.js            # نظر
-│   │   ├── Podcast.js            # پادکست
-│   │   ├── Post.js               # پست
-│   │   ├── PublishedBook.js      # کتاب منتشر شده
-│   │   ├── User.js               # کاربر
-│   │   └── Video.js              # ویدیو
-│   ├── routes/                   # مسیرهای API
-│   │   ├── admin.js              # پنل مدیریت
-│   │   ├── auth.js               # احراز هویت
-│   │   ├── authors.js            # نویسندگان
-│   │   ├── books.js              # کتاب‌ها
-│   │   ├── comments.js           # نظرات
-│   │   ├── podcasts.js           # پادکست‌ها
-│   │   ├── posts.js              # پست‌ها
-│   │   ├── proxy.js              # پروکسی
-│   │   ├── publishedBooks.js     # کتاب‌های منتشر شده
-│   │   ├── upload.js             # آپلود فایل
-│   │   └── videos.js             # ویدیوها
-│   ├── uploads/                  # فایل‌های آپلود شده
-│   └── server.js                 # نقطه ورود سرور
+├── 📁 views/                        # صفحات (جایگزین pages/)
+│   ├── AdminPage.tsx                # پنل مدیریت ⭐
+│   ├── AuthorPage.tsx               # صفحه نویسنده
+│   ├── BookPage.tsx                 # صفحه کتاب
+│   ├── CommentsCommunityPage.tsx    # جامعه نظرات
+│   ├── FavoritesPage.tsx            # علاقه‌مندی‌ها
+│   ├── HomePage.tsx                 # صفحه اصلی ⭐
+│   ├── InterestsPage.tsx            # علاقه‌مندی‌ها
+│   ├── LibraryPage.tsx              # کتابخانه
+│   ├── LoginPage.tsx                # صفحه ورود
+│   ├── MatnPage.tsx                 # صفحه متن
+│   ├── NashrPage.tsx                # صفحه نشر
+│   ├── OrdersPage.tsx               # سفارشات
+│   ├── PlaylistPage.tsx             # لیست پخش
+│   ├── PostCommentsPage.tsx         # نظرات پست
+│   ├── PublishedBooksPage.tsx       # کتاب‌های منتشر شده
+│   ├── SecretaryPage.tsx            # صفحه دبیرخانه
+│   ├── SowtPage.tsx                 # صفحه صوت
+│   ├── UserProfilePage.tsx          # پروفایل کاربر
+│   ├── VideoListPage.tsx            # لیست ویدیوها
+│   └── VideoPlayerPage.tsx          # پخش ویدیو
 │
-├── services/                     # سرویس‌های API
-│   └── api.ts                    # توابع API فرانت‌اند
+├── 📁 server/                       # بک‌اند Express.js
+│   ├── 📁 config/
+│   │   └── db.js                    # اتصال MongoDB
+│   ├── 📁 middleware/
+│   │   └── auth.js                  # مiddleware احراز هویت
+│   ├── 📁 models/                   # مدل‌های Mongoose
+│   │   ├── Author.js                # نویسنده
+│   │   ├── Book.js                  # کتاب
+│   │   ├── Comment.js               # نظر
+│   │   ├── Podcast.js               # پادکست
+│   │   ├── Post.js                  # پست
+│   │   ├── PublishedBook.js         # کتاب منتشر شده
+│   │   ├── User.js                  # کاربر
+│   │   └── Video.js                 # ویدیو
+│   ├── 📁 routes/                   # مسیرهای API
+│   │   ├── admin.js                 # پنل مدیریت
+│   │   ├── auth.js                  # احراز هویت
+│   │   ├── authors.js               # نویسندگان
+│   │   ├── books.js                 # کتاب‌ها
+│   │   ├── comments.js              # نظرات
+│   │   ├── podcasts.js              # پادکست‌ها
+│   │   ├── posts.js                 # پست‌ها
+│   │   ├── proxy.js                 # پروکسی
+│   │   ├── publishedBooks.js        # کتاب‌های منتشر شده
+│   │   ├── upload.js                # آپلود فایل
+│   │   └── videos.js                # ویدیوها
+│   └── server.js                    # نقطه ورود سرور
 │
-├── public/                       # فایل‌های استاتیک
-│   ├── font-awesome/             # آیکون‌های Font Awesome
-│   ├── fonts/                    # فونت‌های سفارشی
-│   └── logo.jpg                  # لوگوی محفل
+├── 📁 services/                     # سرویس‌های API
+│   └── api.ts                       # توابع API فرانت‌اند
 │
-├── fonts/                        # فونت‌ها (برای next/font)
+├── 📁 public/                       # فایل‌های استاتیک
+│   ├── 📁 font-awesome/             # آیکون‌های Font Awesome
+│   ├── 📁 fonts/                    # فونت‌های سفارشی
+│   └── logo.jpg                     # لوگوی محفل
+│
+├── 📁 fonts/                        # فونت‌ها (برای next/font)
 │   ├── IranNastaliq.ttf
 │   └── IranNastaliq.woff2
 │
-├── next.config.ts                # تنظیمات Next.js
-├── tailwind.config.js            # تنظیمات Tailwind CSS
-├── tsconfig.json                 # تنظیمات TypeScript
-└── package.json                  # وابستگی‌ها
+├── next.config.ts                   # تنظیمات Next.js
+├── tailwind.config.js               # تنظیمات Tailwind CSS
+├── tsconfig.json                    # تنظیمات TypeScript
+└── package.json                     # وابستگی‌ها
 ```
 
 ---
 
-## 🛠️ نصب و راه‌اندازی
+## نصب و راه‌اندازی
 
 ### پیش‌نیازها
 
-- Node.js 20+ 
-- MongoDB 7+
-- npm یا yarn
+<table>
+<tr>
+<td>
+
+```bash
+# بررسی نسخه Node.js
+node --version  # v20.0.0+
+
+# بررسی نسخه npm
+npm --version   # v10.0.0+
+
+# بررسی MongoDB
+mongod --version # v7.0.0+
+```
+
+</td>
+</tr>
+</table>
 
 ### مراحل نصب
 
 ```bash
-# 1. کلون کردن پروژه
+# ۱. کلون کردن پروژه
 git clone https://github.com/emadch82/MAHFEL.git
 cd MAHFEL
 
-# 2. نصب وابستگی‌های فرانت‌اند
+# ۲. نصب وابستگی‌های فرانت‌اند
 npm install
 
-# 3. نصب وابستگی‌های بک‌اند
+# ۳. نصب وابستگی‌های بک‌اند
 cd server
 npm install
 cd ..
 
-# 4. تنظیم متغیرهای محیطی
+# ۴. تنظیم متغیرهای محیطی
 cp .env.example .env
 # ویرایش فایل .env با تنظیمات خودتان
 
-# 5. اجرای MongoDB
-mongod
+# ۵. اجرای MongoDB
+mongod --dbpath /path/to/data
 
-# 6. اجرای سرور بک‌اند
+# ۶. اجرای سرور بک‌اند
 cd server
 node server.js
 
-# 7. اجرای فرانت‌اند (در ترمینال جداگانه)
+# ۷. اجرای فرانت‌اند (در ترمینال جداگانه)
 npm run dev
 ```
 
@@ -358,157 +408,376 @@ JWT_SECRET=your_jwt_secret_here
 ADMIN_SECURITY_KEY=admin123
 ```
 
-### دستورات
+### دستورات مفید
 
-| دستور | توضیح |
-|-------|-------|
-| `npm run dev` | اجرای فرانت‌اند با Turbopack |
-| `npm run build` | بیلد پروژه |
-| `npm start` | اجرای پروژه بیلد شده |
-| `cd server && node server.js` | اجرای سرور بک‌اند |
-
----
-
-## 📊 نمودار فناوری‌ها
-
-<table>
-<tr>
-<td align="center" width="14%">
-  <img src="https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js" /><br>
-  <strong>35%</strong>
-</td>
-<td align="center" width="14%">
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react" /><br>
-  <strong>20%</strong>
-</td>
-<td align="center" width="14%">
-  <img src="https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript" /><br>
-  <strong>15%</strong>
-</td>
-<td align="center" width="14%">
-  <img src="https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=node.js" /><br>
-  <strong>10%</strong>
-</td>
-<td align="center" width="14%">
-  <img src="https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb" /><br>
-  <strong>10%</strong>
-</td>
-<td align="center" width="14%">
-  <img src="https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss" /><br>
-  <strong>10%</strong>
-</td>
-</tr>
-</table>
+| دستور | توضیح | پلتفرم |
+|-------|-------|--------|
+| `npm run dev` | اجرای فرانت‌اند با Turbopack | همه |
+| `npm run build` | بیلد پروژه برای تولید | همه |
+| `npm start` | اجرای پروژه بیلد شده | همه |
+| `node server/server.js` | اجرای سرور بک‌اند | همه |
+| `cd server && npm install` | نصب وابستگی‌های بک‌اند | همه |
 
 ---
 
-## 🔐 امنیت
+## رابط کاربری
 
-<table>
-<tr>
-<td width="50%">
-
-### فرانت‌اند
-- CSP Headers (Content Security Policy)
-- X-Content-Type-Options
-- X-Frame-Options
-- X-XSS-Protection
-- Permissions-Policy
-- Referrer-Policy
-
-</td>
-<td width="50%">
-
-### بک‌اند
-- JWT Authentication
-- OTP Verification
-- Rate Limiting
-- Input Validation
-- CORS Configuration
-- Helmet.js
-
-</td>
-</tr>
-</table>
-
----
-
-## ⚡ عملکرد
-
-| ویژگی | وضعیت |
-|--------|-------|
-| SSR (Server-Side Rendering) | ✅ با Next.js 16 |
-| Streaming | ✅ Suspense + Loading |
-| Image Optimization | ✅ next/image |
-| Font Optimization | ✅ next/font |
-| Script Optimization | ✅ next/script |
-| Code Splitting | ✅ اتوماتیک |
-| Caching | ✅ Static + Dynamic |
-| PWA Support | ✅ manifest.json |
-
----
-
-## 📱 صفحات و قابلیت‌ها
+### نمودار صفحات و ارتباطات
 
 ```mermaid
 graph TD
-    A[🏠 صفحه اصلی] --> B[🎵 پادکست‌ها]
-    A --> C[🎬 ویدیوها]
-    A --> D[📚 کتاب‌ها]
-    A --> E[📝 پست‌ها]
+    A["🏠 صفحه اصلی<br/>HomePage"] --> B["🎵 پادکست‌ها<br/>Podcasts"]
+    A --> C["🎬 ویدیوها<br/>Videos"]
+    A --> D["📚 کتاب‌ها<br/>Books"]
+    A --> E["📝 پست‌ها<br/>Posts"]
     
-    B --> B1[🎧 پخش صوتی]
-    B --> B2[💬 جامعه نظرات]
-    B --> B3[📋 لیست پخش]
+    B --> B1["🎧 پخش صوتی"]
+    B --> B2["💬 جامعه نظرات"]
+    B --> B3["📋 لیست پخش"]
     
-    C --> C1[▶️ پخش ویدیو]
-    C --> C2[💬 جامعه نظرات]
-    C --> C3[📺 لیست ویدیوها]
+    C --> C1["▶️ پخش ویدیو"]
+    C --> C2["💬 جامعه نظرات"]
+    C --> C3["📺 لیست ویدیوها"]
     
-    D --> D1[📖 خواندن PDF]
-    D --> D2[📝 خواندن متن]
-    D --> D3[🛒 سبد خرید]
+    D --> D1["📖 خواندن PDF"]
+    D --> D2["📝 خواندن متن"]
+    D --> D3["🛒 سبد خرید"]
     
-    E --> E1[👍 لایک]
-    E --> E2[💬 نظر]
-    E --> E3[🔗 اشتراک‌گذاری]
+    E --> E1["👍 لایک"]
+    E --> E2["💬 نظر"]
+    E --> E3["🔗 اشتراک‌گذاری"]
     
-    F[👤 پروفایل] --> G[❤️ علاقه‌مندی‌ها]
-    F --> H[📦 سفارشات]
-    F --> I[⚙️ تنظیمات]
+    F["👤 پروفایل"] --> G["❤️ علاقه‌مندی‌ها"]
+    F --> H["📦 سفارشات"]
+    F --> I["⚙️ تنظیمات"]
     
-    J[🔧 پنل مدیریت] --> K[📊 آمار]
-    J --> L[👥 مدیریت کاربران]
-    J --> M[📝 مدیریت محتوا]
-    J --> N[🔍 جستجوی جهانی]
+    J["🔧 پنل مدیریت"] --> K["📊 آمار و تحلیل"]
+    J --> L["👥 مدیریت کاربران"]
+    J --> M["📝 مدیریت محتوا"]
+    J --> N["🔍 جستجوی جهانی"]
+    J --> O["📤 خروجی داده"]
     
-    style A fill:#dbeafe,stroke:#3b82f6
-    style F fill:#fce7f3,stroke:#ec4899
-    style J fill:#dcfce7,stroke:#22c55e
+    style A fill:#dbeafe,stroke:#3b82f6,stroke-width:3px
+    style F fill:#fce7f3,stroke:#ec4899,stroke-width:3px
+    style J fill:#dcfce7,stroke:#22c55e,stroke-width:3px
 ```
 
 ---
 
-## 🌐 API Endpoints
+### جدول صفحات
+
+<table>
+<tr>
+<td align="center" width="20%">
+
+**🏠 صفحه اصلی**
+- نمایش محتوای ویژه
+- پادکست‌های جدید
+- ویدیوهای پیشنهادی
+- کتاب‌های جدید
+
+</td>
+<td align="center" width="20%">
+
+**🎵 پادکست**
+- پخش‌کننده صوتی
+- لیست اپیزودها
+- جامعه نظرات
+- لیست پخش
+
+</td>
+<td align="center" width="20%">
+
+**🎬 ویدیو**
+- پخش‌کننده ویدیو
+- لیست ویدیوها
+- جامعه نظرات
+- پخش تمام‌صفحه
+
+</td>
+<td align="center" width="20%">
+
+**📚 کتاب**
+- خواننده PDF
+- خواننده متن
+- فروشگاه کتاب
+- علاقه‌مندی‌ها
+
+</td>
+<td align="center" width="20%">
+
+**🔧 پنل مدیریت**
+- آمار و تحلیل
+- مدیریت کاربران
+- مدیریت محتوا
+- جستجوی جهانی
+
+</td>
+</tr>
+</table>
+
+---
+
+## فناوری‌ها و ابزارها
+
+<table>
+<tr>
+<td align="center" width="12%">
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#61DAFB', 'primaryTextColor': '#000', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[React 19] --> B[Next.js 16]
+    B --> C[App Router]
+    C --> D[Turbopack]
+```
+
+</td>
+<td align="center" width="12%">
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#3178C6', 'primaryTextColor': '#fff', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[TypeScript] --> B[Type Safety]
+    B --> C[Autocomplete]
+    C --> D[Error Detection]
+```
+
+</td>
+<td align="center" width="12%">
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#339933', 'primaryTextColor': '#fff', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[Node.js] --> B[Express.js]
+    B --> C[REST API]
+    C --> D[MongoDB]
+```
+
+</td>
+<td align="center" width="12%">
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#47A248', 'primaryTextColor': '#fff', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[MongoDB] --> B[Mongoose ODM]
+    B --> C[Schemas]
+    C --> D[Models]
+```
+
+</td>
+<td align="center" width="12%">
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#06B6D4', 'primaryTextColor': '#fff', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[Tailwind CSS] --> B[Utility First]
+    B --> C[Responsive]
+    C --> D[Dark Mode]
+```
+
+</td>
+<td align="center" width="12%">
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#FFCA28', 'primaryTextColor': '#000', 'primaryBorderColor': '#000', 'lineColor': '#333', 'secondaryColor': '#f0f0f0', 'tertiaryColor': '#fff'}}}%%
+graph TD
+    A[Firebase] --> B[Authentication]
+    B --> C[OTP Login]
+    C --> D[JWT Token]
+```
+
+</td>
+</tr>
+</table>
+
+---
+
+## امنیت
+
+<table>
+<tr>
+<td width="50%">
+
+### 🔒 فرانت‌اند
+> لایه امنیتی اول با هدرهای HTTP امنیتی
+
+| هدر | توضیح |
+|-----|-------|
+| `Content-Security-Policy` | جلوگیری از XSS |
+| `X-Content-Type-Options` | جلوگیری از MIME sniffing |
+| `X-Frame-Options` | جلوگیری از Clickjacking |
+| `X-XSS-Protection` | محافظت XSS مرورگر |
+| `Permissions-Policy` | کنترل دسترسی‌ها |
+| `Referrer-Policy` | کنترل اطلاعات ارجاع |
+
+</td>
+<td width="50%">
+
+### 🔐 بک‌اند
+> لایه امنیتی دوم با احراز هویت و اعتبارسنجی
+
+| ویژگی | توضیح |
+|-------|-------|
+| JWT Authentication | توکن احراز هویت |
+| OTP Verification | رمز یکبار مصرف |
+| Rate Limiting | محدودیت درخواست |
+| Input Validation | اعتبارسنجی ورودی |
+| CORS Configuration | کنترل دسترسی CORS |
+| Helmet.js | هدرهای امنیتی |
+
+</td>
+</tr>
+</table>
+
+---
+
+## عملکرد و بهینه‌سازی
+
+<table>
+<tr>
+<td width="50%">
+
+### ⚡ بهینه‌سازی فرانت‌اند
+
+| ویژگی | وضعیت | توضیح |
+|--------|-------|-------|
+| SSR | ✅ | Server-Side Rendering با Next.js 16 |
+| Streaming | ✅ | Suspense + Loading |
+| Image Optimization | ✅ | next/image |
+| Font Optimization | ✅ | next/font |
+| Script Optimization | ✅ | next/script |
+| Code Splitting | ✅ | اتوماتیک |
+| Caching | ✅ | Static + Dynamic |
+| PWA Support | ✅ | manifest.json |
+
+</td>
+<td width="50%">
+
+### 🚀 بهینه‌سازی بک‌اند
+
+| ویژگی | وضعیت | توضیح |
+|--------|-------|-------|
+| REST API | ✅ | API استاندارد |
+| MongoDB Aggregation | ✅ | کوئری‌های بهینه |
+| File Streaming | ✅ | استریم فایل‌ها |
+| Connection Pooling | ✅ | مدیریت اتصالات |
+| Error Handling | ✅ | مدیریت خطاها |
+| Logging | ✅ | ثبت رویدادها |
+
+</td>
+</tr>
+</table>
+
+---
+
+## API Endpoints
+
+<table>
+<tr>
+<td width="50%">
+
+### 🏠 عمومی
 
 | متد | مسیر | توضیح |
 |-----|------|-------|
 | `GET` | `/api/health` | Health Check |
 | `GET` | `/api/search` | جستجوی محتوا |
-| `POST` | `/api/auth/send-otp` | ارسال OTP |
-| `POST` | `/api/auth/verify-otp` | تأیید OTP |
 | `GET` | `/api/podcasts` | لیست پادکست‌ها |
 | `GET` | `/api/videos` | لیست ویدیوها |
 | `GET` | `/api/books` | لیست کتاب‌ها |
 | `GET` | `/api/comments` | لیست نظرات |
-| `POST` | `/api/upload` | آپلود فایل |
+| `GET` | `/api/authors` | لیست نویسندگان |
+| `GET` | `/api/posts` | لیست پست‌ها |
+
+</td>
+<td width="50%">
+
+### 👤 احراز هویت
+
+| متد | مسیر | توضیح |
+|-----|------|-------|
+| `POST` | `/api/auth/send-otp` | ارسال OTP |
+| `POST` | `/api/auth/verify-otp` | تأیید OTP |
+
+### 🔧 مدیریت
+
+| متد | مسیر | توضیح |
+|-----|------|-------|
 | `GET` | `/api/admin/stats` | آمار پنل مدیریت |
 | `GET` | `/api/admin/users` | لیست کاربران |
 | `GET` | `/api/admin/posts` | لیست پست‌ها |
 | `GET` | `/api/admin/comments` | لیست نظرات |
+| `POST` | `/api/upload` | آپلود فایل |
+
+</td>
+</tr>
+</table>
 
 ---
 
-<p align="center">
-  ساخته شده توسط <a href="https://github.com/emadch82">EMAD CH</a>
-</p>
+<div align="center">
+
+### 📊 آمار پروژه
+
+<table>
+<tr>
+<td align="center" width="25%">
+
+```
+📁 تعداد فایل‌ها
+━━━━━━━━━━━━
+100+ فایل
+```
+
+</td>
+<td align="center" width="25%">
+
+```
+📄 تعداد صفحات
+━━━━━━━━━━━━
+22 صفحه
+```
+
+</td>
+<td align="center" width="25%">
+
+```
+🧩 تعداد کامپوننت‌ها
+━━━━━━━━━━━━
+35+ کامپوننت
+```
+
+</td>
+<td align="center" width="25%">
+
+```
+🔌 تعداد API
+━━━━━━━━━━━━
+13+ endpoint
+```
+
+</td>
+</tr>
+</table>
+
+<br>
+
+---
+
+### 🛠️ ساخته شده با
+
+<img src="https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=next.js&logoColor=white" />
+<img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+<img src="https://img.shields.io/badge/TypeScript-5.3-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
+<img src="https://img.shields.io/badge/Node.js-20-339933?style=for-the-badge&logo=node.js&logoColor=white" />
+<img src="https://img.shields.io/badge/Express.js-4-000000?style=for-the-badge&logo=express&logoColor=white" />
+<img src="https://img.shields.io/badge/MongoDB-7-47A248?style=for-the-badge&logo=mongodb&logoColor=white" />
+<img src="https://img.shields.io/badge/Tailwind-3-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" />
+<img src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=for-the-badge&logo=firebase&logoColor=black" />
+
+<br><br>
+
+ساخته شده توسط <a href="https://github.com/emadch82"><strong>EMAD CH</strong></a>
+
+</div>
