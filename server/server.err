@@ -1,3 +1,10 @@
 (node:2720) [MONGOOSE] Warning: `isNew` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
 (Use `Node --trace-warnings ...` to show where the warning was created)
 (node:2720) [MONGOOSE] Warning: `isNew` is a reserved schema pathname and may break some functionality. You are allowed to use it, but use at your own risk. To disable this warning pass `suppressReservedKeysWarning` as a schema option.
+Server Error: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+Server Error: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+VERIFY OTP ERROR: TypeError: undefined is not iterable (cannot read property Symbol(Symbol.iterator))
+    at generateDefaultAvatar (file:///E:/soha/server/routes/auth.js:31:20)
+    at file:///E:/soha/server/routes/auth.js:47:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Server Error: Expected property name or '}' in JSON at position 1 (line 1 column 2)

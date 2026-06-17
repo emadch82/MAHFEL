@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: ['./index.html', './pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './App.tsx', './index.tsx'],
+module.exports = {
+  content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './App.tsx', './components/**/*.{js,ts,jsx,tsx}', './views/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
@@ -10,7 +10,7 @@ export default {
         accent: { DEFAULT: '#f59e0b', dark: '#d97706', light: '#fbbf24' },
         surface: { DEFAULT: '#ffffff', 2: '#f8fafc', 3: '#f1f5f9' },
       },
-      fontFamily: { sans: ['Vazirmatn', 'Tahoma', 'sans-serif'], nastaliq: ['IranNastaliq', 'serif'] },
+      fontFamily: { sans: ['var(--font-vazir)', 'Tahoma', 'sans-serif'], nastaliq: ['var(--font-nastaliq)', 'serif'] },
       borderRadius: { 'sm': '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '28px' },
       boxShadow: {
         'glow': '0 0 40px rgba(16, 185, 129, 0.2)',

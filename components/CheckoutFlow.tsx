@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import type { PublishedBook } from '../types';
 import { toPersianDigits } from '../utils/helpers';
 import type { CartItem } from './CartModal';
-import type { Order } from '../pages/OrdersPage';
+import type { Order } from '../views/OrdersPage';
 
 interface CheckoutFlowProps {
   items: CartItem[];

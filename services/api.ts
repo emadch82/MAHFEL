@@ -1,7 +1,7 @@
 
 import type { Podcast, Comment, Video, Post, Book, Author, PublishedBook, User } from '../types';
 
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || '/api';
 
 const getToken = (): string | null => localStorage.getItem('soha_token');
 
