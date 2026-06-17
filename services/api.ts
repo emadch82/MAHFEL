@@ -295,6 +295,117 @@ export const uploadFile = async (file: File, onProgress?: (pct: number) => void)
   });
 };
 
+// --- Admin ---
+export const getAdminStats = async (): Promise<any> => {
+  return apiFetch('/admin/stats');
+};
+
+export const getAdminUsers = async (params?: { search?: string; role?: string; page?: number }): Promise<any> => {
+  const qs = new URLSearchParams();
+  if (params?.search) qs.set('search', params.search);
+  if (params?.role) qs.set('role', params.role);
+  if (params?.page) qs.set('page', String(params.page));
+  return apiFetch(`/admin/users?${qs.toString()}`);
+};
+
+export const updateUserRole = async (userId: string, role: string): Promise<any> => {
+  return apiFetch(`/admin/users/${userId}/role`, { method: 'PUT', body: JSON.stringify({ role }) });
+};
+
+export const updateUser = async (userId: string, data: { name?: string; avatar?: string; role?: string }): Promise<any> => {
+  return apiFetch(`/admin/users/${userId}`, { method: 'PUT', body: JSON.stringify(data) });
+};
+
+export const deleteUser = async (userId: string): Promise<any> => {
+  return apiFetch(`/admin/users/${userId}`, { method: 'DELETE' });
+};
+
+export const getAdminPosts = async (params?: { search?: string; page?: number }): Promise<any> => {
+  const qs = new URLSearchParams();
+  if (params?.search) qs.set('search', params.search);
+  if (params?.page) qs.set('page', String(params.page));
+  return apiFetch(`/admin/posts?${qs.toString()}`);
+};
+
+export const adminDeletePost = async (postId: string): Promise<any> => {
+  return apiFetch(`/admin/posts/${postId}`, { method: 'DELETE' });
+};
+
+export const adminUpdatePost = async (postId: string, data: { text?: string; isPinned?: boolean }): Promise<any> => {
+  return apiFetch(`/admin/posts/${postId}`, { method: 'PUT', body: JSON.stringify(data) });
+};
+
+export const getAdminComments = async (params?: { type?: string; search?: string; page?: number }): Promise<any> => {
+  const qs = new URLSearchParams();
+  if (params?.type) qs.set('type', params.type);
+  if (params?.search) qs.set('search', params.search);
+  if (params?.page) qs.set('page', String(params.page));
+  return apiFetch(`/admin/comments?${qs.toString()}`);
+};
+
+export const adminDeleteComment = async (commentId: string): Promise<any> => {
+  return apiFetch(`/admin/comments/${commentId}`, { method: 'DELETE' });
+};
+
+export const adminUpdateComment = async (commentId: string, data: { text?: string; isFeatured?: boolean }): Promise<any> => {
+  return apiFetch(`/admin/comments/${commentId}`, { method: 'PUT', body: JSON.stringify(data) });
+};
+
+export const getAdminAnalytics = async (params?: { period?: string }): Promise<any> => {
+  const qs = new URLSearchParams();
+  if (params?.period) qs.set('period', params.period);
+  return apiFetch(`/admin/analytics?${qs.toString()}`);
+};
+
+export const getAdminActivity = async (params?: { limit?: number }): Promise<any> => {
+  const qs = new URLSearchParams();
+  if (params?.limit) qs.set('limit', String(params.limit));
+  return apiFetch(`/admin/activity?${qs.toString()}`);
+};
+
+export const adminExportData = async (type: string): Promise<any> => {
+  const token = getToken();
+  const response = await fetch(`${API_BASE}/admin/export?type=${type}`, {
+    headers: token ? { Authorization: `Bearer ${token}` } : {},
+  });
+  if (!response.ok) return null;
+  const blob = await response.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${type}-export.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  return true;
+};
+
+export const adminSearchGlobal = async (q: string): Promise<any> => {
+  const qs = new URLSearchParams();
+  qs.set('q', q);
+  return apiFetch(`/admin/search?${qs.toString()}`);
+};
+
+export const adminBulkUsers = async (ids: string[], action: string, value?: string): Promise<any> => {
+  return apiFetch('/admin/users/bulk', {
+    method: 'POST',
+    body: JSON.stringify({ ids, action, value }),
+  });
+};
+
+export const adminBulkPosts = async (ids: string[], action: string): Promise<any> => {
+  return apiFetch('/admin/posts/bulk', {
+    method: 'POST',
+    body: JSON.stringify({ ids, action }),
+  });
+};
+
+export const adminBulkComments = async (ids: string[], action: string): Promise<any> => {
+  return apiFetch('/admin/comments/bulk', {
+    method: 'POST',
+    body: JSON.stringify({ ids, action }),
+  });
+};
+
 // --- Save All (legacy compatibility) ---
 export const saveAllData = async (data: any): Promise<void> => {
   console.warn('saveAllData is deprecated. Use individual API calls instead.');

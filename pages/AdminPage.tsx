@@ -1,12 +1,10 @@
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import type { Podcast, Episode, Video, PublishedBook, Author, Book } from '../types';
 import { toPersianDigits } from '../utils/helpers';
-import { uploadFile } from '../services/api';
+import { uploadFile, getAdminStats, getAdminUsers, updateUserRole, deleteUser, getAdminPosts, adminDeletePost, adminUpdatePost, getAdminComments, adminDeleteComment, adminUpdateComment, getPodcasts, getBooks, getAuthors, getVideos, getComments, getPosts, getPublishedBooks, getAdminAnalytics, getAdminActivity, adminExportData, adminSearchGlobal, adminBulkUsers, adminBulkPosts, adminBulkComments } from '../services/api';
 import { fetchAparatVideoDetails, extractAparatId } from '../utils/aparatApi';
 import { GoogleGenAI } from "@google/genai";
-
-// --- Shared UI Components ---
 
 const FormField = ({ label, children }: any) => (
   <div className="mb-4">
@@ -38,7 +36,6 @@ const UploadButton = ({ onUpload, icon = "fa-cloud-upload-alt", accept = "image/
 
 const SmartEditButton = ({ text, onEdited }: { text: string, onEdited: (newText: string) => void }) => {
     const [isProcessing, setIsProcessing] = useState(false);
-
     const handleSmartEdit = async () => {
         if (!text || text.trim().length < 5) return;
         setIsProcessing(true);
@@ -47,119 +44,191 @@ const SmartEditButton = ({ text, onEdited }: { text: string, onEdited: (newText:
             const response = await ai.models.generateContent({
                 model: 'gemini-3-flash-preview',
                 contents: text,
-                config: {
-                    systemInstruction: "شما یک ویراستار حرفه‌ای هستید. وظیفه شما این است که متن فارسی ارائه شده را به صورت بسیار جزیی ویرایش کنید تا فقط رسمی و از نظر نگارشی صحیح شود. محتوا، معنا و لحن اصلی باید کاملاً حفظ شود. هیچ اطلاعاتی اضافه یا کم نکنید. فقط کلمات را به معادل رسمی تبدیل کرده و علائم نگارشی را اصلاح کنید. متن خروجی باید کاملاً شبیه اصل باشد اما با ساختار رسمی.",
-                },
+                config: { systemInstruction: "شما یک ویراستار حرفه‌ای هستید. متن فارسی ارائه شده را به صورت بسیار جزیی ویرایش کنید تا فقط رسمی و از نظر نگارشی صحیح شود." },
             });
-            if (response.text) {
-                onEdited(response.text);
-            }
-        } catch (error) {
-            console.error("Smart Edit Error:", error);
-            alert("خطا در ویراستاری هوشمند. لطفاً دوباره تلاش کنید.");
-        } finally {
-            setIsProcessing(false);
-        }
+            if (response.text) onEdited(response.text);
+        } catch (error) { alert("خطا در ویراستاری هوشمند."); } finally { setIsProcessing(false); }
     };
-
     return (
-        <button 
-            onClick={handleSmartEdit}
-            disabled={isProcessing || !text}
-            title="ویراستار هوشمند سرای هنر و اندیشه (رسمی‌سازی جزیی)"
-            className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all border ${isProcessing ? 'bg-primary/10 text-primary' : 'bg-teal-50 text-teal-600 border-teal-100 hover:bg-teal-100 shadow-sm disabled:opacity-30'}`}
-        >
+        <button onClick={handleSmartEdit} disabled={isProcessing || !text} title="ویراستار هوشمند"
+            className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center transition-all border ${isProcessing ? 'bg-primary/10 text-primary' : 'bg-teal-50 text-teal-600 border-teal-100 hover:bg-teal-100 shadow-sm disabled:opacity-30'}`}>
             <i className={`fas ${isProcessing ? 'fa-wand-magic-sparkles fa-spin' : 'fa-wand-magic-sparkles'}`}></i>
         </button>
     );
 };
 
 declare const mammoth: any;
-
 const WordToHtmlButton = ({ onConverted }: any) => {
     const [processing, setProcessing] = useState(false);
     return (
         <label className={`flex-shrink-0 w-10 h-10 rounded-xl flex items-center justify-center cursor-pointer transition-all border ${processing ? 'bg-gray-50 text-gray-400' : 'bg-blue-50 text-blue-600 border-blue-100 hover:bg-blue-100 shadow-sm'}`}>
             <i className={`fas ${processing ? 'fa-spinner fa-spin' : 'fa-file-word'}`}></i>
             <input type="file" accept=".docx" hidden onChange={async (e:any) => {
-                const f = e.target.files[0]; if(!f) return;
-                setProcessing(true);
-                try {
-                    const arrayBuffer = await f.arrayBuffer();
-                    const result = await mammoth.convertToHtml({ arrayBuffer });
-                    onConverted(result.value);
-                } catch (err) { alert("خطا در پردازش ورد"); } finally { setProcessing(false); }
+                const f = e.target.files[0]; if(!f) return; setProcessing(true);
+                try { const arrayBuffer = await f.arrayBuffer(); const result = await mammoth.convertToHtml({ arrayBuffer }); onConverted(result.value); } catch { alert("خطا"); } finally { setProcessing(false); }
             }} />
         </label>
     );
 };
 
-// --- Simple Jalali Date Input ---
-const PersianDateInput = ({ value, onChange }: any) => {
+const PersianDateInput = ({ value, onChange }: any) => (
+    <div className="relative group">
+        <TextInput value={value} onChange={onChange} placeholder="۱۴۰۳/۰۱/۰۱" />
+        <i className="fas fa-calendar-day absolute left-3 top-3.5 text-gray-300 group-focus-within:text-primary transition-colors"></i>
+    </div>
+);
+
+const MiniAudioPlayer = ({ comment }: { comment: any }) => {
+    const [playing, setPlaying] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const podcast = comment.podcastData || (typeof comment.podcastId === 'object' ? comment.podcastId : null);
+    const episode = podcast?.episodes?.[comment.episodeIndex ?? 0];
+    const audioUrl = episode?.audioUrl || '';
+    const cover = podcast?.cover || '';
+    const title = comment.podcastTitle || podcast?.title || 'مجموعه صوتی';
+    const epTitle = comment.episodeTitle || episode?.title || '';
+    const togglePlay = () => {
+        if (!audioUrl) return;
+        if (!audioRef.current) {
+            audioRef.current = new Audio(audioUrl);
+            audioRef.current.addEventListener('timeupdate', () => {
+                if (audioRef.current) setProgress((audioRef.current.currentTime / audioRef.current.duration) * 100);
+            });
+            audioRef.current.addEventListener('ended', () => setPlaying(false));
+        }
+        if (playing) { audioRef.current.pause(); } else { audioRef.current.play(); }
+        setPlaying(!playing);
+    };
     return (
-        <div className="relative group">
-            <TextInput value={value} onChange={onChange} placeholder="۱۴۰۳/۰۱/۰۱" />
-            <i className="fas fa-calendar-day absolute left-3 top-3.5 text-gray-300 group-focus-within:text-primary transition-colors"></i>
+        <div className="mt-2 p-3 bg-gradient-to-l from-purple-50 to-purple-100/50 rounded-2xl flex items-center gap-3 border border-purple-200/60">
+            <div className="relative flex-shrink-0">
+                {cover ? (
+                    <img src={cover} className="w-12 h-12 rounded-xl object-cover shadow-md" />
+                ) : (
+                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-purple-700 flex items-center justify-center text-white shadow-md">
+                        <i className="fas fa-headphones text-base"></i>
+                    </div>
+                )}
+                {audioUrl && (
+                    <button onClick={togglePlay} className="absolute -bottom-1 -left-1 w-6 h-6 rounded-full bg-purple-500 text-white flex items-center justify-center shadow-lg border-2 border-white active:scale-90 transition-transform">
+                        <i className={`fas ${playing ? 'fa-pause' : 'fa-play'} text-[7px] ${!playing ? 'mr-[-1px]' : ''}`}></i>
+                    </button>
+                )}
+            </div>
+            <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-black text-purple-800 truncate">{title}</p>
+                {epTitle && <p className="text-[9px] text-purple-500 truncate mt-0.5">{epTitle}</p>}
+                {audioUrl ? (
+                    <div className="w-full bg-purple-200 rounded-full h-1 mt-2">
+                        <div className="bg-purple-500 h-1 rounded-full transition-all" style={{ width: `${progress}%` }}></div>
+                    </div>
+                ) : (
+                    <p className="text-[7px] text-purple-300 mt-1">لینک صوت موجود نیست</p>
+                )}
+            </div>
         </div>
     );
 };
 
-// --- Two-Step Audio Picker Modal ---
+const MiniVideoPlayer = ({ comment }: { comment: any }) => {
+    const [showEmbed, setShowEmbed] = useState(false);
+    const video = comment.videoData || (typeof comment.videoId === 'object' ? comment.videoId : null);
+    const videoTitle = comment.videoTitle || video?.title || 'ویدیو';
+    const thumbnail = video?.thumbnailUrl || '';
+    const embedId = video?.embedId || '';
+    return (
+        <div className="mt-2 rounded-2xl overflow-hidden border border-blue-200/60">
+            {showEmbed && embedId ? (
+                <div className="relative w-full" style={{ paddingTop: '56.25%' }}>
+                    <iframe src={`https://www.aparat.com/embed/video/${embedId}`} className="absolute inset-0 w-full h-full" frameBorder="0" allowFullScreen></iframe>
+                    <button onClick={() => setShowEmbed(false)} className="absolute top-2 left-2 w-6 h-6 bg-black/50 text-white rounded-full flex items-center justify-center text-[8px] z-10"><i className="fas fa-times"></i></button>
+                </div>
+            ) : (
+                <div className="flex items-center gap-3 p-3 bg-gradient-to-l from-blue-50 to-blue-100/50">
+                    <div className="relative flex-shrink-0">
+                        {thumbnail ? (
+                            <img src={thumbnail} className="w-16 h-10 rounded-xl object-cover shadow-md" />
+                        ) : (
+                            <div className="w-16 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white shadow-md">
+                                <i className="fas fa-play text-[10px] mr-[-1px]"></i>
+                            </div>
+                        )}
+                        {embedId && (
+                            <button onClick={() => setShowEmbed(true)} className="absolute inset-0 flex items-center justify-center">
+                                <div className="w-7 h-7 bg-white/90 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                                    <i className="fas fa-play text-blue-600 text-[9px] mr-[-1px]"></i>
+                                </div>
+                            </button>
+                        )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                        <p className="text-[10px] font-black text-blue-800 truncate">{videoTitle}</p>
+                        {embedId && <p className="text-[8px] text-blue-400 mt-0.5">برای پخش کلیک کنید</p>}
+                    </div>
+                    {embedId && <div className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center flex-shrink-0 shadow-md">
+                        <i className="fas fa-play text-[9px] mr-[-1px]"></i>
+                    </div>}
+                </div>
+            )}
+        </div>
+    );
+};
+
 const AudioPickerModal = ({ podcasts, onSelect, onClose }: any) => {
     const [step, setStep] = useState<'podcast' | 'episode'>('podcast');
     const [selectedPod, setSelectedPod] = useState<Podcast | null>(null);
     const [search, setSearch] = useState('');
-
     const filteredPodcasts = podcasts.filter((p: Podcast) => p.title.includes(search));
     const filteredEpisodes = selectedPod ? selectedPod.episodes.filter(e => e.title.includes(search)) : [];
-
     return (
         <div className="fixed inset-0 bg-black/60 z-[9000] flex items-center justify-center p-4 backdrop-blur-md">
             <div className="bg-white w-full max-w-md rounded-[2.5rem] shadow-2xl flex flex-col h-[70vh] overflow-hidden animate-fadeIn">
                 <div className="p-5 border-b flex justify-between items-center bg-gray-50">
-                    <h3 className="font-black text-gray-800 text-xs">
-                        {step === 'podcast' ? 'مرحله ۱: انتخاب مجموعه' : `مرحله ۲: انتخاب جلسه از ${selectedPod?.title}`}
-                    </h3>
+                    <h3 className="font-black text-gray-800 text-xs">{step === 'podcast' ? 'مرحله ۱: انتخاب مجموعه' : `مرحله ۲: انتخاب جلسه از ${selectedPod?.title}`}</h3>
                     <button onClick={onClose} className="text-gray-400 text-xl">&times;</button>
                 </div>
-                <div className="p-4 bg-white border-b">
-                    <TextInput placeholder="جستجو در لیست..." value={search} onChange={(e:any)=>setSearch(e.target.value)} />
-                </div>
+                <div className="p-4 bg-white border-b"><TextInput placeholder="جستجو..." value={search} onChange={(e:any)=>setSearch(e.target.value)} /></div>
                 <div className="flex-grow overflow-y-auto p-4 space-y-2 no-scrollbar bg-gray-50">
-                    {step === 'podcast' ? (
-                        filteredPodcasts.map((p: Podcast) => (
-                            <div key={p.id} onClick={() => { setSelectedPod(p); setStep('episode'); setSearch(''); }} className="p-4 bg-white rounded-2xl border border-gray-100 hover:border-primary cursor-pointer transition-all flex items-center gap-3 shadow-sm">
-                                <img src={p.cover} className="w-10 h-10 rounded-xl object-cover" />
-                                <div>
-                                    <p className="text-[11px] font-black text-gray-800">{p.title}</p>
-                                    <p className="text-[9px] text-gray-400 font-bold">{toPersianDigits(p.episodes.length)} جلسه</p>
-                                </div>
+                    {step === 'podcast' ? filteredPodcasts.map((p: Podcast) => (
+                        <div key={p.id} onClick={() => { setSelectedPod(p); setStep('episode'); setSearch(''); }} className="p-4 bg-white rounded-2xl border border-gray-100 hover:border-primary cursor-pointer transition-all flex items-center gap-3 shadow-sm">
+                            <img src={p.cover || 'https://via.placeholder.com/80'} className="w-10 h-10 rounded-xl object-cover" />
+                            <div><p className="text-[11px] font-black text-gray-800">{p.title}</p><p className="text-[9px] text-gray-400 font-bold">{toPersianDigits(p.episodes.length)} جلسه</p></div>
+                        </div>
+                    )) : (<>
+                        <button onClick={() => { setStep('podcast'); setSelectedPod(null); }} className="text-primary font-black text-[10px] mb-3 flex items-center gap-1 hover:underline"><i className="fas fa-arrow-right"></i> بازگشت</button>
+                        {filteredEpisodes.map((ep: Episode, idx: number) => (
+                            <div key={idx} onClick={() => { onSelect({ podcastId: selectedPod?.id, episodeIndex: idx, title: ep.title }); onClose(); }} className="p-4 bg-white rounded-2xl border border-gray-100 hover:border-primary cursor-pointer transition-all shadow-sm">
+                                <p className="text-[10px] font-black text-gray-800">{ep.title}</p>
+                                <p className="text-[8px] text-gray-400 font-bold mt-1">{ep.duration}</p>
                             </div>
-                        ))
-                    ) : (
-                        <>
-                            <button onClick={() => { setStep('podcast'); setSelectedPod(null); }} className="text-primary font-black text-[10px] mb-3 flex items-center gap-1 hover:underline">
-                                <i className="fas fa-arrow-right"></i> بازگشت به لیست مجموعه‌ها
-                            </button>
-                            {filteredEpisodes.map((ep: Episode, idx: number) => (
-                                <div key={idx} onClick={() => { onSelect({ podcastId: selectedPod?.id, episodeIndex: idx, title: ep.title }); onClose(); }} className="p-4 bg-white rounded-2xl border border-gray-100 hover:border-primary cursor-pointer transition-all shadow-sm">
-                                    <p className="text-[10px] font-black text-gray-800">{ep.title}</p>
-                                    <p className="text-[8px] text-gray-400 font-bold mt-1">{ep.duration}</p>
-                                </div>
-                            ))}
-                        </>
-                    )}
+                        ))}
+                    </>)}
                 </div>
             </div>
         </div>
     );
 };
 
+const StatCard = ({ icon, label, value, color }: { icon: string; label: string; value: number | string; color: string }) => (
+    <div className="bg-white p-4 rounded-2xl border shadow-sm flex items-center gap-3">
+        <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: `${color}15`, color }}>
+            <i className={`fas ${icon} text-sm`}></i>
+        </div>
+        <div>
+            <p className="text-lg font-black text-gray-800">{typeof value === 'number' ? toPersianDigits(value) : value}</p>
+            <p className="text-[9px] font-black text-gray-400 uppercase tracking-wider">{label}</p>
+        </div>
+    </div>
+);
+
+type AdminTab = 'dashboard' | 'users' | 'posts' | 'comments' | 'sowt' | 'videos' | 'library' | 'nashr' | 'analytics';
+
 const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBooks, currentAuthors, currentBooks, currentComments, currentPosts, onSave }: any) => {
-    const [activeTab, setActiveTab] = useState<'sowt' | 'library' | 'nashr' | 'videos' | 'community'>('sowt');
-    const [librarySubTab, setLibrarySubTab] = useState<'masters' | 'books' | 'secretaries'>('masters');
+    const [activeTab, setActiveTab] = useState<AdminTab>('dashboard');
+    const [librarySubTab, setLibrarySubTab] = useState<'podcasts' | 'books'>('podcasts');
     const [communitySubTab, setCommunitySubTab] = useState<'comments' | 'posts'>('comments');
-    
+
     const [localData, setLocalData] = useState({
         podcasts: JSON.parse(JSON.stringify(currentPodcasts)),
         videos: JSON.parse(JSON.stringify(currentVideos)),
@@ -176,68 +245,536 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
     const [podcastSearch, setPodcastSearch] = useState('');
     const [podcastSort, setPodcastSort] = useState<'newest' | 'year' | 'master'>('newest');
     const [selectedMasterFilter, setSelectedMasterFilter] = useState<number | 'all'>('all');
-    const [communitySearch, setCommunitySearch] = useState('');
-    const [confirmDelete, setConfirmDelete] = useState<{ key: string, id: any } | null>(null);
+    const [confirmDelete, setConfirmDelete] = useState<{ key: string, id: any, label?: string, onConfirm: () => void } | null>(null);
+
+    const [stats, setStats] = useState<any>(null);
+    const [users, setUsers] = useState<any[]>([]);
+    const [usersPage, setUsersPage] = useState(1);
+    const [usersTotal, setUsersTotal] = useState(0);
+    const [usersSearch, setUsersSearch] = useState('');
+    const [usersRoleFilter, setUsersRoleFilter] = useState('');
+    const [adminPosts, setAdminPosts] = useState<any[]>([]);
+    const [adminPostsPage, setAdminPostsPage] = useState(1);
+    const [adminPostsTotal, setAdminPostsTotal] = useState(0);
+    const [adminPostsSearch, setAdminPostsSearch] = useState('');
+    const [adminComments, setAdminComments] = useState<any[]>([]);
+    const [adminCommentsPage, setAdminCommentsPage] = useState(1);
+    const [adminCommentsTotal, setAdminCommentsTotal] = useState(0);
+    const [adminCommentsSearch, setAdminCommentsSearch] = useState('');
+    const [adminCommentsType, setAdminCommentsType] = useState('');
+    const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+    const [editingCommentText, setEditingCommentText] = useState('');
+    const [editingPostId, setEditingPostId] = useState<string | null>(null);
+    const [editingPostText, setEditingPostText] = useState('');
+    const [globalSearch, setGlobalSearch] = useState('');
+    const [globalSearchResults, setGlobalSearchResults] = useState<any>(null);
+    const [isSearching, setIsSearching] = useState(false);
+    const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+    const [selectedPosts, setSelectedPosts] = useState<string[]>([]);
+    const [selectedComments, setSelectedComments] = useState<string[]>([]);
+    const [analytics, setAnalytics] = useState<any>(null);
+    const [analyticsPeriod, setAnalyticsPeriod] = useState('7d');
+    const [activity, setActivity] = useState<any[]>([]);
 
     const updateTable = (key: keyof typeof localData, val: any) => setLocalData(prev => ({ ...prev, [key]: val }));
-
-    const handleDelete = (key: keyof typeof localData, id: any) => {
-        setConfirmDelete({ key, id });
+    const handleDelete = (key: string, id: any, label?: string, onConfirm?: () => void) => {
+        setConfirmDelete({ key, id, label, onConfirm: onConfirm || (() => updateTable(key as any, localData[key as keyof typeof localData].filter((x: any) => x.id !== id))) });
     };
     const confirmDeleteItem = () => {
         if (!confirmDelete) return;
-        updateTable(confirmDelete.key as any, localData[confirmDelete.key as keyof typeof localData].filter((x: any) => x.id !== confirmDelete.id));
+        confirmDelete.onConfirm();
         setConfirmDelete(null);
     };
 
+    const loadStats = useCallback(async () => {
+        const s = await getAdminStats();
+        if (s) setStats(s);
+    }, []);
+
+    const loadUsers = useCallback(async (page = 1) => {
+        const r = await getAdminUsers({ search: usersSearch, role: usersRoleFilter, page });
+        if (r) { setUsers(r.users); setUsersTotal(r.total); setUsersPage(page); }
+    }, [usersSearch, usersRoleFilter]);
+
+    const loadPosts = useCallback(async (page = 1) => {
+        const r = await getAdminPosts({ search: adminPostsSearch, page });
+        if (r) { setAdminPosts(r.posts); setAdminPostsTotal(r.total); setAdminPostsPage(page); }
+    }, [adminPostsSearch]);
+
+    const loadComments = useCallback(async (page = 1) => {
+        const r = await getAdminComments({ type: adminCommentsType, search: adminCommentsSearch, page });
+        if (r) { setAdminComments(r.comments); setAdminCommentsTotal(r.total); setAdminCommentsPage(page); }
+    }, [adminCommentsType, adminCommentsSearch]);
+
+    const loadAnalytics = useCallback(async () => {
+        const a = await getAdminAnalytics({ period: analyticsPeriod });
+        if (a) setAnalytics(a);
+    }, [analyticsPeriod]);
+
+    const loadActivity = useCallback(async () => {
+        const act = await getAdminActivity({ limit: 50 });
+        if (act) setActivity(act);
+    }, []);
+
+    const handleGlobalSearch = useCallback(async () => {
+        if (!globalSearch || globalSearch.length < 2) { setGlobalSearchResults(null); return; }
+        setIsSearching(true);
+        const results = await adminSearchGlobal(globalSearch);
+        if (results) setGlobalSearchResults(results);
+        setIsSearching(false);
+    }, [globalSearch]);
+
+    useEffect(() => {
+        if (activeTab === 'dashboard') loadStats();
+        if (activeTab === 'users') loadUsers(1);
+        if (activeTab === 'posts') loadPosts(1);
+        if (activeTab === 'comments') loadComments(1);
+        if (activeTab === 'analytics') loadAnalytics();
+        if (activeTab === 'analytics') loadActivity();
+    }, [activeTab, loadStats, loadUsers, loadPosts, loadComments, loadAnalytics, loadActivity]);
+
     const sortedPodcasts = useMemo(() => {
         let list = [...localData.podcasts].filter(p => p.title.includes(podcastSearch));
-        
-        if (selectedMasterFilter !== 'all') {
-            list = list.filter(p => p.speakerId === selectedMasterFilter || p.authorId === selectedMasterFilter);
-        }
-
+        if (selectedMasterFilter !== 'all') list = list.filter(p => p.speakerId === selectedMasterFilter || p.authorId === selectedMasterFilter);
         if (podcastSort === 'newest') list.sort((a,b) => b.id - a.id);
         if (podcastSort === 'year') list.sort((a,b) => b.year - a.year);
-        if (podcastSort === 'master') {
-            list.sort((a, b) => {
-                const authorA = localData.authors.find((au: any) => au.id === a.speakerId)?.name || '';
-                const authorB = localData.authors.find((au: any) => au.id === b.speakerId)?.name || '';
-                return authorA.localeCompare(authorB);
-            });
-        }
+        if (podcastSort === 'master') list.sort((a, b) => {
+            const authorA = localData.authors.find((au: any) => au.id === a.speakerId)?.name || '';
+            const authorB = localData.authors.find((au: any) => au.id === b.speakerId)?.name || '';
+            return authorA.localeCompare(authorB);
+        });
         return list;
     }, [localData.podcasts, podcastSearch, podcastSort, selectedMasterFilter, localData.authors]);
 
-    // --- Renderers ---
+    const renderDashboard = () => (
+        <div className="p-4 space-y-6 animate-fadeIn">
+            <div className="grid grid-cols-2 gap-3">
+                <StatCard icon="fa-users" label="کاربران" value={stats?.users || 0} color="#1ab394" />
+                <StatCard icon="fa-microphone-alt" label="مجموعه صوتی" value={stats?.podcasts || 0} color="#1ab394" />
+                <StatCard icon="fa-video" label="ویدیوها" value={stats?.videos || 0} color="#2e86c1" />
+                <StatCard icon="fa-newspaper" label="پست‌ها" value={stats?.posts || 0} color="#f97316" />
+                <StatCard icon="fa-comment-dots" label="نظرات" value={stats?.comments || 0} color="#0d9488" />
+                <StatCard icon="fa-book" label="کتاب‌ها" value={stats?.books || 0} color="#8b5cf6" />
+                <StatCard icon="fa-user-tie" label="اساتید" value={stats?.authors || 0} color="#ec4899" />
+                <StatCard icon="fa-shopping-cart" label="نشر" value={stats?.publishedBooks || 0} color="#2563eb" />
+            </div>
+
+            <div className="bg-white rounded-2xl border shadow-sm p-4">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">روند هفتگی</h3>
+                <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center p-3 bg-green-50 rounded-xl">
+                        <p className="text-lg font-black text-green-600">{toPersianDigits(stats?.newUsersThisWeek || 0)}</p>
+                        <p className="text-[8px] font-black text-green-400">کاربر جدید</p>
+                    </div>
+                    <div className="text-center p-3 bg-orange-50 rounded-xl">
+                        <p className="text-lg font-black text-orange-600">{toPersianDigits(stats?.newPostsThisWeek || 0)}</p>
+                        <p className="text-[8px] font-black text-orange-400">پست جدید</p>
+                    </div>
+                    <div className="text-center p-3 bg-teal-50 rounded-xl">
+                        <p className="text-lg font-black text-teal-600">{toPersianDigits(stats?.newCommentsThisWeek || 0)}</p>
+                        <p className="text-[8px] font-black text-teal-400">نظر جدید</p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border shadow-sm p-4">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">محبوب‌ترین پادکست‌ها</h3>
+                <div className="space-y-2">
+                    {(stats?.popularPodcasts || []).slice(0, 3).map((p: any) => (
+                        <div key={p._id} className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl">
+                            <img src={p.cover || 'https://via.placeholder.com/40'} className="w-10 h-10 rounded-lg object-cover" />
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-gray-700 truncate">{p.title}</p>
+                                <p className="text-[8px] text-gray-400">{toPersianDigits(p.viewCount || 0)} بازدید • {toPersianDigits(p.episodes?.length || 0)} جلسه</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
+                <div className="p-4 border-b bg-gray-50">
+                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">آخرین کاربران</h3>
+                </div>
+                <div className="divide-y">
+                    {(stats?.recentUsers || []).map((u: any) => (
+                        <div key={u._id} className="p-3 flex items-center gap-3">
+                            <img src={u.avatar || `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><rect width="32" height="32" rx="16" fill="#1ab394"/><text x="16" y="16" font-size="14" fill="white" text-anchor="middle" dominant-baseline="central" font-family="Arial">${(u.name || 'ک').charAt(0)}</text></svg>`)}`} className="w-8 h-8 rounded-full object-cover" />
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-gray-800 truncate">{u.name || 'بدون نام'}</p>
+                                <p className="text-[8px] text-gray-400">{toPersianDigits(u.phoneNumber)}</p>
+                            </div>
+                            <span className={`text-[7px] px-2 py-0.5 rounded-full font-black ${u.role === 'admin' ? 'bg-red-50 text-red-500' : u.role === 'author' ? 'bg-orange-50 text-orange-500' : 'bg-gray-100 text-gray-500'}`}>{u.role === 'admin' ? 'ادمین' : u.role === 'author' ? 'نویسنده' : 'کاربر'}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
+                <div className="p-4 border-b bg-gray-50">
+                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">آخرین پست‌ها</h3>
+                </div>
+                <div className="divide-y">
+                    {(stats?.recentPosts || []).map((p: any) => (
+                        <div key={p._id} className="p-3 flex items-start gap-3">
+                            <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary text-[10px] font-black flex-shrink-0">{p.author?.charAt(0) || '?'}</div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[10px] font-black text-gray-800">{p.author}</p>
+                                <p className="text-[9px] text-gray-500 line-clamp-2 mt-0.5">{p.text || '(بدون متن)'}</p>
+                            </div>
+                            <div className="text-[8px] text-gray-400 flex items-center gap-1"><i className="fas fa-heart text-red-300"></i>{toPersianDigits(p.likes || 0)}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border shadow-sm p-4">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">توزیع نقش‌ها</h3>
+                <div className="flex gap-2">
+                    {(stats?.roleStats || []).map((r: any) => (
+                        <div key={r._id} className="flex-1 text-center p-3 bg-gray-50 rounded-xl">
+                            <p className="text-lg font-black text-gray-800">{toPersianDigits(r.count)}</p>
+                            <p className="text-[8px] font-black text-gray-400">{r._id === 'admin' ? 'ادمین' : r._id === 'author' ? 'نویسنده' : 'کاربر'}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border shadow-sm p-4">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">توزیع نظرات بر اساس نوع</h3>
+                <div className="flex gap-2">
+                    {(stats?.commentsByType || []).map((c: any) => (
+                        <div key={c._id} className="flex-1 text-center p-3 bg-gray-50 rounded-xl">
+                            <p className="text-lg font-black text-gray-800">{toPersianDigits(c.count)}</p>
+                            <p className="text-[8px] font-black text-gray-400">{c._id === 'podcast' ? 'صوتی' : c._id === 'video' ? 'ویدیویی' : 'کتاب'}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-gradient-to-r from-primary/5 to-purple-500/5 rounded-2xl border shadow-sm p-4">
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h3 className="text-[10px] font-black text-gray-600">کل لایک‌ها</h3>
+                        <p className="text-2xl font-black text-primary">{toPersianDigits(stats?.totalLikes || 0)}</p>
+                    </div>
+                    <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary"><i className="fas fa-heart text-xl"></i></div>
+                </div>
+            </div>
+        </div>
+    );
+
+    const renderUsersPanel = () => (
+        <div className="p-4 space-y-4 animate-fadeIn">
+            <div className="bg-white p-3 rounded-2xl border shadow-sm space-y-2">
+                <div className="relative">
+                    <TextInput placeholder="جستجوی نام یا شماره..." value={usersSearch} onChange={(e: any) => setUsersSearch(e.target.value)} onKeyDown={(e: any) => e.key === 'Enter' && loadUsers(1)} />
+                    <i className="fas fa-search absolute left-3 top-3.5 text-gray-300"></i>
+                </div>
+                <div className="flex gap-2">
+                    {[{ v: '', l: 'همه' }, { v: 'user', l: 'کاربر' }, { v: 'author', l: 'نویسنده' }, { v: 'admin', l: 'ادمین' }].map(r => (
+                        <button key={r.v} onClick={() => { setUsersRoleFilter(r.v); }}
+                            className={`flex-1 py-2 rounded-xl text-[9px] font-black transition-all ${usersRoleFilter === r.v ? 'bg-primary text-white' : 'bg-gray-50 text-gray-400'}`}>{r.l}</button>
+                    ))}
+                </div>
+            </div>
+
+            {selectedUsers.length > 0 && (
+                <div className="bg-primary/5 p-3 rounded-2xl border border-primary/20 flex items-center gap-3">
+                    <span className="text-[9px] font-black text-primary">{toPersianDigits(selectedUsers.length)} انتخاب شده</span>
+                    <div className="flex-1"></div>
+                    <button onClick={async () => { await adminBulkUsers(selectedUsers, 'role', 'author'); setSelectedUsers([]); loadUsers(1); }} className="px-3 py-1.5 bg-orange-50 text-orange-600 rounded-lg text-[8px] font-black">تبدیل به نویسنده</button>
+                    <button onClick={async () => { await adminBulkUsers(selectedUsers, 'delete'); setSelectedUsers([]); loadUsers(1); }} className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-[8px] font-black">حذف</button>
+                    <button onClick={() => setSelectedUsers([])} className="text-gray-400 text-[8px]"><i className="fas fa-times"></i></button>
+                </div>
+            )}
+
+            <p className="text-[9px] font-black text-gray-400">{toPersianDigits(usersTotal)} کاربر یافت شد</p>
+
+            <div className="space-y-2">
+                {users.map((u: any) => (
+                    <div key={u._id} className={`bg-white p-3 rounded-2xl border shadow-sm flex items-center gap-3 group hover:border-primary transition-all ${selectedUsers.includes(u._id) ? 'border-primary bg-primary/5' : ''}`}>
+                        <input
+                            type="checkbox"
+                            checked={selectedUsers.includes(u._id)}
+                            onChange={(e) => {
+                                if (e.target.checked) setSelectedUsers(prev => [...prev, u._id]);
+                                else setSelectedUsers(prev => prev.filter(id => id !== u._id));
+                            }}
+                            className="w-4 h-4 rounded border-gray-300 text-primary focus:ring-primary"
+                        />
+                        <img src={u.avatar || `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" rx="20" fill="#1ab394"/><text x="20" y="20" font-size="16" fill="white" text-anchor="middle" dominant-baseline="central" font-family="Arial">${(u.name || 'ک').charAt(0)}</text></svg>`)}`} className="w-10 h-10 rounded-full object-cover shadow-sm" />
+                        <div className="flex-1 min-w-0">
+                            <p className="text-[11px] font-black text-gray-800 truncate">{u.name || 'بدون نام'}</p>
+                            <p className="text-[9px] text-gray-400">{toPersianDigits(u.phoneNumber)}</p>
+                            <p className="text-[8px] text-gray-300">{u.interests?.length ? `${toPersianDigits(u.interests.length)} علاقه‌مندی` : ''} {u.library?.podcasts?.length ? `• ${toPersianDigits(u.library.podcasts.length)} پادکست` : ''}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <select value={u.role} onChange={async (e) => {
+                                const r = await updateUserRole(u._id, e.target.value);
+                                if (r) setUsers(prev => prev.map(x => x._id === u._id ? { ...x, role: e.target.value } : x));
+                            }} className="bg-gray-50 border rounded-lg px-2 py-1.5 text-[9px] font-black outline-none">
+                                <option value="user">کاربر</option>
+                                <option value="author">نویسنده</option>
+                                <option value="admin">ادمین</option>
+                            </select>
+                            <button onClick={async () => {
+                                if (!confirm('آیا از حذف این کاربر اطمینان دارید؟')) return;
+                                const r = await deleteUser(u._id);
+                                if (r) setUsers(prev => prev.filter(x => x._id !== u._id));
+                            }} className="w-8 h-8 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[10px]"></i></button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {usersTotal > 20 && (
+                <div className="flex justify-center gap-2">
+                    <button onClick={() => loadUsers(usersPage - 1)} disabled={usersPage <= 1} className="px-4 py-2 bg-white border rounded-xl text-[10px] font-black disabled:opacity-30">قبلی</button>
+                    <span className="px-4 py-2 text-[10px] font-black text-gray-400">{toPersianDigits(usersPage)} / {toPersianDigits(Math.ceil(usersTotal / 20))}</span>
+                    <button onClick={() => loadUsers(usersPage + 1)} disabled={usersPage >= Math.ceil(usersTotal / 20)} className="px-4 py-2 bg-white border rounded-xl text-[10px] font-black disabled:opacity-30">بعدی</button>
+                </div>
+            )}
+        </div>
+    );
+
+    const renderPostsPanel = () => (
+        <div className="p-4 space-y-4 animate-fadeIn">
+            <div className="bg-white p-3 rounded-2xl border shadow-sm">
+                <div className="relative">
+                    <TextInput placeholder="جستجو در پست‌ها..." value={adminPostsSearch} onChange={(e: any) => setAdminPostsSearch(e.target.value)} onKeyDown={(e: any) => e.key === 'Enter' && loadPosts(1)} />
+                    <i className="fas fa-search absolute left-3 top-3.5 text-gray-300"></i>
+                </div>
+            </div>
+
+            {selectedPosts.length > 0 && (
+                <div className="bg-orange-50 p-3 rounded-2xl border border-orange-200 flex items-center gap-3">
+                    <span className="text-[9px] font-black text-orange-600">{toPersianDigits(selectedPosts.length)} انتخاب شده</span>
+                    <div className="flex-1"></div>
+                    <button onClick={async () => { await adminBulkPosts(selectedPosts, 'pin'); setSelectedPosts([]); loadPosts(1); }} className="px-3 py-1.5 bg-yellow-50 text-yellow-600 rounded-lg text-[8px] font-black">سنجاق کردن</button>
+                    <button onClick={async () => { await adminBulkPosts(selectedPosts, 'delete'); setSelectedPosts([]); loadPosts(1); }} className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-[8px] font-black">حذف</button>
+                    <button onClick={() => setSelectedPosts([])} className="text-gray-400 text-[8px]"><i className="fas fa-times"></i></button>
+                </div>
+            )}
+
+            <p className="text-[9px] font-black text-gray-400">{toPersianDigits(adminPostsTotal)} پست یافت شد</p>
+
+            <div className="space-y-3">
+                {adminPosts.map((p: any) => (
+                    <div key={p._id} className={`bg-white p-4 rounded-2xl border shadow-sm group hover:border-primary transition-all ${selectedPosts.includes(p._id) ? 'border-orange-400 bg-orange-50/30' : ''}`}>
+                        <div className="flex items-start gap-3">
+                            <input
+                                type="checkbox"
+                                checked={selectedPosts.includes(p._id)}
+                                onChange={(e) => {
+                                    if (e.target.checked) setSelectedPosts(prev => [...prev, p._id]);
+                                    else setSelectedPosts(prev => prev.filter(id => id !== p._id));
+                                }}
+                                className="w-4 h-4 rounded border-gray-300 text-orange-500 focus:ring-orange-500 mt-1"
+                            />
+                            <img src={p.authorAvatarUrl || `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36"><rect width="36" height="36" rx="18" fill="#f97316"/><text x="18" y="18" font-size="14" fill="white" text-anchor="middle" dominant-baseline="central" font-family="Arial">${(p.author || 'ک').charAt(0)}</text></svg>`)}`} className="w-9 h-9 rounded-full object-cover shadow-sm flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                                <div className="flex justify-between items-center mb-1">
+                                    <span className="text-[11px] font-black text-gray-800">{p.author}</span>
+                                    <div className="flex items-center gap-2">
+                                        {p.isPinned && <span className="text-[7px] px-1.5 py-0.5 rounded-full bg-yellow-50 text-yellow-600 font-black"><i className="fas fa-thumbtack"></i> سنجاق</span>}
+                                        {p.isEdited && <span className="text-[7px] text-gray-400 font-bold">ویرایش شده</span>}
+                                        <span className="text-[8px] text-gray-400 font-bold">{p.date}</span>
+                                    </div>
+                                </div>
+                                {editingPostId === p._id ? (
+                                    <div className="flex gap-2 mt-2">
+                                        <TextInput value={editingPostText} onChange={(e: any) => setEditingPostText(e.target.value)} />
+                                        <button onClick={async () => {
+                                            const r = await adminUpdatePost(p._id, { text: editingPostText });
+                                            if (r) { setAdminPosts(prev => prev.map(x => x._id === p._id ? { ...x, text: editingPostText } : x)); setEditingPostId(null); }
+                                        }} className="px-3 py-1 bg-primary text-white rounded-lg text-[9px] font-black">ذخیره</button>
+                                        <button onClick={() => setEditingPostId(null)} className="px-3 py-1 bg-gray-100 text-gray-500 rounded-lg text-[9px] font-black">لغو</button>
+                                    </div>
+                                ) : (
+                                    <p className="text-[10px] text-gray-500 leading-relaxed line-clamp-3">{p.text || '(بدون متن)'}</p>
+                                )}
+                                {p.podcastData && (
+                                    <MiniAudioPlayer comment={{ podcastId: p.podcastData, episodeIndex: p.episodeIndex, podcastTitle: p.podcastData?.title, episodeTitle: p.podcastData?.episodes?.[p.episodeIndex]?.title }} />
+                                )}
+                                {p.videoData && (
+                                    <MiniVideoPlayer comment={{ videoId: p.videoData, videoTitle: p.videoData?.title }} />
+                                )}
+                                {p.bookData && !p.podcastData && !p.videoData && (
+                                    <div className="mt-2 p-2 bg-pink-50 rounded-xl flex items-center gap-2">
+                                        <img src={p.bookData?.cover} className="w-8 h-8 rounded-lg object-cover shadow-sm flex-shrink-0" />
+                                        <span className="text-[9px] font-black text-pink-600">{p.bookData?.title || 'کتاب'}</span>
+                                    </div>
+                                )}
+                                {p.media && p.media.length > 0 && (
+                                    <div className="flex gap-1 mt-2">
+                                        {p.media.map((m: any, i: number) => (
+                                            m.type === 'image' ? <img key={i} src={m.url} className="w-12 h-12 rounded-lg object-cover border" /> : <span key={i} className="text-[8px] text-gray-400 bg-gray-50 px-2 py-1 rounded-lg"><i className="fas fa-video"></i></span>
+                                        ))}
+                                    </div>
+                                )}
+                                {p.comments && p.comments.length > 0 && (
+                                    <div className="mt-2 p-2 bg-gray-50 rounded-xl space-y-1">
+                                        <p className="text-[8px] font-black text-gray-400">{toPersianDigits(p.comments.length)} نظر</p>
+                                        {p.comments.slice(0, 3).map((c: any) => (
+                                            <div key={c._id} className="flex items-center gap-2">
+                                                <span className="text-[8px] font-black text-gray-600">{c.author}:</span>
+                                                <span className="text-[8px] text-gray-500 truncate">{c.text}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-1 flex-shrink-0">
+                                <button onClick={() => setEditingPostId(p._id)} className="w-7 h-7 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-pen text-[8px]"></i></button>
+                                <button onClick={async () => {
+                                    const r = await adminUpdatePost(p._id, { isPinned: !p.isPinned });
+                                    if (r) setAdminPosts(prev => prev.map(x => x._id === p._id ? { ...x, isPinned: !x.isPinned } : x));
+                                }} className={`w-7 h-7 rounded-lg transition-all flex items-center justify-center opacity-0 group-hover:opacity-100 ${p.isPinned ? 'bg-yellow-50 text-yellow-500' : 'bg-gray-50 text-gray-400 hover:bg-yellow-50 hover:text-yellow-500'}`}><i className="fas fa-thumbtack text-[8px]"></i></button>
+                                <button onClick={async () => {
+                                    if (!confirm('آیا از حذف این پست اطمینان دارید؟')) return;
+                                    const r = await adminDeletePost(p._id);
+                                    if (r) setAdminPosts(prev => prev.filter(x => x._id !== p._id));
+                                }} className="w-7 h-7 rounded-lg bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[8px]"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {adminPostsTotal > 20 && (
+                <div className="flex justify-center gap-2">
+                    <button onClick={() => loadPosts(adminPostsPage - 1)} disabled={adminPostsPage <= 1} className="px-4 py-2 bg-white border rounded-xl text-[10px] font-black disabled:opacity-30">قبلی</button>
+                    <span className="px-4 py-2 text-[10px] font-black text-gray-400">{toPersianDigits(adminPostsPage)} / {toPersianDigits(Math.ceil(adminPostsTotal / 20))}</span>
+                    <button onClick={() => loadPosts(adminPostsPage + 1)} disabled={adminPostsPage >= Math.ceil(adminPostsTotal / 20)} className="px-4 py-2 bg-white border rounded-xl text-[10px] font-black disabled:opacity-30">بعدی</button>
+                </div>
+            )}
+        </div>
+    );
+
+    const renderCommentsPanel = () => (
+        <div className="p-4 space-y-4 animate-fadeIn">
+            <div className="bg-white p-3 rounded-2xl border shadow-sm space-y-2">
+                <div className="relative">
+                    <TextInput placeholder="جستجو در نظرات..." value={adminCommentsSearch} onChange={(e: any) => setAdminCommentsSearch(e.target.value)} onKeyDown={(e: any) => e.key === 'Enter' && loadComments(1)} />
+                    <i className="fas fa-search absolute left-3 top-3.5 text-gray-300"></i>
+                </div>
+                <div className="flex gap-2">
+                    {[{ v: '', l: 'همه', icon: 'fa-comments' }, { v: 'podcast', l: 'صوتی', icon: 'fa-podcast' }, { v: 'video', l: 'ویدیویی', icon: 'fa-video' }, { v: 'book', l: 'کتاب', icon: 'fa-book' }].map(t => (
+                        <button key={t.v} onClick={() => { setAdminCommentsType(t.v); }}
+                            className={`flex-1 py-2 rounded-xl text-[9px] font-black transition-all flex items-center justify-center gap-1 ${adminCommentsType === t.v ? 'bg-primary text-white' : 'bg-gray-50 text-gray-400'}`}>
+                            <i className={`fas ${t.icon}`}></i>{t.l}
+                        </button>
+                    ))}
+                </div>
+            </div>
+
+            {selectedComments.length > 0 && (
+                <div className="bg-teal-50 p-3 rounded-2xl border border-teal-200 flex items-center gap-3">
+                    <span className="text-[9px] font-black text-teal-600">{toPersianDigits(selectedComments.length)} انتخاب شده</span>
+                    <div className="flex-1"></div>
+                    <button onClick={async () => { await adminBulkComments(selectedComments, 'feature'); setSelectedComments([]); loadComments(1); }} className="px-3 py-1.5 bg-yellow-50 text-yellow-600 rounded-lg text-[8px] font-black">ویژه کردن</button>
+                    <button onClick={async () => { await adminBulkComments(selectedComments, 'delete'); setSelectedComments([]); loadComments(1); }} className="px-3 py-1.5 bg-red-50 text-red-600 rounded-lg text-[8px] font-black">حذف</button>
+                    <button onClick={() => setSelectedComments([])} className="text-gray-400 text-[8px]"><i className="fas fa-times"></i></button>
+                </div>
+            )}
+
+            <p className="text-[9px] font-black text-gray-400">{toPersianDigits(adminCommentsTotal)} نظر یافت شد</p>
+
+            <div className="space-y-2">
+                {adminComments.map((c: any) => (
+                    <div key={c._id} className={`bg-white p-4 rounded-2xl border shadow-sm group transition-all ${c.isFeatured ? 'border-yellow-300 bg-yellow-50/30' : 'hover:border-primary'} ${selectedComments.includes(c._id) ? 'border-teal-400 bg-teal-50/30' : ''}`}>
+                        <div className="flex items-start gap-3">
+                            <input
+                                type="checkbox"
+                                checked={selectedComments.includes(c._id)}
+                                onChange={(e) => {
+                                    if (e.target.checked) setSelectedComments(prev => [...prev, c._id]);
+                                    else setSelectedComments(prev => prev.filter(id => id !== c._id));
+                                }}
+                                className="w-4 h-4 rounded border-gray-300 text-teal-500 focus:ring-teal-500 mt-1"
+                            />
+                            <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black text-[11px] flex-shrink-0 shadow-sm">{c.author?.charAt(0) || '?'}</div>
+                            <div className="flex-1 min-w-0">
+                                <div className="flex justify-between items-center mb-1">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-[11px] font-black text-gray-800">{c.author}</span>
+                                        <span className="text-[7px] px-1.5 py-0.5 rounded-full font-bold" style={{ background: c.type === 'podcast' ? '#fef3c7' : c.type === 'video' ? '#dbeafe' : '#fce7f3', color: c.type === 'podcast' ? '#d97706' : c.type === 'video' ? '#2563eb' : '#db2777' }}>{c.type}</span>
+                                        {c.isFeatured && <span className="text-[7px] px-1.5 py-0.5 rounded-full bg-yellow-100 text-yellow-600 font-black"><i className="fas fa-star"></i> ویژه</span>}
+                                    </div>
+                                    <span className="text-[8px] text-gray-400 font-bold">{c.date}</span>
+                                </div>
+                                {editingCommentId === c._id ? (
+                                    <div className="flex gap-2 mt-2">
+                                        <TextInput value={editingCommentText} onChange={(e: any) => setEditingCommentText(e.target.value)} />
+                                        <button onClick={async () => {
+                                            const r = await adminUpdateComment(c._id, { text: editingCommentText });
+                                            if (r) { setAdminComments(prev => prev.map(x => x._id === c._id ? { ...x, text: editingCommentText } : x)); setEditingCommentId(null); }
+                                        }} className="px-3 py-1 bg-primary text-white rounded-lg text-[9px] font-black">ذخیره</button>
+                                        <button onClick={() => setEditingCommentId(null)} className="px-3 py-1 bg-gray-100 text-gray-500 rounded-lg text-[9px] font-black">لغو</button>
+                                    </div>
+                                ) : (
+                                    <p className="text-[10px] text-gray-500 leading-relaxed">{c.text}</p>
+                                )}
+                                {c.type === 'podcast' && (
+                                    <MiniAudioPlayer comment={{ ...c, podcastData: c.podcastData || c.podcastId }} />
+                                )}
+                                {c.type === 'video' && (
+                                    <MiniVideoPlayer comment={{ ...c, videoData: c.videoData || c.videoId }} />
+                                )}
+                                {c.type === 'book' && c.bookId && (
+                                    <div className="mt-2 p-2 bg-pink-50 rounded-xl flex items-center gap-2">
+                                        <i className="fas fa-book text-pink-400 text-[9px]"></i>
+                                        <span className="text-[8px] font-black text-pink-600">نظر درباره کتاب</span>
+                                    </div>
+                                )}
+                                {(c.timestamp || c.audioTimestamp || c.videoTimestamp) && (
+                                    <span className="text-[8px] text-primary mt-1 inline-block"><i className="fas fa-clock"></i> {toPersianDigits(Math.floor((c.timestamp || c.audioTimestamp || c.videoTimestamp || 0) / 60))}:{toPersianDigits(Math.floor((c.timestamp || c.audioTimestamp || c.videoTimestamp || 0) % 60)).toString().padStart(2, '0')}</span>
+                                )}
+                            </div>
+                            <div className="flex items-center gap-1 flex-shrink-0">
+                                <button onClick={() => { setEditingCommentId(c._id); setEditingCommentText(c.text); }} className="w-7 h-7 rounded-lg bg-blue-50 text-blue-500 hover:bg-blue-100 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-pen text-[8px]"></i></button>
+                                <button onClick={async () => {
+                                    const r = await adminUpdateComment(c._id, { isFeatured: !c.isFeatured });
+                                    if (r) setAdminComments(prev => prev.map(x => x._id === c._id ? { ...x, isFeatured: !x.isFeatured } : x));
+                                }} className={`w-7 h-7 rounded-lg transition-all flex items-center justify-center opacity-0 group-hover:opacity-100 ${c.isFeatured ? 'bg-yellow-50 text-yellow-500' : 'bg-gray-50 text-gray-400 hover:bg-yellow-50 hover:text-yellow-500'}`}><i className="fas fa-star text-[8px]"></i></button>
+                                <button onClick={async () => {
+                                    if (!confirm('آیا از حذف این نظر اطمینان دارید؟')) return;
+                                    const r = await adminDeleteComment(c._id);
+                                    if (r) setAdminComments(prev => prev.filter(x => x._id !== c._id));
+                                }} className="w-7 h-7 rounded-lg bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[8px]"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {adminCommentsTotal > 30 && (
+                <div className="flex justify-center gap-2">
+                    <button onClick={() => loadComments(adminCommentsPage - 1)} disabled={adminCommentsPage <= 1} className="px-4 py-2 bg-white border rounded-xl text-[10px] font-black disabled:opacity-30">قبلی</button>
+                    <span className="px-4 py-2 text-[10px] font-black text-gray-400">{toPersianDigits(adminCommentsPage)} / {toPersianDigits(Math.ceil(adminCommentsTotal / 30))}</span>
+                    <button onClick={() => loadComments(adminCommentsPage + 1)} disabled={adminCommentsPage >= Math.ceil(adminCommentsTotal / 30)} className="px-4 py-2 bg-white border rounded-xl text-[10px] font-black disabled:opacity-30">بعدی</button>
+                </div>
+            )}
+        </div>
+    );
 
     const renderSowtPanel = () => {
         if (editingItem?.type === 'Podcast') {
             const p = localData.podcasts.find((x: any) => x.id === editingItem.id);
             if (!p) return null;
             const setField = (f: keyof Podcast, v: any) => updateTable('podcasts', localData.podcasts.map((i: any) => i.id === p.id ? { ...i, [f]: v } : i));
-
             return (
                 <div className="p-4 space-y-6 animate-fadeIn pb-40">
                     <button onClick={() => setEditingItem(null)} className="text-primary font-black text-[10px]">&larr; بازگشت به لیست</button>
                     <div className="bg-white p-6 rounded-[2.5rem] border shadow-sm space-y-4">
                         <FormField label="عنوان مجموعه صوتی"><TextInput value={p.title} onChange={(e:any)=>setField('title', e.target.value)} /></FormField>
                         <div className="grid grid-cols-2 gap-3">
-                             <FormField label="دبیر (ارائه‌دهنده)">
-                                <select className="w-full bg-white border border-gray-200 rounded-xl h-11 px-2 text-[11px] font-black outline-none shadow-sm" value={p.speakerId} onChange={(e:any)=>setField('speakerId', Number(e.target.value))}>
-                                    {localData.authors.map((a:any)=><option key={a.id} value={a.id}>{a.name}</option>)}
-                                </select>
-                            </FormField>
-                             <FormField label="سال برگزاری (شمسی)"><TextInput type="number" value={p.year} onChange={(e:any)=>setField('year', Number(e.target.value))} /></FormField>
+                            <FormField label="دبیر (ارائه‌دهنده)"><select className="w-full bg-white border border-gray-200 rounded-xl h-11 px-2 text-[11px] font-black outline-none shadow-sm" value={p.speakerId} onChange={(e:any)=>setField('speakerId', Number(e.target.value))}>{localData.authors.map((a:any)=><option key={a.id} value={a.id}>{a.name}</option>)}</select></FormField>
+                            <FormField label="سال برگزاری (شمسی)"><TextInput type="number" value={p.year} onChange={(e:any)=>setField('year', Number(e.target.value))} /></FormField>
                         </div>
-                        <FormField label="کاور مجموعه">
-                            <div className="flex gap-2">
-                                <TextInput value={p.cover} onChange={(e:any)=>setField('cover', e.target.value)} />
-                                <UploadButton onUpload={(url:string)=>setField('cover', url)} />
-                            </div>
-                        </FormField>
+                        <FormField label="کاور مجموعه"><div className="flex gap-2"><TextInput value={p.cover} onChange={(e:any)=>setField('cover', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('cover', url)} /></div></FormField>
                     </div>
-
                     <div className="space-y-4">
                         <h3 className="text-[10px] font-black text-gray-400 pr-3 uppercase tracking-widest">جلسات مجموعه</h3>
                         {p.episodes.map((ep: Episode, idx: number) => (
@@ -251,15 +788,7 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
                                     <FormField label="لینک صوت"><TextInput value={ep.audioUrl} onChange={(e:any)=>{ const n=[...p.episodes]; n[idx].audioUrl=e.target.value; setField('episodes', n); }}/></FormField>
                                     <FormField label="تاریخ انتشار"><PersianDateInput value={ep.date} onChange={(e:any)=>{ const n=[...p.episodes]; n[idx].date=e.target.value; setField('episodes', n); }}/></FormField>
                                 </div>
-                                <FormField label="متن جلسه (مطالعه)">
-                                    <div className="flex gap-2 items-start">
-                                        <TextArea placeholder="متن مطالعه این جلسه..." value={ep.fullText || ''} onChange={(e:any)=>{ const n=[...p.episodes]; n[idx].fullText=e.target.value; setField('episodes', n); }} />
-                                        <div className="flex flex-col gap-2">
-                                            <WordToHtmlButton onConverted={(html:string)=>{ const n=[...p.episodes]; n[idx].fullText=html; setField('episodes', n); }} />
-                                            <SmartEditButton text={ep.fullText || ''} onEdited={(newText) => { const n=[...p.episodes]; n[idx].fullText=newText; setField('episodes', n); }} />
-                                        </div>
-                                    </div>
-                                </FormField>
+                                <FormField label="متن جلسه (مطالعه)"><div className="flex gap-2 items-start"><TextArea placeholder="متن مطالعه..." value={ep.fullText || ''} onChange={(e:any)=>{ const n=[...p.episodes]; n[idx].fullText=e.target.value; setField('episodes', n); }} /><div className="flex flex-col gap-2"><WordToHtmlButton onConverted={(html:string)=>{ const n=[...p.episodes]; n[idx].fullText=html; setField('episodes', n); }} /><SmartEditButton text={ep.fullText || ''} onEdited={(newText) => { const n=[...p.episodes]; n[idx].fullText=newText; setField('episodes', n); }} /></div></div></FormField>
                                 <button onClick={()=>{const n=[...p.episodes]; n.splice(idx,1); setField('episodes', n);}} className="text-red-400 text-[9px] font-black w-full text-center py-2 opacity-0 group-hover:opacity-100 transition-opacity">حذف این جلسه</button>
                             </div>
                         ))}
@@ -270,41 +799,18 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
         }
         return (
             <div className="p-4 space-y-4">
-                <button onClick={()=>{
-                    const id = Date.now();
-                    const n: Podcast = { id, title: '', description: '', cover: '', speakerId: localData.authors[0]?.id || 1, duration: '0', episodes: [], year: 1403, categories: ["پادکست"] };
-                    updateTable('podcasts', [n, ...localData.podcasts]);
-                    setEditingItem({ type: 'Podcast', id });
-                }} className="w-full py-4 bg-primary text-white rounded-[2rem] font-black text-sm shadow-xl shadow-primary/20 transition-all active:scale-95">+ ایجاد مجموعه صوتی جدید</button>
-                
+                <button onClick={()=>{ const id = Date.now(); const n: Podcast = { id, title: '', description: '', cover: '', speakerId: localData.authors[0]?.id || 1, duration: '0', episodes: [], year: 1403, categories: ["پادکست"] }; updateTable('podcasts', [n, ...localData.podcasts]); setEditingItem({ type: 'Podcast', id }); }} className="w-full py-4 bg-primary text-white rounded-[2rem] font-black text-sm shadow-xl shadow-primary/20 transition-all active:scale-95">+ ایجاد مجموعه صوتی جدید</button>
                 <div className="space-y-2 bg-white p-3 rounded-[2rem] border shadow-sm">
-                    <div className="relative">
-                        <TextInput placeholder="جستجو در مجموعه‌ها..." value={podcastSearch} onChange={(e:any)=>setPodcastSearch(e.target.value)} />
-                        <i className="fas fa-search absolute left-3 top-3.5 text-gray-300"></i>
-                    </div>
+                    <div className="relative"><TextInput placeholder="جستجو..." value={podcastSearch} onChange={(e:any)=>setPodcastSearch(e.target.value)} /><i className="fas fa-search absolute left-3 top-3.5 text-gray-300"></i></div>
                     <div className="flex gap-2">
-                        <select className="flex-1 bg-gray-50 border-none rounded-xl px-3 h-10 text-[10px] font-black text-gray-500 outline-none" value={podcastSort} onChange={(e:any)=>setPodcastSort(e.target.value as any)}>
-                            <option value="newest">سورت: جدیدترین</option>
-                            <option value="year">سورت: سال برگزاری</option>
-                            <option value="master">سورت: نام استاد</option>
-                        </select>
-                        <select className="flex-1 bg-gray-50 border-none rounded-xl px-3 h-10 text-[10px] font-black text-gray-500 outline-none" value={selectedMasterFilter} onChange={(e:any)=>setSelectedMasterFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}>
-                            <option value="all">همه اساتید</option>
-                            {localData.authors.map((a:any) => <option key={a.id} value={a.id}>{a.name}</option>)}
-                        </select>
+                        <select className="flex-1 bg-gray-50 border-none rounded-xl px-3 h-10 text-[10px] font-black text-gray-500 outline-none" value={podcastSort} onChange={(e:any)=>setPodcastSort(e.target.value as any)}><option value="newest">جدیدترین</option><option value="year">سال برگزاری</option><option value="master">نام استاد</option></select>
+                        <select className="flex-1 bg-gray-50 border-none rounded-xl px-3 h-10 text-[10px] font-black text-gray-500 outline-none" value={selectedMasterFilter} onChange={(e:any)=>setSelectedMasterFilter(e.target.value === 'all' ? 'all' : Number(e.target.value))}><option value="all">همه اساتید</option>{localData.authors.map((a:any) => <option key={a.id} value={a.id}>{a.name}</option>)}</select>
                     </div>
                 </div>
-
                 <div className="space-y-2">
                     {sortedPodcasts.map((p: any) => (
                         <div key={p.id} className="bg-white p-3 rounded-2xl border shadow-sm flex items-center justify-between group hover:border-primary transition-all">
-                            <div className="flex items-center gap-3">
-                                <img src={p.cover} className="w-11 h-11 rounded-xl object-cover shadow-sm"/>
-                                <div>
-                                    <p className="font-black text-[11px] text-gray-700">{p.title || 'بی‌عنوان'}</p>
-                                    <p className="text-[9px] text-gray-400 font-bold">{toPersianDigits(p.year)} • {toPersianDigits(p.episodes.length)} جلسه</p>
-                                </div>
-                            </div>
+                            <div className="flex items-center gap-3"><img src={p.cover || 'https://via.placeholder.com/80'} className="w-11 h-11 rounded-xl object-cover shadow-sm"/><div><p className="font-black text-[11px] text-gray-700">{p.title || 'بی‌عنوان'}</p><p className="text-[9px] text-gray-400 font-bold">{toPersianDigits(p.year)} • {toPersianDigits(p.episodes.length)} جلسه</p></div></div>
                             <div className="flex items-center gap-2">
                                 <button onClick={() => setEditingItem({ type: 'Podcast', id: p.id })} className="bg-blue-50 text-blue-600 px-5 py-2 rounded-xl text-[10px] font-black transition-colors hover:bg-blue-100">ویرایش</button>
                                 <button onClick={() => handleDelete('podcasts', p.id)} className="w-8 h-8 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[10px]"></i></button>
@@ -326,21 +832,13 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
                     <button onClick={() => setEditingItem(null)} className="text-orange-600 font-black text-[10px]">&larr; بازگشت</button>
                     <div className="bg-white p-6 rounded-[2.5rem] border shadow-sm space-y-4">
                         <FormField label="نام استاد/دبیر"><TextInput value={a.name} onChange={(e:any)=>setField('name', e.target.value)} /></FormField>
-                        <FormField label="نقش">
-                            <select className="w-full bg-white border border-gray-200 rounded-xl h-11 px-2 text-[11px] font-black outline-none shadow-sm" value={a.role} onChange={(e:any)=>setField('role', e.target.value)}>
-                                <option value="master">استاد (مولف)</option>
-                                <option value="secretary">دبیر (ارائه‌دهنده)</option>
-                            </select>
-                        </FormField>
-                        <FormField label="تصویر آواتار">
-                            <div className="flex gap-2"><TextInput value={a.avatar} onChange={(e:any)=>setField('avatar', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('avatar', url)} /></div>
-                        </FormField>
+                        <FormField label="نقش"><select className="w-full bg-white border border-gray-200 rounded-xl h-11 px-2 text-[11px] font-black outline-none shadow-sm" value={a.role} onChange={(e:any)=>setField('role', e.target.value)}><option value="master">استاد (مولف)</option><option value="secretary">دبیر (ارائه‌دهنده)</option></select></FormField>
+                        <FormField label="تصویر آواتار"><div className="flex gap-2"><TextInput value={a.avatar} onChange={(e:any)=>setField('avatar', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('avatar', url)} /></div></FormField>
                         <TextArea label="بایوگرافی" value={a.bio} onChange={(e:any)=>setField('bio', e.target.value)} />
                     </div>
                 </div>
             );
         }
-
         if (editingItem?.type === 'Book') {
             const b = localData.books.find((x: any) => x.id === editingItem.id);
             if (!b) return null;
@@ -350,118 +848,30 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
                     <button onClick={() => setEditingItem(null)} className="text-orange-600 font-black text-[10px]">&larr; بازگشت</button>
                     <div className="bg-white p-6 rounded-[2.5rem] border shadow-sm space-y-4">
                         <FormField label="عنوان کتاب"><TextInput value={b.title} onChange={(e:any)=>setField('title', e.target.value)} /></FormField>
-                        <FormField label="انتخاب استاد (مولف)">
-                            <select className="w-full bg-white border border-gray-200 rounded-xl h-11 px-2 text-[11px] font-black outline-none shadow-sm" value={b.authorId} onChange={(e:any)=>setField('authorId', Number(e.target.value))}>
-                                {localData.authors.filter((a:any)=>a.role === 'master').map((a:any)=><option key={a.id} value={a.id}>{a.name}</option>)}
-                            </select>
-                        </FormField>
-                        <FormField label="کاور کتاب">
-                            <div className="flex gap-2"><TextInput value={b.cover} onChange={(e:any)=>setField('cover', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('cover', url)} /></div>
-                        </FormField>
+                        <FormField label="انتخاب استاد (مولف)"><select className="w-full bg-white border border-gray-200 rounded-xl h-11 px-2 text-[11px] font-black outline-none shadow-sm" value={b.authorId} onChange={(e:any)=>setField('authorId', Number(e.target.value))}>{localData.authors.filter((a:any)=>a.role === 'master').map((a:any)=><option key={a.id} value={a.id}>{a.name}</option>)}</select></FormField>
+                        <FormField label="کاور کتاب"><div className="flex gap-2"><TextInput value={b.cover} onChange={(e:any)=>setField('cover', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('cover', url)} /></div></FormField>
                         <div className="pt-4 border-t">
                             <p className="text-[10px] font-black text-gray-400 mb-3 uppercase tracking-widest">صوت‌های متصل شده</p>
-                            <div className="space-y-1 mb-3">
-                                {b.relatedEpisodes?.map((re:any, i:number)=>(
-                                    <div key={i} className="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                                        <span className="text-[9px] font-bold text-gray-600">صوت شماره {toPersianDigits(i+1)}</span>
-                                        <button onClick={()=>{const n=[...b.relatedEpisodes]; n.splice(i,1); setField('relatedEpisodes', n);}} className="text-red-400 text-xs p-1 hover:text-red-600 transition-colors"><i className="fas fa-times-circle"></i></button>
-                                    </div>
-                                ))}
-                            </div>
-                            <button onClick={()=>setPickerConfig({ podcasts: localData.podcasts, onSelect: (ep:any)=>{ const n=[...(b.relatedEpisodes||[]), {podcastId: ep.podcastId, episodeIndex: ep.episodeIndex}]; setField('relatedEpisodes', n); } })} className="w-full py-3 bg-orange-50 text-orange-600 rounded-2xl text-[10px] font-black border-2 border-dashed border-orange-100 hover:bg-orange-100 transition-colors shadow-sm">+ اتصال صوت جدید (مرورگر دو مرحله‌ای)</button>
+                            <div className="space-y-1 mb-3">{b.relatedEpisodes?.map((re:any, i:number)=>(<div key={i} className="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border border-gray-100"><span className="text-[9px] font-bold text-gray-600">صوت شماره {toPersianDigits(i+1)}</span><button onClick={()=>{const n=[...b.relatedEpisodes]; n.splice(i,1); setField('relatedEpisodes', n);}} className="text-red-400 text-xs p-1 hover:text-red-600"><i className="fas fa-times-circle"></i></button></div>))}</div>
+                            <button onClick={()=>setPickerConfig({ podcasts: localData.podcasts, onSelect: (ep:any)=>{ const n=[...(b.relatedEpisodes||[]), {podcastId: ep.podcastId, episodeIndex: ep.episodeIndex}]; setField('relatedEpisodes', n); } })} className="w-full py-3 bg-orange-50 text-orange-600 rounded-2xl text-[10px] font-black border-2 border-dashed border-orange-100 hover:bg-orange-100 transition-colors shadow-sm">+ اتصال صوت جدید</button>
                         </div>
                     </div>
                 </div>
             );
         }
-
         return (
             <div className="p-4 space-y-6 pb-40">
-                {/* Library Tabs Selector */}
-                <div className="flex p-1 bg-gray-100 rounded-2xl gap-1">
-                    {[
-                        { id: 'masters', label: 'اساتید', icon: 'fa-user-tie' },
-                        { id: 'books', label: 'کتابخانه', icon: 'fa-book' },
-                        { id: 'secretaries', label: 'دبیران', icon: 'fa-user-graduate' }
-                    ].map(sub => (
-                        <button key={sub.id} onClick={() => setLibrarySubTab(sub.id as any)}
-                            className={`flex-1 py-3 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-2 ${librarySubTab === sub.id ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400 grayscale opacity-60'}`}>
-                            <i className={`fas ${sub.icon}`}></i>
-                            <span>{sub.label}</span>
-                        </button>
+                <div className="flex p-1 bg-gray-100 rounded-2xl gap-1 overflow-x-auto no-scrollbar">
+                    {[{ id: 'podcasts', label: 'صوت‌ها', icon: 'fa-podcast' }, { id: 'books', label: 'کتاب‌ها', icon: 'fa-book' }].map(sub => (
+                        <button key={sub.id} onClick={() => setLibrarySubTab(sub.id as any)} className={`flex-shrink-0 flex flex-col items-center justify-center p-2.5 rounded-xl text-[9px] font-black transition-all ${librarySubTab === sub.id ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-400 grayscale opacity-60'}`}><i className={`fas ${sub.icon} text-sm mb-1`}></i><span>{sub.label}</span></button>
                     ))}
                 </div>
 
-                {librarySubTab === 'masters' && (
-                    <section className="animate-fadeIn">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">لیست اساتید</h3>
-                            <button onClick={()=>{
-                                 const id = Date.now();
-                                 const n: Author = { id, name: '', avatar: '', bio: '', role: 'master' };
-                                 updateTable('authors', [n, ...localData.authors]);
-                                 setEditingItem({ type: 'Author', id });
-                            }} className="text-[9px] font-black text-primary bg-primary/5 px-4 py-1.5 rounded-full">+ استاد جدید</button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                            {localData.authors.filter((a:any)=>a.role === 'master').map((a:any) => (
-                                <div key={a.id} className="bg-white p-3 rounded-2xl border flex items-center gap-3 cursor-pointer hover:border-orange-500 shadow-sm transition-all group" onClick={() => setEditingItem({ type: 'Author', id: a.id })}>
-                                    <img src={a.avatar} className="w-10 h-10 rounded-full object-cover shadow-sm" />
-                                    <span className="text-[10px] font-black text-gray-700 truncate flex-1">{a.name}</span>
-                                    <button onClick={(e) => { e.stopPropagation(); handleDelete('authors', a.id); }} className="w-7 h-7 rounded-full bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[8px]"></i></button>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
+                {librarySubTab === 'podcasts' && (<section className="animate-fadeIn"><div className="flex justify-between items-center mb-4"><h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">مجموعه‌های صوتی ذخیره شده</h3><span className="text-[9px] font-black text-primary bg-primary/5 px-3 py-1 rounded-full">{toPersianDigits(localData.podcasts.length)} مجموعه</span></div><div className="space-y-2">{localData.podcasts.map((p: any) => (<div key={p.id} className="bg-white p-3 rounded-2xl border shadow-sm flex items-center gap-3 group hover:border-primary transition-all"><img src={p.cover || 'https://via.placeholder.com/80'} className="w-12 h-12 rounded-xl object-cover shadow-sm flex-shrink-0" /><div className="flex-1 min-w-0"><p className="text-[11px] font-black text-gray-800 truncate">{p.title || 'بی‌عنوان'}</p><p className="text-[9px] text-gray-400 font-bold mt-0.5">{toPersianDigits(p.episodes?.length || 0)} جلسه • {p.year ? toPersianDigits(p.year) : ''}</p><div className="flex flex-wrap gap-1 mt-1">{p.episodes?.slice(0, 3).map((ep: any, i: number) => (<span key={i} className="text-[7px] bg-gray-50 text-gray-500 px-1.5 py-0.5 rounded-full">{ep.title}</span>))}{(p.episodes?.length || 0) > 3 && <span className="text-[7px] bg-gray-50 text-gray-400 px-1.5 py-0.5 rounded-full">+{toPersianDigits(p.episodes.length - 3)}</span>}</div></div><div className="flex items-center gap-1 flex-shrink-0"><button onClick={() => setEditingItem({ type: 'Podcast', id: p.id })} className="w-8 h-8 rounded-xl bg-blue-50 text-blue-500 hover:bg-blue-100 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-pen text-[9px]"></i></button><button onClick={() => handleDelete('podcasts', p.id)} className="w-8 h-8 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[9px]"></i></button></div></div>))}</div></section>)}
 
-                {librarySubTab === 'secretaries' && (
-                    <section className="animate-fadeIn">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">لیست دبیران</h3>
-                            <button onClick={()=>{
-                                 const id = Date.now();
-                                 const n: Author = { id, name: '', avatar: '', bio: '', role: 'secretary' };
-                                 updateTable('authors', [n, ...localData.authors]);
-                                 setEditingItem({ type: 'Author', id });
-                            }} className="text-[9px] font-black text-primary bg-primary/5 px-4 py-1.5 rounded-full">+ دبیر جدید</button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-3">
-                            {localData.authors.filter((a:any)=>a.role === 'secretary').map((a:any) => (
-                                <div key={a.id} onClick={() => setEditingItem({ type: 'Author', id: a.id })} className="bg-white p-3 rounded-2xl border flex items-center gap-3 cursor-pointer hover:border-primary shadow-sm transition-all group">
-                                    <img src={a.avatar} className="w-10 h-10 rounded-full object-cover shadow-sm" />
-                                    <span className="text-[10px] font-black text-gray-700 truncate flex-1">{a.name}</span>
-                                    <button onClick={(e) => { e.stopPropagation(); handleDelete('authors', a.id); }} className="w-7 h-7 rounded-full bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[8px]"></i></button>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
+                
 
-                {librarySubTab === 'books' && (
-                    <section className="animate-fadeIn">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">لیست کتاب‌های متنی</h3>
-                            <button onClick={()=>{
-                                const id = Date.now();
-                                const n: Book = { id, title: '', authorId: localData.authors.find((a:any)=>a.role==='master')?.id || 1, cover: '', relatedEpisodes: [], categories: ["فلسفه"] };
-                                updateTable('books', [n, ...localData.books]);
-                                setEditingItem({ type: 'Book', id });
-                            }} className="text-[9px] font-black text-orange-600 bg-orange-50 px-4 py-1.5 rounded-full">+ کتاب جدید</button>
-                        </div>
-                        <div className="space-y-2">
-                            {localData.books.map((bk: any) => (
-                                <div key={bk.id} className="bg-white p-3 rounded-2xl border flex justify-between items-center shadow-sm hover:border-orange-200 transition-all group">
-                                    <div className="flex items-center gap-4"><img src={bk.cover} className="w-9 h-12 rounded-lg object-cover shadow-sm" /><p className="text-[10px] font-black text-gray-800">{bk.title}</p></div>
-                                    <div className="flex items-center gap-2">
-                                        <button onClick={() => setEditingItem({ type: 'Book', id: bk.id })} className="bg-orange-50 text-orange-600 px-5 py-2 rounded-xl text-[10px] font-black hover:bg-orange-100 transition-colors">ویرایش</button>
-                                        <button onClick={() => handleDelete('books', bk.id)} className="w-8 h-8 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[10px]"></i></button>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </section>
-                )}
+                {librarySubTab === 'books' && (<section className="animate-fadeIn"><div className="flex justify-between items-center mb-4"><h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">لیست کتاب‌ها</h3><button onClick={()=>{ const id = Date.now(); const n: Book = { id, title: '', authorId: localData.authors.find((a:any)=>a.role==='master')?.id || 1, cover: '', relatedEpisodes: [], categories: ["فلسفه"] }; updateTable('books', [n, ...localData.books]); setEditingItem({ type: 'Book', id }); }} className="text-[9px] font-black text-orange-600 bg-orange-50 px-4 py-1.5 rounded-full">+ کتاب جدید</button></div><div className="space-y-2">{localData.books.map((bk: any) => (<div key={bk.id} className="bg-white p-3 rounded-2xl border flex justify-between items-center shadow-sm hover:border-orange-200 transition-all group"><div className="flex items-center gap-4"><img src={bk.cover || 'https://via.placeholder.com/80'} className="w-9 h-12 rounded-lg object-cover shadow-sm" /><p className="text-[10px] font-black text-gray-800">{bk.title}</p></div><div className="flex items-center gap-2"><button onClick={() => setEditingItem({ type: 'Book', id: bk.id })} className="bg-orange-50 text-orange-600 px-5 py-2 rounded-xl text-[10px] font-black hover:bg-orange-100 transition-colors">ویرایش</button><button onClick={() => handleDelete('books', bk.id)} className="w-8 h-8 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[10px]"></i></button></div></div>))}</div></section>)}
             </div>
         );
     };
@@ -475,66 +885,26 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
                 <div className="p-4 space-y-4 animate-fadeIn pb-40">
                     <button onClick={() => setEditingItem(null)} className="text-blue-600 font-black text-[10px]">&larr; بازگشت</button>
                     <div className="bg-white p-6 rounded-[2.5rem] border shadow-sm space-y-4">
-                        <FormField label="نوع اثر">
-                            <select className="w-full bg-white border border-gray-200 rounded-xl h-11 px-2 text-[11px] font-black outline-none shadow-sm" value={b.type || 'book'} onChange={(e:any)=>setField('type', e.target.value)}>
-                                <option value="book">کتاب</option>
-                                <option value="note">یادداشت</option>
-                            </select>
-                        </FormField>
+                        <FormField label="نوع اثر"><select className="w-full bg-white border border-gray-200 rounded-xl h-11 px-2 text-[11px] font-black outline-none shadow-sm" value={b.type || 'book'} onChange={(e:any)=>setField('type', e.target.value)}><option value="book">کتاب</option><option value="note">یادداشت</option></select></FormField>
                         <FormField label="عنوان"><TextInput value={b.title} onChange={(e:any)=>setField('title', e.target.value)} /></FormField>
                         <FormField label="زیرعنوان"><TextInput value={b.subtitle} onChange={(e:any)=>setField('subtitle', e.target.value)} /></FormField>
-                        {b.type !== 'note' && (
-                            <FormField label="کاور اثر">
-                                <div className="flex gap-2"><TextInput value={b.cover} onChange={(e:any)=>setField('cover', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('cover', url)} /></div>
-                            </FormField>
-                        )}
+                        {b.type !== 'note' && <FormField label="کاور اثر"><div className="flex gap-2"><TextInput value={b.cover} onChange={(e:any)=>setField('cover', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('cover', url)} /></div></FormField>}
                         <div className="grid grid-cols-2 gap-3">
                             <FormField label="قیمت (تومان)"><TextInput value={b.price} onChange={(e:any)=>setField('price', e.target.value)} /></FormField>
-                            <FormField label="لینک فایل PDF">
-                                <div className="flex gap-2">
-                                    <TextInput value={b.pdfUrl} onChange={(e:any)=>setField('pdfUrl', e.target.value)} />
-                                    <UploadButton accept=".pdf" icon="fa-file-pdf" onUpload={(url:string)=>setField('pdfUrl', url)} />
-                                </div>
-                            </FormField>
+                            <FormField label="لینک فایل PDF"><div className="flex gap-2"><TextInput value={b.pdfUrl} onChange={(e:any)=>setField('pdfUrl', e.target.value)} /><UploadButton accept=".pdf" icon="fa-file-pdf" onUpload={(url:string)=>setField('pdfUrl', url)} /></div></FormField>
                         </div>
                         <FormField label="فهرست مطالب"><TextArea value={b.tableOfContents} onChange={(e:any)=>setField('tableOfContents', e.target.value)} rows={4} /></FormField>
-                        <FormField label="مقدمه / متن محصول">
-                            <div className="flex gap-2">
-                                <TextArea label="توضیحات اثر" value={b.contentHtml || b.description} onChange={(e:any)=>setField('contentHtml', e.target.value)} />
-                                <WordToHtmlButton onConverted={(html:string)=>setField('contentHtml', html)} />
-                            </div>
-                        </FormField>
-
-                        <div className="pt-4 border-t">
-                            <p className="text-[10px] font-black text-gray-400 mb-3 uppercase tracking-widest">صوت‌های متصل شده</p>
-                            <div className="space-y-1 mb-3">
-                                {b.relatedAudioIds?.map((pid:number, i:number)=>(
-                                    <div key={i} className="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-                                        <span className="text-[9px] font-bold text-gray-600">شناسه مجموعه: {toPersianDigits(pid)}</span>
-                                        <button onClick={()=>{const n=[...b.relatedAudioIds]; n.splice(i,1); setField('relatedAudioIds', n);}} className="text-red-400 text-xs p-1"><i className="fas fa-times-circle"></i></button>
-                                    </div>
-                                ))}
-                            </div>
-                            <button onClick={()=>setPickerConfig({ podcasts: localData.podcasts, onSelect: (ep:any)=>{ const n=[...(b.relatedAudioIds||[]), ep.podcastId]; setField('relatedAudioIds', Array.from(new Set(n))); } })} className="w-full py-3 bg-blue-50 text-blue-600 rounded-2xl text-[10px] font-black border-2 border-dashed border-blue-100 hover:bg-blue-100 transition-colors shadow-sm">+ اتصال صوت جدید (مرورگر دو مرحله‌ای)</button>
-                        </div>
+                        <FormField label="مقدمه / متن محصول"><div className="flex gap-2"><TextArea value={b.contentHtml || b.description} onChange={(e:any)=>setField('contentHtml', e.target.value)} /><WordToHtmlButton onConverted={(html:string)=>setField('contentHtml', html)} /></div></FormField>
                     </div>
                 </div>
             );
         }
         return (
             <div className="p-4 space-y-4 pb-40">
-                <button onClick={()=>{
-                    const id = Date.now();
-                    const n: PublishedBook = { id, title: '', subtitle: '', description: '', authorName: 'نشر سرای هنر و اندیشه', cover: '', price: '۰', type: 'book', relatedAudioIds: [] };
-                    updateTable('publishedBooks', [n, ...localData.publishedBooks]);
-                    setEditingItem({ type: 'PublishedBook', id });
-                }} className="w-full py-4 bg-blue-600 text-white rounded-[2rem] font-black text-sm shadow-xl shadow-blue-100 active:scale-95 transition-all">+ محصول جدید در نشر</button>
+                <button onClick={()=>{ const id = Date.now(); const n: PublishedBook = { id, title: '', subtitle: '', description: '', authorName: 'نشر سرای هنر و اندیشه', cover: '', price: '۰', type: 'book', relatedAudioIds: [] }; updateTable('publishedBooks', [n, ...localData.publishedBooks]); setEditingItem({ type: 'PublishedBook', id }); }} className="w-full py-4 bg-blue-600 text-white rounded-[2rem] font-black text-sm shadow-xl shadow-blue-100 active:scale-95 transition-all">+ محصول جدید در نشر</button>
                 {localData.publishedBooks.map((b: any) => (
                     <div key={b.id} className="bg-white p-3 rounded-2xl border shadow-sm flex items-center justify-between group hover:border-blue-300 transition-all">
-                        <div className="flex items-center gap-3">
-                            <img src={b.cover || 'https://via.placeholder.com/100'} className="w-10 h-14 rounded-lg object-cover shadow-sm" />
-                            <p className="font-black text-[11px] text-gray-800">{b.title || 'بی‌عنوان'}</p>
-                        </div>
+                        <div className="flex items-center gap-3"><img src={b.cover || 'https://via.placeholder.com/100'} className="w-10 h-14 rounded-lg object-cover shadow-sm" /><p className="font-black text-[11px] text-gray-800">{b.title || 'بی‌عنوان'}</p></div>
                         <div className="flex items-center gap-2">
                             <button onClick={() => setEditingItem({ type: 'PublishedBook', id: b.id })} className="bg-blue-50 text-blue-600 px-5 py-2 rounded-xl text-[10px] font-black hover:bg-blue-100 transition-colors">ویرایش</button>
                             <button onClick={() => handleDelete('publishedBooks', b.id)} className="w-8 h-8 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[10px]"></i></button>
@@ -555,9 +925,7 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
                     <button onClick={() => setEditingItem(null)} className="text-secondary font-black text-[10px]">&larr; بازگشت</button>
                     <div className="bg-white p-6 rounded-[2.5rem] border shadow-sm space-y-4">
                         <FormField label="عنوان ویدیو"><TextInput value={v.title} onChange={(e:any)=>setField('title', e.target.value)} /></FormField>
-                        <FormField label="کاور ویدیو">
-                            <div className="flex gap-2"><TextInput value={v.thumbnailUrl} onChange={(e:any)=>setField('thumbnailUrl', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('thumbnailUrl', url)} /></div>
-                        </FormField>
+                        <FormField label="کاور ویدیو"><div className="flex gap-2"><TextInput value={v.thumbnailUrl} onChange={(e:any)=>setField('thumbnailUrl', e.target.value)} /><UploadButton onUpload={(url:string)=>setField('thumbnailUrl', url)} /></div></FormField>
                         <FormField label="شناسه امبد (Aparat UID)"><TextInput value={v.embedId} onChange={(e:any)=>setField('embedId', e.target.value)} /></FormField>
                         <TextArea label="توضیحات" value={v.description} onChange={(e:any)=>setField('description', e.target.value)} />
                     </div>
@@ -568,25 +936,17 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
             <div className="p-4 space-y-4 pb-40">
                 <div className="flex gap-2">
                     <div className="flex-1 bg-secondary/5 p-4 rounded-[2.5rem] border border-secondary/10 flex gap-2 shadow-inner">
-                        <TextInput placeholder="لینک آپارات برای دریافت خودکار..." value={aparatUrl} onChange={(e: any) => setAparatUrl(e.target.value)} />
+                        <TextInput placeholder="لینک آپارات..." value={aparatUrl} onChange={(e: any) => setAparatUrl(e.target.value)} />
                         <button onClick={async () => {
                             const id = extractAparatId(aparatUrl); if (!id) return alert("لینک نامعتبر");
-                            try {
-                                const { details } = await fetchAparatVideoDetails(id);
-                                const nv: Video = { id: details.uid, embedId: details.uid, title: details.title, description: details.description, thumbnailUrl: details.big_poster, viewCount: details.visit_cnt, uploadDate: details.sdate, duration: details.duration, categories: ["ویدیو"] };
-                                updateTable('videos', [nv, ...localData.videos]); setAparatUrl(''); setEditingItem({ type: 'Video', id: nv.id });
-                            } catch (e) { alert("خطا در دریافت"); }
+                            try { const { details } = await fetchAparatVideoDetails(id); const nv: Video = { id: details.uid, embedId: details.uid, title: details.title, description: details.description, thumbnailUrl: details.big_poster, viewCount: details.visit_cnt, uploadDate: details.sdate, duration: details.duration, categories: ["ویدیو"] }; updateTable('videos', [nv, ...localData.videos]); setAparatUrl(''); setEditingItem({ type: 'Video', id: nv.id }); } catch { alert("خطا"); }
                         }} className="bg-secondary text-white px-6 rounded-xl font-black text-xs shadow-lg active:scale-95 transition-all">دریافت</button>
                     </div>
-                    <button onClick={() => {
-                        const id = String(Date.now());
-                        const nv: Video = { id, title: '', description: '', thumbnailUrl: '', embedId: '', viewCount: 0, uploadDate: '', duration: 0, categories: ["ویدیو"] };
-                        updateTable('videos', [nv, ...localData.videos]); setEditingItem({ type: 'Video', id });
-                    }} className="bg-gray-100 text-gray-600 px-4 rounded-2xl font-black text-[10px] transition-all hover:bg-gray-200 active:scale-95 shadow-sm flex items-center gap-1"><i className="fas fa-plus"></i> جدید</button>
+                    <button onClick={() => { const id = String(Date.now()); const nv: Video = { id, title: '', description: '', thumbnailUrl: '', embedId: '', viewCount: 0, uploadDate: '', duration: 0, categories: ["ویدیو"] }; updateTable('videos', [nv, ...localData.videos]); setEditingItem({ type: 'Video', id }); }} className="bg-gray-100 text-gray-600 px-4 rounded-2xl font-black text-[10px] transition-all hover:bg-gray-200 active:scale-95 shadow-sm flex items-center gap-1"><i className="fas fa-plus"></i> جدید</button>
                 </div>
                 {localData.videos.map((v: any) => (
                     <div key={v.id} className="bg-white p-2 rounded-2xl border shadow-sm flex items-center justify-between group hover:border-secondary transition-all">
-                        <div className="flex items-center gap-3"><img src={v.thumbnailUrl} className="w-16 h-10 rounded-lg object-cover shadow-sm"/><p className="text-[10px] font-black text-gray-700 truncate max-w-[150px]">{v.title}</p></div>
+                        <div className="flex items-center gap-3"><img src={v.thumbnailUrl || 'https://via.placeholder.com/120x68?text=Video'} className="w-16 h-10 rounded-lg object-cover shadow-sm"/><p className="text-[10px] font-black text-gray-700 truncate max-w-[150px]">{v.title}</p></div>
                         <div className="flex items-center gap-2">
                             <button onClick={() => setEditingItem({ type: 'Video', id: v.id })} className="text-blue-500 font-black text-[9px] bg-blue-50 px-5 py-2 rounded-xl hover:bg-blue-100 transition-colors">ویرایش</button>
                             <button onClick={() => handleDelete('videos', v.id)} className="w-8 h-8 rounded-xl bg-red-50 text-red-400 hover:bg-red-100 hover:text-red-600 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100"><i className="fas fa-trash text-[10px]"></i></button>
@@ -597,130 +957,209 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
         );
     };
 
-    const renderCommunityPanel = () => {
-        const filteredComments = localData.comments.filter((c: any) => c.text?.includes(communitySearch) || c.author?.includes(communitySearch));
-        const filteredPosts = localData.posts.filter((p: any) => p.text?.includes(communitySearch) || p.author?.includes(communitySearch));
-        return (
-            <div className="p-4 space-y-4 pb-40">
-                <div className="flex p-1 bg-gray-100 rounded-2xl gap-1">
-                    {[
-                        { id: 'comments', label: 'نظرات', icon: 'fa-comment-dots' },
-                        { id: 'posts', label: 'پست‌ها', icon: 'fa-newspaper' }
-                    ].map(sub => (
-                        <button key={sub.id} onClick={() => setCommunitySubTab(sub.id as any)}
-                            className={`flex-1 py-3 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-2 ${communitySubTab === sub.id ? 'bg-white text-teal-600 shadow-sm' : 'text-gray-400 grayscale opacity-60'}`}>
-                            <i className={`fas ${sub.icon}`}></i>
-                            <span>{sub.label}</span>
+    const renderAnalytics = () => (
+        <div className="p-4 space-y-6 animate-fadeIn">
+            <div className="bg-white p-4 rounded-2xl border shadow-sm">
+                <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">آمار و تحلیل</h3>
+                    <div className="flex gap-2">
+                        {['7d', '30d', '90d'].map(p => (
+                            <button key={p} onClick={() => { setAnalyticsPeriod(p); }}
+                                className={`px-3 py-1.5 rounded-lg text-[9px] font-black transition-all ${analyticsPeriod === p ? 'bg-purple-500 text-white' : 'bg-gray-50 text-gray-400'}`}>
+                                {p === '7d' ? '۷ روز' : p === '30d' ? '۳۰ روز' : '۹۰ روز'}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                    <div className="text-center p-3 bg-purple-50 rounded-xl">
+                        <p className="text-lg font-black text-purple-600">{toPersianDigits(analytics?.newUsers || 0)}</p>
+                        <p className="text-[8px] font-black text-purple-400">کاربر جدید</p>
+                    </div>
+                    <div className="text-center p-3 bg-orange-50 rounded-xl">
+                        <p className="text-lg font-black text-orange-600">{toPersianDigits(analytics?.newPosts || 0)}</p>
+                        <p className="text-[8px] font-black text-orange-400">پست جدید</p>
+                    </div>
+                    <div className="text-center p-3 bg-teal-50 rounded-xl">
+                        <p className="text-lg font-black text-teal-600">{toPersianDigits(analytics?.newComments || 0)}</p>
+                        <p className="text-[8px] font-black text-teal-400">نظر جدید</p>
+                    </div>
+                </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border shadow-sm">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">نویسندگان برتر</h3>
+                <div className="space-y-2">
+                    {(analytics?.topAuthors || []).slice(0, 5).map((a: any, i: number) => (
+                        <div key={i} className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl">
+                            <span className="text-[10px] font-black text-gray-400 w-5">{toPersianDigits(i + 1)}</span>
+                            <div className="flex-1">
+                                <p className="text-[10px] font-black text-gray-700">{a._id}</p>
+                                <p className="text-[8px] text-gray-400">{toPersianDigits(a.count)} پست • {toPersianDigits(a.totalLikes)} لایک</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border shadow-sm">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">نظردهندگان برتر</h3>
+                <div className="space-y-2">
+                    {(analytics?.topCommenters || []).slice(0, 5).map((c: any, i: number) => (
+                        <div key={i} className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl">
+                            <span className="text-[10px] font-black text-gray-400 w-5">{toPersianDigits(i + 1)}</span>
+                            <div className="flex-1">
+                                <p className="text-[10px] font-black text-gray-700">{c._id}</p>
+                                <p className="text-[8px] text-gray-400">{toPersianDigits(c.count)} نظر</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border shadow-sm">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">فعالیت اخیر</h3>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                    {activity.map((a: any, i: number) => (
+                        <div key={i} className="flex items-center gap-3 p-2 bg-gray-50 rounded-xl">
+                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white text-[10px] ${a.type === 'user_joined' ? 'bg-green-500' : a.type === 'post_created' ? 'bg-orange-500' : 'bg-teal-500'}`}>
+                                <i className={`fas ${a.type === 'user_joined' ? 'fa-user-plus' : a.type === 'post_created' ? 'fa-newspaper' : 'fa-comment-dots'}`}></i>
+                            </div>
+                            <div className="flex-1 min-w-0">
+                                <p className="text-[9px] font-black text-gray-700 truncate">
+                                    {a.type === 'user_joined' ? `${a.user} عضو شد` : a.type === 'post_created' ? `${a.author} پست گذاشت` : `${a.author} نظر داد`}
+                                </p>
+                                <p className="text-[8px] text-gray-400 truncate">{a.text || a.contentType || ''}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="bg-white p-4 rounded-2xl border shadow-sm">
+                <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3">خروجی داده‌ها</h3>
+                <div className="grid grid-cols-2 gap-2">
+                    {[{ type: 'users', label: 'کاربران', icon: 'fa-users', color: 'green' }, { type: 'posts', label: 'پست‌ها', icon: 'fa-newspaper', color: 'orange' }, { type: 'comments', label: 'نظرات', icon: 'fa-comment-dots', color: 'teal' }, { type: 'podcasts', label: 'صوت‌ها', icon: 'fa-podcast', color: 'blue' }, { type: 'videos', label: 'ویدیوها', icon: 'fa-video', color: 'purple' }].map(e => (
+                        <button key={e.type} onClick={() => adminExportData(e.type)} className={`flex items-center gap-2 p-3 bg-${e.color}-50 rounded-xl text-${e.color}-600 hover:bg-${e.color}-100 transition-all`}>
+                            <i className={`fas ${e.icon} text-sm`}></i>
+                            <span className="text-[9px] font-black">{e.label}</span>
                         </button>
                     ))}
                 </div>
-                <div className="relative">
-                    <TextInput placeholder="جستجو..." value={communitySearch} onChange={(e:any)=>setCommunitySearch(e.target.value)} />
-                    <i className="fas fa-search absolute left-3 top-3.5 text-gray-300"></i>
-                </div>
-                {communitySubTab === 'comments' && (
-                    <div className="space-y-3">
-                        {filteredComments.length === 0 && <p className="text-center text-gray-400 text-[10px] font-black py-10">نظری یافت نشد</p>}
-                        {filteredComments.map((c:any)=>(
-                            <div key={c.id} className="bg-white p-4 rounded-3xl border shadow-sm flex items-start gap-4 animate-fadeIn group">
-                                <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center text-white font-black text-[11px] flex-shrink-0 shadow-lg">{c.author?.charAt(0) || '?'}</div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <span className="text-[11px] font-black text-gray-800">{c.author}</span>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[8px] text-gray-400 font-bold">{c.date}</span>
-                                            {c.type && <span className="text-[7px] px-1.5 py-0.5 rounded-full font-bold" style={{ background: c.type === 'podcast' ? '#fef3c7' : c.type === 'book' ? '#dbeafe' : '#fce7f3', color: c.type === 'podcast' ? '#d97706' : c.type === 'book' ? '#2563eb' : '#db2777' }}>{c.type}</span>}
-                                        </div>
-                                    </div>
-                                    <p className="text-[10px] text-gray-500 leading-relaxed line-clamp-3">{c.text}</p>
-                                </div>
-                                <button onClick={() => handleDelete('comments', c.id)} className="text-red-300 hover:text-red-500 transition-colors p-1 opacity-0 group-hover:opacity-100"><i className="fas fa-times-circle"></i></button>
-                            </div>
-                        ))}
-                    </div>
-                )}
-                {communitySubTab === 'posts' && (
-                    <div className="space-y-3">
-                        {filteredPosts.length === 0 && <p className="text-center text-gray-400 text-[10px] font-black py-10">پستی یافت نشد</p>}
-                        {filteredPosts.map((p:any)=>(
-                            <div key={p.id} className="bg-white p-4 rounded-3xl border shadow-sm flex items-start gap-4 animate-fadeIn group">
-                                <div className="w-9 h-9 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 font-black text-[11px] flex-shrink-0 shadow-lg">{p.author?.charAt(0) || '?'}</div>
-                                <div className="flex-1 min-w-0">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <span className="text-[11px] font-black text-gray-800">{p.author}</span>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[8px] text-gray-400 font-bold">{p.date}</span>
-                                            {p.comments && <span className="text-[7px] text-gray-400 font-bold">{toPersianDigits(p.comments.length)} نظر</span>}
-                                        </div>
-                                    </div>
-                                    <p className="text-[10px] text-gray-500 leading-relaxed line-clamp-3">{p.text || '(بدون متن)'}</p>
-                                    {p.media && p.media.length > 0 && (
-                                        <div className="flex gap-1 mt-2">
-                                            {p.media.map((m: any, i: number) => (
-                                                m.type === 'image' ? <img key={i} src={m.url} className="w-12 h-12 rounded-lg object-cover border" /> : <span key={i} className="text-[8px] text-gray-400 bg-gray-50 px-2 py-1 rounded-lg"><i className="fas fa-video"></i></span>
-                                            ))}
-                                        </div>
-                                    )}
-                                    {p.videoId && <span className="text-[8px] text-blue-500 mt-1 inline-block"><i className="fas fa-video"></i> ویدیو</span>}
-                                    {p.podcastId && <span className="text-[8px] text-amber-500 mt-1 inline-block mr-2"><i className="fas fa-podcast"></i> صوت</span>}
-                                    {p.bookId && <span className="text-[8px] text-purple-500 mt-1 inline-block mr-2"><i className="fas fa-book"></i> کتاب</span>}
-                                </div>
-                                <button onClick={() => handleDelete('posts', p.id)} className="text-red-300 hover:text-red-500 transition-colors p-1 opacity-0 group-hover:opacity-100"><i className="fas fa-times-circle"></i></button>
-                            </div>
-                        ))}
-                    </div>
-                )}
             </div>
-        );
-    };
+        </div>
+    );
 
     const isEditing = editingItem !== null;
+    const tabs: { id: AdminTab; label: string; icon: string; color: string }[] = [
+        { id: 'dashboard', label: 'داشبورد', icon: 'fa-chart-pie', color: '#6366f1' },
+        { id: 'users', label: 'کاربران', icon: 'fa-users', color: '#10b981' },
+        { id: 'posts', label: 'پست‌ها', icon: 'fa-newspaper', color: '#f97316' },
+        { id: 'comments', label: 'نظرات', icon: 'fa-comment-dots', color: '#0d9488' },
+        { id: 'analytics', label: 'آمار', icon: 'fa-chart-line', color: '#8b5cf6' },
+        { id: 'sowt', label: 'صوت', icon: 'fa-microphone-alt', color: '#1ab394' },
+        { id: 'library', label: 'کتابخانه', icon: 'fa-book-open', color: '#f97316' },
+        { id: 'nashr', label: 'نشر', icon: 'fa-shopping-cart', color: '#2563eb' },
+        { id: 'videos', label: 'ویدیو', icon: 'fa-video', color: '#2e86c1' },
+    ];
 
     return (
         <div className="fixed inset-0 bg-gray-950/98 z-[4500] backdrop-blur-3xl flex items-center justify-center p-0 sm:p-4 animate-fadeIn">
             <div className="bg-[#fcfdfe] w-full max-w-4xl h-full sm:h-[90vh] rounded-none sm:rounded-[3.5rem] shadow-2xl flex flex-col overflow-hidden border border-white/5">
-                <header className={`bg-white px-10 transition-all duration-300 border-b flex justify-between items-center flex-shrink-0 overflow-hidden ${isEditing ? 'h-0 opacity-0 py-0' : 'py-6 opacity-100'}`}>
-                    <div className="flex items-center gap-5">
-                        <div className="w-12 h-12 bg-gray-900 rounded-[1.25rem] flex items-center justify-center text-white rotate-3 shadow-xl"><i className="fas fa-sliders-h"></i></div>
+                <header className={`bg-white px-6 sm:px-10 transition-all duration-300 border-b flex justify-between items-center flex-shrink-0 overflow-hidden ${isEditing ? 'h-0 opacity-0 py-0' : 'py-5 sm:py-6 opacity-100'}`}>
+                    <div className="flex items-center gap-4">
+                        <div className="w-11 h-11 bg-gray-900 rounded-[1.25rem] flex items-center justify-center text-white rotate-3 shadow-xl"><i className="fas fa-sliders-h"></i></div>
                         <div>
-                            <h2 className="font-black text-gray-800 text-lg font-nastaliq">کنسول مدیریت سرای هنر و اندیشه</h2>
-                            <p className="text-[9px] text-gray-400 font-black uppercase mt-0.5 tracking-widest">Saraye Honar CMS V25.5</p>
+                            <h2 className="font-black text-gray-800 text-base sm:text-lg font-nastaliq">پنل مدیریت</h2>
+                            <p className="text-[9px] text-gray-400 font-black uppercase mt-0.5 tracking-widest">Soha Admin Panel</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-300 hover:text-red-500 font-black text-xl transition-all">&times;</button>
+                    <div className="flex items-center gap-3">
+                        <div className="relative hidden sm:block">
+                            <input
+                                type="text"
+                                value={globalSearch}
+                                onChange={(e) => setGlobalSearch(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleGlobalSearch()}
+                                placeholder="جستجوی سراسری..."
+                                className="w-48 bg-gray-50 border border-gray-200 rounded-xl px-4 py-2 text-[10px] text-gray-700 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+                            />
+                            <i className={`fas ${isSearching ? 'fa-spinner fa-spin' : 'fa-search'} absolute left-3 top-2.5 text-gray-300 text-[10px]`}></i>
+                        </div>
+                        <button onClick={() => adminExportData('users')} className="w-9 h-9 rounded-xl bg-green-50 text-green-500 hover:bg-green-100 transition-all flex items-center justify-center" title="خروجی کاربران"><i className="fas fa-download text-[10px]"></i></button>
+                        <button onClick={onClose} className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center text-gray-300 hover:text-red-500 font-black text-xl transition-all">&times;</button>
+                    </div>
                 </header>
 
-                <div className={`flex gap-1.5 bg-gray-50 border-b overflow-x-auto no-scrollbar flex-shrink-0 justify-center transition-all duration-300 ${isEditing ? 'h-0 opacity-0 p-0' : 'p-3 opacity-100'}`}>
-                    {[
-                        { id: 'sowt', label: 'صوت', icon: 'fa-microphone-alt', color: '#1ab394' },
-                        { id: 'library', label: 'کتابخانه', icon: 'fa-book-open', color: '#f97316' },
-                        { id: 'nashr', label: 'نشر', icon: 'fa-shopping-cart', color: '#2563eb' },
-                        { id: 'videos', label: 'ویدیو', icon: 'fa-video', color: '#2e86c1' },
-                        { id: 'community', label: 'محفل', icon: 'fa-comments', color: '#0d9488' }
-                    ].map(tab => (
-                        <button key={tab.id} onClick={() => setActiveTab(tab.id as any)}
-                            className={`flex flex-col items-center justify-center p-2.5 rounded-[1.25rem] transition-all border-2 flex-shrink-0 w-20 ${activeTab === tab.id ? 'bg-white shadow-lg scale-105 active:scale-95' : 'bg-transparent border-transparent text-gray-300 grayscale opacity-60'}`}
-                            style={{ borderColor: activeTab === tab.id ? tab.color : 'transparent', color: activeTab === tab.id ? tab.color : '' }}
-                        >
-                            <i className={`fas ${tab.icon} text-base mb-1`}></i>
-                            <span className="text-[9px] font-black uppercase">{tab.label}</span>
+                <div className={`flex gap-1 bg-gray-50 border-b overflow-x-auto no-scrollbar flex-shrink-0 transition-all duration-300 ${isEditing ? 'h-0 opacity-0 p-0' : 'p-2 sm:p-3 opacity-100'}`}>
+                    {tabs.map(tab => (
+                        <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+                            className={`flex flex-col items-center justify-center p-2 rounded-xl sm:rounded-[1.25rem] transition-all border-2 flex-shrink-0 min-w-[60px] sm:w-20 ${activeTab === tab.id ? 'bg-white shadow-lg scale-105 active:scale-95' : 'bg-transparent border-transparent text-gray-300 grayscale opacity-60'}`}
+                            style={{ borderColor: activeTab === tab.id ? tab.color : 'transparent', color: activeTab === tab.id ? tab.color : '' }}>
+                            <i className={`fas ${tab.icon} text-sm mb-1`}></i>
+                            <span className="text-[8px] sm:text-[9px] font-black uppercase">{tab.label}</span>
                         </button>
                     ))}
                 </div>
 
                 <div className="flex-grow overflow-y-auto no-scrollbar bg-[#f8f9fa] pb-40">
                     <div className="max-w-2xl mx-auto">
+                        {globalSearchResults && (
+                            <div className="p-4 space-y-4 animate-fadeIn border-b bg-white">
+                                <div className="flex items-center justify-between">
+                                    <h3 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">نتایج جستجو برای "{globalSearch}"</h3>
+                                    <button onClick={() => setGlobalSearchResults(null)} className="text-[9px] text-gray-400 hover:text-red-500"><i className="fas fa-times"></i> بستن</button>
+                                </div>
+                                {globalSearchResults.users?.length > 0 && (
+                                    <div>
+                                        <p className="text-[9px] font-black text-green-500 mb-2"><i className="fas fa-users"></i> کاربران ({toPersianDigits(globalSearchResults.users.length)})</p>
+                                        {globalSearchResults.users.map((u: any) => (
+                                            <div key={u._id} className="p-2 bg-gray-50 rounded-xl mb-1 flex items-center gap-2">
+                                                <span className="text-[10px] font-black text-gray-700">{u.name}</span>
+                                                <span className="text-[8px] text-gray-400">{toPersianDigits(u.phoneNumber)}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                {globalSearchResults.posts?.length > 0 && (
+                                    <div>
+                                        <p className="text-[9px] font-black text-orange-500 mb-2"><i className="fas fa-newspaper"></i> پست‌ها ({toPersianDigits(globalSearchResults.posts.length)})</p>
+                                        {globalSearchResults.posts.map((p: any) => (
+                                            <div key={p._id} className="p-2 bg-gray-50 rounded-xl mb-1">
+                                                <p className="text-[10px] font-black text-gray-700">{p.author}</p>
+                                                <p className="text-[8px] text-gray-500 truncate">{p.text}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                                {globalSearchResults.comments?.length > 0 && (
+                                    <div>
+                                        <p className="text-[9px] font-black text-teal-500 mb-2"><i className="fas fa-comment-dots"></i> نظرات ({toPersianDigits(globalSearchResults.comments.length)})</p>
+                                        {globalSearchResults.comments.map((c: any) => (
+                                            <div key={c._id} className="p-2 bg-gray-50 rounded-xl mb-1">
+                                                <p className="text-[10px] font-black text-gray-700">{c.author}</p>
+                                                <p className="text-[8px] text-gray-500 truncate">{c.text}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                        {activeTab === 'dashboard' && renderDashboard()}
+                        {activeTab === 'users' && renderUsersPanel()}
+                        {activeTab === 'posts' && renderPostsPanel()}
+                        {activeTab === 'comments' && renderCommentsPanel()}
+                        {activeTab === 'analytics' && renderAnalytics()}
                         {activeTab === 'sowt' && renderSowtPanel()}
+                        {activeTab === 'videos' && renderVideoPanel()}
                         {activeTab === 'library' && renderLibraryPanel()}
                         {activeTab === 'nashr' && renderNashrPanel()}
-                        {activeTab === 'videos' && renderVideoPanel()}
-                        {activeTab === 'community' && renderCommunityPanel()}
                     </div>
                 </div>
 
                 <footer className="bg-white px-8 py-4 border-t flex gap-4 flex-shrink-0 z-[100] shadow-[0_-10px_40px_rgba(0,0,0,0.03)]">
-                    <button onClick={onClose} className="flex-1 py-3.5 bg-gray-50 text-gray-400 rounded-2xl text-[10px] font-black hover:bg-gray-100 transition-all active:scale-95">انصراف</button>
-                    <button onClick={() => { onSave(localData); onClose(); }} className="flex-[2] py-3.5 bg-primary text-white rounded-2xl text-[10px] font-black shadow-xl shadow-primary/20 active:scale-95 transition-all">ذخیره و اعمال نهایی در دیتابیس</button>
+                    <button onClick={onClose} className="flex-1 py-3.5 bg-gray-50 text-gray-400 rounded-2xl text-[10px] font-black hover:bg-gray-100 transition-all active:scale-95">بازگشت به سایت</button>
+                    <button onClick={() => { onSave(localData); onClose(); }} className="flex-[2] py-3.5 bg-primary text-white rounded-2xl text-[10px] font-black shadow-xl shadow-primary/20 active:scale-95 transition-all">ذخیره و اعمال تغییرات</button>
                 </footer>
             </div>
             {pickerConfig && <AudioPickerModal podcasts={localData.podcasts} onSelect={pickerConfig.onSelect} onClose={()=>setPickerConfig(null)} />}
@@ -729,7 +1168,7 @@ const AdminPage = ({ onClose, currentPodcasts, currentVideos, currentPublishedBo
                     <div className="bg-white max-w-xs w-full rounded-[2rem] shadow-2xl p-6 text-center animate-slideInUp">
                         <div className="w-14 h-14 bg-red-50 rounded-full flex items-center justify-center text-red-500 mx-auto mb-4"><i className="fas fa-exclamation-triangle text-xl"></i></div>
                         <h3 className="font-black text-gray-800 text-sm mb-2">تایید حذف</h3>
-                        <p className="text-[10px] text-gray-500 font-bold mb-6">آیا از حذف این آیتم اطمینان دارید؟ این عمل قابل بازگشت نیست.</p>
+                        <p className="text-[10px] text-gray-500 font-bold mb-6">{confirmDelete.label || 'آیا از حذف این آیتم اطمینان دارید؟ این عمل قابل بازگشت نیست.'}</p>
                         <div className="flex gap-3">
                             <button onClick={() => setConfirmDelete(null)} className="flex-1 py-3 bg-gray-50 text-gray-400 rounded-2xl text-[10px] font-black hover:bg-gray-100 transition-all active:scale-95">انصراف</button>
                             <button onClick={confirmDeleteItem} className="flex-[2] py-3 bg-red-500 text-white rounded-2xl text-[10px] font-black shadow-lg active:scale-95 transition-all hover:bg-red-600">حذف کن</button>

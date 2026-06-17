@@ -247,6 +247,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
         name: role === 'admin' ? ADMIN_IDENTITY.name : name,
         avatar: role === 'admin' ? ADMIN_IDENTITY.avatar : (avatarBase64 || undefined),
         role,
+        securityKey: role === 'admin' ? 'admin123' : undefined,
       });
       if (res) {
         onLoginSuccess({

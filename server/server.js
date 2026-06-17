@@ -21,6 +21,7 @@ import postRoutes from './routes/posts.js';
 import commentRoutes from './routes/comments.js';
 import proxyRoutes from './routes/proxy.js';
 import uploadRoutes from './routes/upload.js';
+import adminRoutes from './routes/admin.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -84,6 +85,7 @@ app.use('/api/posts', postRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/proxy', proxyRoutes);
 app.use('/api/upload', uploadRoutes);
+app.use('/api/admin', adminRoutes);
 app.use('/uploads', express.static(path.resolve('uploads')));
 
 app.use((err, req, res, next) => {

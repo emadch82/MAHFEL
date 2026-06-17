@@ -36,7 +36,7 @@ import { formatTime } from './utils/helpers';
 
 const AppInner: React.FC = () => {
     const { theme, toggleTheme } = useTheme();
-    const [appState, setAppState] = useState<'initializing' | 'login' | 'interests' | 'ready'>('initializing');
+    const [appState, setAppState] = useState<'initializing' | 'login' | 'interests' | 'ready' | 'admin'>('initializing');
     const [podcasts, setPodcasts] = useState<Podcast[]>([]);
     const [authors, setAuthors] = useState<Author[]>([]);
     const [videos, setVideos] = useState<Video[]>([]);
@@ -71,7 +71,6 @@ const AppInner: React.FC = () => {
     const [postMedia, setPostMedia] = useState<{ type: 'image' | 'video' | 'audio'; url: string }[]>([]);
     
     const [toast, setToast] = useState<{ id: number; message: string; image?: string; name?: string } | null>(null);
-    const [isAdminOpen, setIsAdminOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -148,7 +147,7 @@ const AppInner: React.FC = () => {
                         }
                         setUser(userData);
                         setIsAuthenticated(true);
-                        setAppState(userData.interests && userData.interests.length > 0 ? 'ready' : 'interests');
+                        setAppState(userData.role === 'admin' ? 'admin' : (userData.interests && userData.interests.length > 0 ? 'ready' : 'interests'));
                     } else {
                         setAppState('login');
                     }
@@ -300,7 +299,7 @@ const AppInner: React.FC = () => {
         setIsAuthenticated(true);
         if (token) localStorage.setItem('soha_token', token);
         localStorage.setItem('user_data', JSON.stringify(u));
-        if (u.role === 'admin') setIsAdminOpen(true);
+        if (u.role === 'admin') { setAppState('admin'); return; }
         setAppState(u.interests && u.interests.length > 0 ? 'ready' : 'interests');
     };
 
@@ -782,7 +781,7 @@ const AppInner: React.FC = () => {
     setIsPlaying(true);
     audioRef.current!.currentTime = seekTime;
   }).catch(()=>{});
-}} hasPlayer={currentTrack !== null} isPlaying={isPlaying} onTogglePlay={togglePlay} onOpenPlayer={() => setIsPlayerExpanded(true)} onPlaylistTabChange={setPlaylistTab} activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); }} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} onToggleLibrary={(podcast: Podcast) => togglePodcastLibrary(podcast)} isInLibrary={selectedPodcast ? (user?.library?.podcasts || []).includes(String(selectedPodcast.id || (selectedPodcast as any)._id)) : false} onPrev={playPrev} onNext={playNext} audioProgress={audioProgress} audioDuration={audioDuration} isSidebarOpen={isSidebarOpen} onCloseSidebar={() => setIsSidebarOpen(false)} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setIsAdminOpen(true)} user={user} isAuthenticated={isAuthenticated} isSidebarCollapsed={desktopSidebarCollapsed} onToggleSidebarCollapsed={setDesktopSidebarCollapsed} />;
+}} hasPlayer={currentTrack !== null} isPlaying={isPlaying} onTogglePlay={togglePlay} onOpenPlayer={() => setIsPlayerExpanded(true)} onPlaylistTabChange={setPlaylistTab} activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setShowChatInput(false); }} theme={theme} onToggleTheme={toggleTheme} onOpenProfile={() => setIsProfileOpen(true)} onToggleLibrary={(podcast: Podcast) => togglePodcastLibrary(podcast)} isInLibrary={selectedPodcast ? (user?.library?.podcasts || []).includes(String(selectedPodcast.id || (selectedPodcast as any)._id)) : false} onPrev={playPrev} onNext={playNext} audioProgress={audioProgress} audioDuration={audioDuration} isSidebarOpen={isSidebarOpen} onCloseSidebar={() => setIsSidebarOpen(false)} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setAppState('admin')} user={user} isAuthenticated={isAuthenticated} isSidebarCollapsed={desktopSidebarCollapsed} onToggleSidebarCollapsed={setDesktopSidebarCollapsed} />;
         if (selectedAuthor) return <AuthorPage author={selectedAuthor} allBooks={books} allPodcasts={podcasts} allVideos={videos} onBack={() => setSelectedAuthor(null)} onBookSelect={setSelectedBook} onPlayEpisode={playEpisode} />;
         if (selectedBook) return <BookPage book={selectedBook} allPodcasts={podcasts} authors={authors} onBack={() => setSelectedBook(null)} onPlayEpisode={playEpisode} onAuthorSelect={setSelectedAuthor} />;
         if (selectedPublishedBook) {
@@ -874,6 +873,7 @@ const AppInner: React.FC = () => {
     if (networkError) return <NetworkErrorPage onRetry={() => { setNetworkError(false); window.location.reload(); }} />;
     if (appState === 'login') return <LoginPage onLoginSuccess={handleLogin} />;
     if (appState === 'interests') return <InterestsPage onInterestsSelected={(interests) => { if(user) { const u = {...user, interests}; setUser(u); handleLogin(u); } }} />;
+    if (appState === 'admin') return <AdminPage onClose={() => setAppState('ready')} currentPodcasts={podcasts} currentVideos={videos} currentPublishedBooks={publishedBooks} currentAuthors={authors} currentBooks={books} currentComments={comments} currentPosts={posts} onSave={(data: any) => { setPodcasts(data.podcasts); setVideos(data.videos); setPublishedBooks(data.publishedBooks); setAuthors(data.authors); setBooks(data.books); setPosts(data.posts); setComments(data.comments); }} />;
 
     const miniPlayerVideoId = activeVideo ? (activeVideo.id || (activeVideo as any)._id) : null;
     const miniPlayerInitialTime = miniPlayerVideoId === activeVideoId ? videoCurrentTimeRef.current : 0;
@@ -884,7 +884,7 @@ const AppInner: React.FC = () => {
              <div className="app-container bg-background flex-1 flex min-h-0">
              
              {/* Desktop Sidebar */}
-              <Sidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setSelectedPostForComments(null); setSelectedPostPodcast(null); setSelectedVideoComment(null); setIsPlayerExpanded(false); }} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} theme={theme} onToggleTheme={toggleTheme} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setIsAdminOpen(true)} onOpenProfile={() => setIsProfileOpen(true)} user={user} isAuthenticated={isAuthenticated} collapsed={desktopSidebarCollapsed} onToggleCollapsed={setDesktopSidebarCollapsed} />
+              <Sidebar activeTab={activeTab} onTabChange={(tab) => { setActiveTab(tab); setSelectedPodcast(null); setSelectedAuthor(null); setSelectedBook(null); setSelectedPublishedBook(null); setSelectedPostForComments(null); setSelectedPostPodcast(null); setSelectedVideoComment(null); setIsPlayerExpanded(false); setActiveVideo(null); setIsVideoMini(false); }} isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} theme={theme} onToggleTheme={toggleTheme} onOpenSearch={() => setIsSearchOpen(true)} onOpenAdmin={() => setAppState('admin')} onOpenProfile={() => setIsProfileOpen(true)} user={user} isAuthenticated={isAuthenticated} collapsed={desktopSidebarCollapsed} onToggleCollapsed={setDesktopSidebarCollapsed} />
 
               {/* Main Content */}
                <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
@@ -1068,7 +1068,6 @@ onPlayVideo={(v) => { setIsVideoMini(false); handlePlayVideo(v); }}
                 />
               )}
              {instantView && <InstantView title={instantView.title} content={instantView.content} onClose={() => setInstantView(null)} />}
-             {isAdminOpen && <AdminPage onClose={() => setIsAdminOpen(false)} currentPodcasts={podcasts} currentVideos={videos} currentPublishedBooks={publishedBooks} currentAuthors={authors} currentBooks={books} currentComments={comments} currentPosts={posts} onSave={(data: any) => { setPodcasts(data.podcasts); setVideos(data.videos); setPublishedBooks(data.publishedBooks); setAuthors(data.authors); setBooks(data.books); setPosts(data.posts); setComments(data.comments); }} />}
              {isProfileOpen && user && <UserProfilePage onClose={() => setIsProfileOpen(false)} onLogout={handleLogout} user={user} allPodcasts={podcasts} allVideos={videos} onPlayPodcast={playEpisode} onPlayVideo={(v) => { handlePlayVideo(v); setIsProfileOpen(false); }} onEditPost={(post: Post) => { setEditingPost(post); setEditPostText(post.text || ''); setIsProfileOpen(false); }} onDeletePost={handleDeletePost} onUpdateUser={(u) => { setUser(u); localStorage.setItem('user_data', JSON.stringify(u)); }} />}
              
              <SearchModal 

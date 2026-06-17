@@ -27,7 +27,7 @@ function generateDefaultAvatar(name) {
     ['#8b5cf6', '#7c3aed'], ['#ef4444', '#dc2626'], ['#ec4899', '#db2777'],
     ['#06b6d4', '#0891b2'], ['#14b8a6', '#0d9488'],
   ];
-  const idx = (name || '').charCodeAt(0) % colors.length;
+  const idx = ((name || 'ک').charCodeAt(0) || 0) % colors.length;
   const [c1, c2] = colors[idx];
   return `data:image/svg+xml,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:${c1}"/><stop offset="100%" style="stop-color:${c2}"/></linearGradient></defs><rect width="128" height="128" rx="64" fill="url(#g)"/><text x="64" y="64" font-family="Arial,sans-serif" font-size="52" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="central">${initials}</text></svg>`)}`;
 }
