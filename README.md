@@ -97,52 +97,6 @@
 
 ---
 
-### نمودار ارتباط کامپوننت‌ها
-
-```mermaid
-graph LR
-    subgraph "🎮 لایه کنترل"
-        A[AppHeader] --> B[SearchModal]
-        A --> C[Theme Toggle]
-        A --> D[Profile Menu]
-        E[BottomTabs] --> F[Mobile Navigation]
-        E --> G[Desktop Navigation]
-    end
-
-    subgraph "🎵 پخش‌کننده‌ها"
-        H[AudioPlayer] --> I[AudioTimestampBar]
-        J[MinimizedPlayer] --> H
-        K[VideoMiniPlayer] --> L[CustomVideoPlayer]
-        M[FullScreenPlayer] --> H
-        M --> L
-        N[InlineVideoPlayer] --> L
-    end
-
-    subgraph "📄 صفحات اصلی"
-        O[HomePage] --> P[PodcastCard]
-        O --> Q[VideoCard]
-        O --> R[BookCard]
-        S[LibraryPage] --> T[BookReader]
-        U[AdminPage] --> V[Analytics Dashboard]
-        U --> W[User Management]
-        U --> X[Content Management]
-    end
-
-    subgraph "🔧 ابزارهای کمکی"
-        Y[CheckoutFlow]
-        Z[ShareCard]
-        AA[Skeleton Loading]
-        AB[Toast Notifications]
-        AC[ErrorBoundary]
-    end
-
-    style O fill:#dbeafe,stroke:#3b82f6,stroke-width:2px
-    style H fill:#fce7f3,stroke:#ec4899,stroke-width:2px
-    style U fill:#dcfce7,stroke:#22c55e,stroke-width:2px
-```
-
----
-
 ## ساختار پروژه
 
 ```
