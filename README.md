@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="public/logo.jpg" alt="MAHFEL Logo" width="400" />
+<img src="public/logo.jpg" alt="MAHFEL Logo" width="600" />
 
 # محفل — MAHFEL
 
