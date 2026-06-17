@@ -661,6 +661,31 @@ graph TD
 
 ---
 
-ساخته شده توسط <a href="https://github.com/emadch82"><strong>EMAD CH</strong></a>
+<table align="center">
+<tr>
+<td align="center">
+
+<img src="https://img.shields.io/badge/ساخته_شده_توسط-EMAD_CH-06b6d4?style=for-the-badge&labelColor=000&color=06b6d4" />
+
+</td>
+</tr>
+<tr>
+<td align="center">
+
+<a href="https://github.com/emadch82">
+<img src="https://img.shields.io/badge/GitHub-EMAD_CH-181717?style=for-the-badge&logo=github&logoColor=white" />
+</a>
+
+</td>
+</tr>
+</table>
+
+<br>
+
+<div align="center">
+
+**با ❤️ و ☕ ساخته شده**
+
+</div>
 
 </div>
