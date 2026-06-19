@@ -468,7 +468,7 @@ const ChatBubble: React.FC<{
             )}
 
             {comment.audioTimestamp != null && onAudioTimestampClick && (
-              <button onClick={(e) => { e.stopPropagation(); onAudioTimestampClick!(comment.audioTimestamp); }}
+              <button onClick={(e) => { e.stopPropagation(); const ts = comment.audioTimestamp; if (ts != null) onAudioTimestampClick!(ts); }}
                 className="flex items-center gap-1.5 mb-1.5 rounded-lg transition-all active:scale-95"
                 style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)', color: 'var(--primary)', padding: '3px 8px', fontSize: '9px', border: '1px solid color-mix(in srgb, var(--primary) 20%, transparent)' }}>
                 <i className="fas fa-music text-[8px]"></i>
@@ -478,7 +478,7 @@ const ChatBubble: React.FC<{
               </button>
             )}
             {comment.videoTimestamp != null && onTimestampClick && (
-              <button onClick={(e) => { e.stopPropagation(); onTimestampClick!(comment.videoTimestamp); }}
+              <button onClick={(e) => { e.stopPropagation(); const ts = comment.videoTimestamp; if (ts != null) onTimestampClick!(ts); }}
                 className="flex items-center gap-1.5 mb-1.5 rounded-lg transition-all active:scale-95"
                 style={{ background: 'color-mix(in srgb, var(--primary) 12%, transparent)', color: 'var(--primary)', padding: '3px 8px', fontSize: '9px', border: '1px solid color-mix(in srgb, var(--primary) 20%, transparent)' }}>
                 <i className="fas fa-video text-[8px]"></i>

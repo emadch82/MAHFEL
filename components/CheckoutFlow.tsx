@@ -148,8 +148,9 @@ const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ items, isOpen, onClose, onC
   const totalPrice = items.reduce((sum, item) => sum + parsePrice(item.book.price) * item.quantity, 0);
   const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
+  const stripNonDigits = (v: string) => v.replace(/[^\d۰-۹]/g, '').replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d).toString());
   const formatCardNumber = (v: string) => {
-    const digits = v.replace(/\D/g, '').slice(0, 16);
+    const digits = stripNonDigits(v).slice(0, 16);
     return digits.replace(/(\d{4})(?=\d)/g, '$1 ');
   };
 
@@ -235,7 +236,7 @@ const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ items, isOpen, onClose, onC
 
   const canProceedCard = cardNumber.replace(/\s/g, '').length >= 16 && cardHolder.trim().length >= 3;
   const canProceedPersonal = fullName.trim().length >= 3 && phone.trim().length >= 10;
-  const canProceedAddress = province.trim() && city.trim() && fullAddress.trim().length >= 10 && postalCode.trim().length >= 10;
+  const canProceedAddress = province.trim().length > 0 && city.trim().length > 0 && fullAddress.trim().length >= 5 && postalCode.trim().length >= 5;
 
   const stepLabels: Record<string, string> = {
     'cart': 'سبد خرید',
@@ -423,7 +424,7 @@ const CheckoutFlow: React.FC<CheckoutFlowProps> = ({ items, isOpen, onClose, onC
                   <label className="text-[10px] font-black mb-1.5 flex items-center gap-1.5" style={{ color: 'var(--text-3)' }}>
                     <i className="fas fa-hashtag text-[8px]" /> کد پستی
                   </label>
-                  <input type="text" value={postalCode} onChange={e => setPostalCode(e.target.value.replace(/\D/g, '').slice(0, 10))} placeholder="۱۲۳۴۵۶۷۸۹۰" className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all focus:ring-2" dir="ltr" style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text)', '--tw-ring-color': 'var(--primary)' } as any} />
+                  <input type="text" value={postalCode} onChange={e => setPostalCode(stripNonDigits(e.target.value).slice(0, 10))} placeholder="۱۲۳۴۵۶۷۸۹۰" className="w-full px-4 py-3 rounded-xl text-sm outline-none transition-all focus:ring-2" dir="ltr" style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text)', '--tw-ring-color': 'var(--primary)' } as any} />
                 </div>
                 <div>
                   <label className="text-[10px] font-black mb-1.5 flex items-center gap-1.5" style={{ color: 'var(--text-3)' }}>

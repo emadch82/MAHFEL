@@ -27,6 +27,8 @@ interface PlaylistPageProps {
   onOpenPlayer?: () => void;
   onPlaylistTabChange?: (tab: 'about' | 'episodes' | 'comments') => void;
   initialTab?: 'about' | 'episodes' | 'comments';
+  initialEpisodeIndex?: number;
+  onEpisodeIndexChange?: (index: number) => void;
   activeTab: Page;
   onTabChange: (tab: Page) => void;
   theme: 'light' | 'dark';
@@ -50,7 +52,7 @@ interface PlaylistPageProps {
 
 const PlaylistPage: React.FC<PlaylistPageProps> = ({
   podcast, author, comments, onBack, onPlayEpisode, onAuthorSelect,
-  onAddComment, onDeleteComment, onUpdateComment, onLikeComment, currentUserName, currentUserAvatar, currentAudioTime, onSeekToTime, onPlayEpisodeAtTime, hasPlayer, isPlaying, onTogglePlay, onOpenPlayer, onPlaylistTabChange, initialTab,
+  onAddComment, onDeleteComment, onUpdateComment, onLikeComment, currentUserName, currentUserAvatar, currentAudioTime, onSeekToTime, onPlayEpisodeAtTime, hasPlayer, isPlaying, onTogglePlay, onOpenPlayer, onPlaylistTabChange, initialTab, initialEpisodeIndex, onEpisodeIndexChange,
   activeTab: pageTab, onTabChange, theme, onToggleTheme, onOpenProfile, onToggleLibrary, isInLibrary, onPrev, onNext, audioProgress = 0, audioDuration = 0,
   isSidebarOpen, onCloseSidebar, onOpenSearch, onOpenAdmin, user, isAuthenticated, isSidebarCollapsed, onToggleSidebarCollapsed,
 }) => {
@@ -63,7 +65,11 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
   }, [initialTab]);
   const [instantViewContent, setInstantViewContent] = useState<{ title: string; content: string } | null>(null);
   const [mahfelSidebarOpen, setMahfelSidebarOpen] = useState(false);
-  const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState<number>(0);
+  const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState<number>(initialEpisodeIndex || 0);
+
+  useEffect(() => {
+    if (initialEpisodeIndex !== undefined) setSelectedEpisodeIndex(initialEpisodeIndex);
+  }, [initialEpisodeIndex]);
   const [commentText, setCommentText] = useState('');
   const [replyTo, setReplyTo] = useState<{ id: string; author: string; text: string } | null>(null);
   const [editCommentId, setEditCommentId] = useState<string | null>(null);
@@ -113,7 +119,7 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
 
   const removeMedia = () => setUploadedMedia(null);
 
-  const toggleBookmark = (e: React.MouseEvent) => { e.stopPropagation(); if (onToggleLibrary) onToggleLibrary(podcast); };
+  const toggleBookmark = (e?: React.MouseEvent) => { e?.stopPropagation(); if (onToggleLibrary) onToggleLibrary(podcast); };
   const playAll = (e: React.MouseEvent) => { e.stopPropagation(); if (podcast.episodes.length > 0) onPlayEpisode(podcast, selectedEpisodeIndex); };
   const handleAuthorClick = () => { if (author && onAuthorSelect) onAuthorSelect(author); };
 
@@ -223,7 +229,7 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
                     </div>
                   </div>
                   {hasPlayer && audioDuration > 0 && (
-                    <div className="flex items-center gap-3" dir="ltr">
+                    <div className="flex items-center gap-3 pt-1" dir="ltr">
                       <span className={`text-[10px] font-mono flex-shrink-0 w-10 text-left ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{formatTime(audioProgress * audioDuration)}</span>
                       <div className="flex-1 group cursor-pointer h-5 flex items-center" onClick={(e) => { e.stopPropagation(); if (onSeekToTime) { const rect = e.currentTarget.getBoundingClientRect(); const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)); onSeekToTime(pct * audioDuration); } }}>
                         <div className={`w-full h-1.5 ${isDark ? 'bg-white/10' : 'bg-gray-200'} rounded-full overflow-hidden group-hover:h-2 transition-all`}>
@@ -297,8 +303,19 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
                   </button>
                 )}
               </div>
+              </div>
+              {activeTab === 'comments' && hasPlayer && audioDuration > 0 && (
+                <div className="lg:hidden flex items-center gap-2 mt-2 px-1" dir="ltr" onClick={(e) => e.stopPropagation()}>
+                  <span className={`text-[10px] font-mono flex-shrink-0 w-9 text-left ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{formatTime(audioProgress * audioDuration)}</span>
+                  <div className="flex-1 group cursor-pointer h-4 flex items-center" onClick={(e) => { if (onSeekToTime) { const rect = e.currentTarget.getBoundingClientRect(); const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)); onSeekToTime(pct * audioDuration); } }}>
+                    <div className={`w-full h-1.5 ${isDark ? 'bg-white/10' : 'bg-gray-200'} rounded-full overflow-hidden group-hover:h-2 transition-all`}>
+                      <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${audioProgress * 100}%` }}></div>
+                    </div>
+                  </div>
+                  <span className={`text-[10px] font-mono flex-shrink-0 w-9 text-right ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{formatTime(audioDuration)}</span>
+                </div>
+              )}
             </div>
-          </div>
         </header>
 
         {/* Tabs */}
@@ -356,8 +373,19 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-base opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[2px]">
                         <div className="w-10 h-10 rounded-full bg-emerald-500/80 backdrop-blur-md flex items-center justify-center shadow-lg shadow-emerald-500/20 ring-1 ring-white/20 transform group-hover:scale-110 transition-transform">
                           <i className="fas fa-play text-sm mr-0.5"></i>
+                  {hasPlayer && audioDuration > 0 && (
+                    <div className="flex items-center gap-3" dir="ltr">
+                      <span className={`text-[10px] font-mono flex-shrink-0 w-10 text-left ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{formatTime(audioProgress * audioDuration)}</span>
+                      <div className="flex-1 group cursor-pointer h-5 flex items-center" onClick={(e) => { e.stopPropagation(); if (onSeekToTime) { const rect = e.currentTarget.getBoundingClientRect(); const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)); onSeekToTime(pct * audioDuration); } }}>
+                        <div className={`w-full h-1.5 ${isDark ? 'bg-white/10' : 'bg-gray-200'} rounded-full overflow-hidden group-hover:h-2 transition-all`}>
+                          <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${audioProgress * 100}%` }}></div>
                         </div>
                       </div>
+                      <span className={`text-[10px] font-mono flex-shrink-0 w-10 text-right ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{formatTime(audioDuration)}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className={'text-sm font-bold line-clamp-2 leading-snug transition-colors ' + (isDark ? 'text-white/80 group-hover:text-white' : 'text-gray-700 group-hover:text-gray-900')}>{String(episode.title)}</h4>
@@ -383,7 +411,7 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
             <section className="animate-fadeIn">
               <div className="flex gap-2 overflow-x-auto pb-3 mb-4 no-scrollbar lg:justify-center" dir="ltr">
                 {podcast.episodes.map((ep, i) => (
-                  <button key={i} onClick={() => { setSelectedEpisodeIndex(i); setReplyTo(null); setEditCommentId(null); onPlayEpisode(podcast, i); }}
+                  <button key={i} onClick={() => { setSelectedEpisodeIndex(i); onEpisodeIndexChange?.(i); setReplyTo(null); setEditCommentId(null); onPlayEpisode(podcast, i); }}
                     className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${selectedEpisodeIndex === i ? 'bg-primary text-white shadow-md' : (isDark ? 'bg-gray-800 text-gray-400 border border-gray-700 hover:bg-gray-700' : 'bg-gray-100 text-gray-500 border border-gray-200 hover:bg-gray-200')}`}>
                     {toPersianDigits(i + 1)} · {String(ep.title).substring(0, 15)}{String(ep.title).length > 15 ? '..' : ''}
                   </button>

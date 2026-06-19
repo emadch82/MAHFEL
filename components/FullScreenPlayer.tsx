@@ -423,8 +423,8 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
                 )}
               </div>
               <div className={`flex justify-between text-[11px] font-mono ${isDark ? 'text-white/20' : 'text-gray-400'} mt-1`}>
-                <span>{formatTime(currentTime)}</span>
                 <span>-{formatTime(Math.max(0, duration - currentTime))}</span>
+                <span>{formatTime(currentTime)}</span>
               </div>
             </div>
 

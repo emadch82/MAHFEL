@@ -92,6 +92,7 @@ export interface Comment {
     isoDate: string;
     likes: number;
     isFeatured: boolean;
+    isEdited?: boolean;
     podcastId?: number;
     episodeIndex?: number;
     podcastTitle?: string;

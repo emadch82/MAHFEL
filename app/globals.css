@@ -448,5 +448,10 @@ input::-moz-placeholder {
   opacity: 1 !important;
 }
 
-/* Hide Next.js dev tools SVG indicator */
-nextjs-portal { display: none !important; }
+/* Reposition Next.js dev tools indicator */
+nextjs-portal {
+  bottom: auto !important;
+  top: 12px !important;
+  left: 12px !important;
+  right: auto !important;
+}

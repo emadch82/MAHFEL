@@ -205,7 +205,7 @@ const RenderReply = React.memo<RenderReplyProps>(({ comment, depth, postId, loca
             ) : (
               <>
                 {comment.audioTimestamp != null && (
-                  <button onClick={() => { const el = document.querySelector('audio'); if (el) { el.currentTime = comment.audioTimestamp; el.play().catch(() => {}); } }}
+                   <button onClick={() => { const el = document.querySelector('audio'); const ts = comment.audioTimestamp; if (el && ts != null) { el.currentTime = ts; el.play().catch(() => {}); } }}
                     className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded-lg transition-all active:scale-95"
                     style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '8px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
                     <i className="fas fa-music text-[7px]"></i>
@@ -365,10 +365,10 @@ const PostBubble: React.FC<{
   };
 
   const handleSavePostEdit = async () => {
-    if (!editPostText.trim() || editPostText.trim() === post.text) { setIsEditingPost(false); return; }
+    if (!editPostText?.trim() || editPostText.trim() === post.text) { setIsEditingPost(false); return; }
     try {
       const { updatePost } = await import('../services/api');
-      const updated = await updatePost(String(post.id), { text: editPostText.trim() });
+      const updated = await updatePost(String(post.id), { text: editPostText!.trim() });
       if (updated) {
         if (onUpdatePost) onUpdatePost({ ...updated, id: updated.id ?? post.id });
         setIsEditingPost(false);
@@ -905,7 +905,7 @@ const ReplyItem: React.FC<{
         ) : reply.text ? (
           <>
             {reply.audioTimestamp != null && (
-              <button onClick={() => { const el = document.querySelector('audio'); if (el) { el.currentTime = reply.audioTimestamp; el.play().catch(() => {}); } }}
+              <button onClick={() => { const el = document.querySelector('audio'); const ts = reply.audioTimestamp; if (el && ts != null) { el.currentTime = ts; el.play().catch(() => {}); } }}
                 className="flex items-center gap-1.5 mb-1.5 px-2 py-1 rounded-lg transition-all active:scale-95"
                 style={{ background: 'color-mix(in srgb, var(--primary) 10%, transparent)', color: 'var(--primary)', fontSize: '8px', border: '1px solid color-mix(in srgb, var(--primary) 15%, transparent)' }}>
                 <i className="fas fa-music text-[7px]"></i>

@@ -14,8 +14,8 @@ const vazir = Vazirmatn({
 
 const iranNastaliq = localFont({
   src: [
-    { path: '../fonts/IranNastaliq.woff2', format: 'woff2' },
-    { path: '../fonts/IranNastaliq.ttf', format: 'truetype' },
+    { path: '../fonts/IranNastaliq.woff2' },
+    { path: '../fonts/IranNastaliq.ttf' },
   ],
   variable: '--font-nastaliq',
   display: 'swap',

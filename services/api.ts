@@ -1,7 +1,7 @@
 
 import type { Podcast, Comment, Video, Post, Book, Author, PublishedBook, User } from '../types';
 
-const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_URL) || '/api';
+const API_BASE = '/api';
 
 const getToken = (): string | null => localStorage.getItem('soha_token');
 
@@ -130,18 +130,20 @@ export const getVideos = async (): Promise<Video[]> => {
 
 const streamCache = new Map<string, any>();
 
+type StreamData = { defaultUrl: string; qualities: { profile: string; label: string; url: string; size: string }[] };
+
 export const prefetchStream = (id: string) => {
   if (streamCache.has(id)) return;
-  const promise = apiFetch(`/videos/${id}/stream`);
+  const promise = apiFetch<StreamData>(`/videos/${id}/stream`);
   streamCache.set(id, promise);
   promise.then(data => streamCache.set(id, data));
   promise.catch(() => streamCache.delete(id));
 };
 
-export const getVideoStream = async (id: string): Promise<{ defaultUrl: string; qualities: { profile: string; label: string; url: string; size: string }[] } | null> => {
+export const getVideoStream = async (id: string): Promise<StreamData | null> => {
   const cached = streamCache.get(id);
   if (cached) return cached;
-  const promise = apiFetch(`/videos/${id}/stream`);
+  const promise = apiFetch<StreamData>(`/videos/${id}/stream`);
   streamCache.set(id, promise);
   promise.then(data => streamCache.set(id, data));
   promise.catch(() => streamCache.delete(id));
