@@ -1,7 +1,20 @@
 
 import type { Podcast, Comment, Video, Post, Book, Author, PublishedBook, User } from '../types';
 
-const API_BASE = '/api';
+const isCapacitor = () => {
+  try { return !!(window as any).Capacitor; } catch { return false; }
+};
+
+const getApiBase = (): string => {
+  if (isCapacitor()) {
+    const saved = localStorage.getItem('mahfel_server_url');
+    if (saved) return saved;
+    return 'http://10.0.2.2:5000';
+  }
+  return '/api';
+};
+
+const API_BASE = getApiBase();
 
 const getToken = (): string | null => localStorage.getItem('soha_token');
 

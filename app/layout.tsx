@@ -23,33 +23,33 @@ const iranNastaliq = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: 'سرای هنر و اندیشه',
-    template: '%s | سرای هنر و اندیشه',
+    default: 'MAHFEL - محفل',
+    template: '%s | MAHFEL - محفل',
   },
-  description: 'پلتفرم پادکست، کتاب و ویدیو - سرای هنر و اندیشه',
-  keywords: ['پادکست', 'کتاب', 'ویدیو', 'سرای هنر و اندیشه', 'آموزش', 'فلسفه', 'عرفان'],
-  authors: [{ name: 'سرای هنر و اندیشه' }],
+  description: 'پلتفرم پادکست، کتاب و ویدیو - محفل',
+  keywords: ['پادکست', 'کتاب', 'ویدیو', 'محفل', 'آموزش', 'فلسفه', 'عرفان'],
+  authors: [{ name: 'EMAD CH' }],
   icons: {
     icon: '/favicon.svg',
     apple: '/logo.png',
   },
   openGraph: {
-    title: 'سرای هنر و اندیشه',
+    title: 'MAHFEL - محفل',
     description: 'پلتفرم پادکست، کتاب و ویدیو',
     type: 'website',
     locale: 'fa_IR',
-    siteName: 'سرای هنر و اندیشه',
+    siteName: 'MAHFEL - محفل',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'سرای هنر و اندیشه',
+    title: 'MAHFEL - محفل',
     description: 'پلتفرم پادکست، کتاب و ویدیو',
   },
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'سرای هنر و اندیشه',
+    title: 'MAHFEL - محفل',
   },
 };
 
@@ -58,7 +58,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: '#0f172a',
+  themeColor: '#06b6d4',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -66,6 +66,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="fa" dir="rtl" className={`${vazir.variable} ${iranNastaliq.variable}`} suppressHydrationWarning>
       <head>
         <link rel="stylesheet" href="/font-awesome/all.min.css" />
+        <script dangerouslySetInnerHTML={{ __html: `
+          if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+              navigator.serviceWorker.register('/sw.js').catch(() => {});
+            });
+          }
+        `}} />
       </head>
       <body suppressHydrationWarning>
         <StructuredData />
