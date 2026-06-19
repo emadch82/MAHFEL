@@ -26,6 +26,7 @@ interface PlaylistPageProps {
   onTogglePlay?: () => void;
   onOpenPlayer?: () => void;
   onPlaylistTabChange?: (tab: 'about' | 'episodes' | 'comments') => void;
+  initialTab?: 'about' | 'episodes' | 'comments';
   activeTab: Page;
   onTabChange: (tab: Page) => void;
   theme: 'light' | 'dark';
@@ -49,13 +50,17 @@ interface PlaylistPageProps {
 
 const PlaylistPage: React.FC<PlaylistPageProps> = ({
   podcast, author, comments, onBack, onPlayEpisode, onAuthorSelect,
-  onAddComment, onDeleteComment, onUpdateComment, onLikeComment, currentUserName, currentUserAvatar, currentAudioTime, onSeekToTime, onPlayEpisodeAtTime, hasPlayer, isPlaying, onTogglePlay, onOpenPlayer, onPlaylistTabChange,
+  onAddComment, onDeleteComment, onUpdateComment, onLikeComment, currentUserName, currentUserAvatar, currentAudioTime, onSeekToTime, onPlayEpisodeAtTime, hasPlayer, isPlaying, onTogglePlay, onOpenPlayer, onPlaylistTabChange, initialTab,
   activeTab: pageTab, onTabChange, theme, onToggleTheme, onOpenProfile, onToggleLibrary, isInLibrary, onPrev, onNext, audioProgress = 0, audioDuration = 0,
   isSidebarOpen, onCloseSidebar, onOpenSearch, onOpenAdmin, user, isAuthenticated, isSidebarCollapsed, onToggleSidebarCollapsed,
 }) => {
   const isDark = theme === 'dark';
   const isBookmarked = isInLibrary ?? false;
-  const [activeTab, setActiveTab] = useState<'about' | 'episodes' | 'comments'>('episodes');
+  const [activeTab, setActiveTab] = useState<'about' | 'episodes' | 'comments'>(initialTab || 'episodes');
+
+  useEffect(() => {
+    if (initialTab) setActiveTab(initialTab);
+  }, [initialTab]);
   const [instantViewContent, setInstantViewContent] = useState<{ title: string; content: string } | null>(null);
   const [mahfelSidebarOpen, setMahfelSidebarOpen] = useState(false);
   const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState<number>(0);
