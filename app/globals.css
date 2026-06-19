@@ -447,3 +447,6 @@ input::-moz-placeholder {
   color: #475569 !important;
   opacity: 1 !important;
 }
+
+/* Hide Next.js dev tools SVG indicator */
+nextjs-portal { display: none !important; }
