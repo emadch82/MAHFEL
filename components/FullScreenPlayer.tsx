@@ -199,25 +199,25 @@ const FullScreenPlayer: React.FC<FullScreenPlayerProps> = ({
         </div>
 
         {/* Controls */}
-        <div className="relative z-10 flex items-center justify-center gap-3 px-4 -mt-1">
+        <div className="relative z-10 flex items-center justify-center gap-4 px-4 -mt-1 w-full translate-x-6 lg:translate-x-0">
           <button onClick={() => onRepeatModeChange(repeatMode === 'none' ? 'one' : repeatMode === 'one' ? 'all' : 'none')}
-            className={`relative w-7 h-7 rounded-lg flex items-center justify-center transition-all text-[10px] ${repeatMode !== 'none' ? 'text-emerald-400 bg-emerald-400/15 ring-1 ring-emerald-400/30' : 'text-white/40'}`}>
+            className={`relative w-8 h-8 lg:w-7 lg:h-7 rounded-lg flex items-center justify-center transition-all text-[11px] lg:text-[10px] ${repeatMode !== 'none' ? 'text-emerald-400 bg-emerald-400/15 ring-1 ring-emerald-400/30' : 'text-white/40'}`}>
             <i className={`fas fa-repeat ${repeatMode !== 'none' ? 'text-white' : ''}`}></i>
             {repeatMode === 'one' && <span className="absolute -top-1.5 -left-1.5 w-3.5 h-3.5 bg-emerald-500 text-[7px] text-white font-bold rounded-full flex items-center justify-center">۱</span>}
           </button>
-          <button onClick={onNext} className={`${isDark ? 'text-white/50 hover:text-white' : 'text-gray-400 hover:text-gray-900'} active:scale-90 transition-all text-sm`}><i className="fas fa-forward-step"></i></button>
-          <button onClick={onPlayPause} className="w-10 h-10 rounded-full flex items-center justify-center text-sm active:scale-90 transition-all shadow-lg shadow-emerald-500/20" style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>
-            <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'} text-white text-sm ${!isPlaying ? 'mr-0.5' : ''}`}></i>
+          <button onClick={onNext} className={`${isDark ? 'text-white/50 hover:text-white' : 'text-gray-400 hover:text-gray-900'} active:scale-90 transition-all text-lg lg:text-sm`}><i className="fas fa-forward-step"></i></button>
+          <button onClick={onPlayPause} className="w-14 h-14 lg:w-10 lg:h-10 rounded-full flex items-center justify-center active:scale-90 transition-all shadow-lg shadow-emerald-500/20" style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}>
+            <i className={`fas ${isPlaying ? 'fa-pause' : 'fa-play'} text-white text-lg lg:text-sm ${!isPlaying ? 'mr-0.5' : ''}`}></i>
           </button>
-          <button onClick={onPrev} className={`${isDark ? 'text-white/50 hover:text-white' : 'text-gray-400 hover:text-gray-900'} active:scale-90 transition-all text-sm`}><i className="fas fa-backward-step"></i></button>
+          <button onClick={onPrev} className={`${isDark ? 'text-white/50 hover:text-white' : 'text-gray-400 hover:text-gray-900'} active:scale-90 transition-all text-lg lg:text-sm`}><i className="fas fa-backward-step"></i></button>
+        </div>
+
+        {/* Extras single row */}
+        <div className="relative z-10 flex items-center justify-center gap-3 px-4 mt-4 w-full">
           <button onClick={() => onPlaybackRateChange(playbackRate >= 2 ? 0.75 : +(playbackRate + 0.25).toFixed(2))}
             className={'w-6 h-6 rounded-md flex items-center justify-center transition-all text-[8px] font-black ' + (playbackRate !== 1 ? 'text-emerald-400 bg-emerald-400/15' : (isDark ? 'text-white/30' : 'text-gray-400'))}>
             {renderRate(playbackRate)}
           </button>
-        </div>
-
-        {/* Extras single row */}
-        <div className="relative z-10 flex items-center justify-center gap-3 px-4 mt-4">
           <button onClick={() => { const proxyUrl = `/api/proxy/audio?url=${encodeURIComponent(episode.audioUrl || '')}`; const a = document.createElement('a'); a.href = proxyUrl; a.download = `${episode.title}.mp3`; a.click(); }}
             className={`w-7 h-7 rounded-lg flex items-center justify-center ${isDark ? 'text-white/40 hover:text-white' : 'text-gray-400 hover:text-gray-900'} active:scale-90 transition-all text-xs`}>
             <i className="fas fa-download"></i>

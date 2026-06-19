@@ -228,7 +228,7 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
                       </button>
                     </div>
                   </div>
-                  {hasPlayer && audioDuration > 0 && (
+                  {activeTab === 'comments' && (
                     <div className="flex items-center gap-3 pt-1" dir="ltr">
                       <span className={`text-[10px] font-mono flex-shrink-0 w-10 text-left ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{formatTime(audioProgress * audioDuration)}</span>
                       <div className="flex-1 group cursor-pointer h-5 flex items-center" onClick={(e) => { e.stopPropagation(); if (onSeekToTime) { const rect = e.currentTarget.getBoundingClientRect(); const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)); onSeekToTime(pct * audioDuration); } }}>
@@ -304,7 +304,7 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
                 )}
               </div>
               </div>
-              {activeTab === 'comments' && hasPlayer && audioDuration > 0 && (
+              {activeTab === 'comments' && (
                 <div className="lg:hidden flex items-center gap-2 mt-2 px-1" dir="ltr" onClick={(e) => e.stopPropagation()}>
                   <span className={`text-[10px] font-mono flex-shrink-0 w-9 text-left ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{formatTime(audioProgress * audioDuration)}</span>
                   <div className="flex-1 group cursor-pointer h-4 flex items-center" onClick={(e) => { if (onSeekToTime) { const rect = e.currentTarget.getBoundingClientRect(); const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)); onSeekToTime(pct * audioDuration); } }}>
@@ -373,7 +373,7 @@ const PlaylistPage: React.FC<PlaylistPageProps> = ({
                       <div className="absolute inset-0 bg-black/60 flex items-center justify-center text-white text-base opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-[2px]">
                         <div className="w-10 h-10 rounded-full bg-emerald-500/80 backdrop-blur-md flex items-center justify-center shadow-lg shadow-emerald-500/20 ring-1 ring-white/20 transform group-hover:scale-110 transition-transform">
                           <i className="fas fa-play text-sm mr-0.5"></i>
-                  {hasPlayer && audioDuration > 0 && (
+                  {activeTab === 'comments' && (
                     <div className="flex items-center gap-3" dir="ltr">
                       <span className={`text-[10px] font-mono flex-shrink-0 w-10 text-left ${isDark ? 'text-white/40' : 'text-gray-500'}`}>{formatTime(audioProgress * audioDuration)}</span>
                       <div className="flex-1 group cursor-pointer h-5 flex items-center" onClick={(e) => { e.stopPropagation(); if (onSeekToTime) { const rect = e.currentTarget.getBoundingClientRect(); const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width)); onSeekToTime(pct * audioDuration); } }}>

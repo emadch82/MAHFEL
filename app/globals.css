@@ -448,10 +448,14 @@ input::-moz-placeholder {
   opacity: 1 !important;
 }
 
-/* Reposition Next.js dev tools indicator */
 nextjs-portal {
-  bottom: auto !important;
   top: 12px !important;
   left: 12px !important;
   right: auto !important;
+}
+
+@media (max-width: 1023px) {
+  nextjs-portal {
+    display: none !important;
+  }
 }

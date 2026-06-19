@@ -25,6 +25,9 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   turbopack: {},
+  devIndicators: {
+    position: 'top-left',
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
